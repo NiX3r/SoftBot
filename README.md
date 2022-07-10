@@ -2,8 +2,6 @@
 
  Discord bot for Czech airsoft communites
 
-
-
 ## Features
 
 - Games notifications
@@ -24,8 +22,6 @@
 
 - d
 
-
-
 ## Commands
 
 - !sb game - commands for game section
@@ -36,12 +32,26 @@
   
   - !sb game create <name> - create game with specific name
   
-  - !sb game edit <id> [name | start-date | end-date | website | location | description] - edit game with specific ID before it's show time ( only creator of game and programmer can use this command )
+  - !sb game edit <id> [^name | ^start-date | ^end-date | website | ^location | ^price | ^type | ^description] <value> - edit game with specific ID before its show time ( only creator of game and programmer can use this command )
   
   - !sb game finish <id> - finish creating a specific game ( only creator of game and programmer can use this command )
   
-  - !sb game visible <id> [on | off] - set visible of specific game ( only creator of game and programmer can use this command )
+  - !sb game visible <id> [on | off] - set visibility of specific game ( only creator of game and programmer can use this command )
 
 - !sb team - commands for team section
+  
+  - !sb team list <index> - list of all teams sorted by alphabetic and counted max to 10
+  
+  - !sb team show <id> - show all description of a selected team
+  
+  - !sb team create <name> - create a team with specific name
+  
+  - !sb team edit <id> [^name | ^create-date | website | Discord server | ^type | ^logo ] - edit team with specific ID before its show time ( only creator of game and programmer can use this command )
+  
+  - !sb team finish <id> - finish creating a specific team ( only creator of game and programmer can use this command )
+  
+  - !sb team visible <id> [on | off] - set visibility of team ( only creator of game and programmer can use this command )
 
 - !sb youtube - commands for youtube section
+
+_^ stands for necassary data_
