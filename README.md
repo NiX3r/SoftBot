@@ -82,7 +82,7 @@
 
 - `!sb invite` - shows URL link for invite bot into Discord server
 
-- `!sb credentials` - shows bots credentials
+- `!sb credits` - shows bots credentials
 
 - `!sb offer` - commands for bazaar offers section
   
@@ -148,7 +148,7 @@ _`*` stands for necassary input variables_
 
 - [ ] Reddit section
 
-- [ ] Invite & Credentials commands
+- [ ] Invite & Credits commands
 
 - [ ] Youtube section
 
