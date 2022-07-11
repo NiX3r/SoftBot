@@ -80,6 +80,10 @@
 
 - `!sb reddit` - command for view 
 
+- `!sb invite` - shows URL link for invite bot into Discord server
+
+- `!sb credentials` - shows bots credentials
+
 - `!sb offer` - commands for bazaar offers section
   
   - `!sb offer list <index>` - list of all offers sorted by create date and counted max to 10
@@ -114,6 +118,26 @@
 
 _`*` stands for necassary input variables_
 
+### Bot admins commands
+
+- `!sba ban <user-dicord-id> [ bazaar | everywhere ] <reason>` - ban user from using bazaar or whole Discord bot
+
+- `!sba unban <user-discord-id> [ bazaar | everywhere ] <reason>` - unban user
+
+- `!sba server` - server commands section
+  
+  - `!sba server list` - list of all servers bot is in
+  
+  - `!sba server link <server-id>` - create an invite link for a specify server
+  
+  - `!sba server disconnect <server-id> <reason>` - disconnect bot from server
+  
+  - `!sba server ban <server-id> <reason>` - ban server from using bot anyway
+  
+  - `!sba server unban <server-id> <reason>` - unban server
+
+- `!sba announcement <message>` - send annoucement message to all servers
+
 ## Plan
 
 - [x] Wishes and dreams
@@ -124,11 +148,15 @@ _`*` stands for necassary input variables_
 
 - [ ] Reddit section
 
+- [ ] Invite & Credentials commands
+
 - [ ] Youtube section
 
 - [ ] Bazaar offer section
 
 - [ ] Bazaar inquiry section
+
+- [ ] Admins commands section
 
 - [ ] Hide & seek with a bugs
 
