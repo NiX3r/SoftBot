@@ -19,8 +19,18 @@
   - Discord users could see list of teams and join their Discord server
 
 - Youtubers statistics
+  
+  - Server administrators can setup youtube channels to send notification about new videos
+  
+  - Every X minutes bot check every single Youtube channel for a new video to send to Discord servers announcement
 
-- d
+- Reddit posts
+  
+  - Users can view a posts on r/airsoft reddit
+  
+  - Posts are save into cache which is refresh every single day
+
+- *and more next time*
 
 ## Commands
 
@@ -53,5 +63,7 @@
   - !sb team visible <id> [on | off] - set visibility of team ( only creator of game and programmer can use this command )
 
 - !sb youtube - commands for youtube section
+
+- !sb reddit - command for view 
 
 _^ stands for necassary data_
