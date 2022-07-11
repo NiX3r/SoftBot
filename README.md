@@ -30,7 +30,7 @@
   
   - Posts are save into cache which is refresh every single day
 
-- *and more next time*
+- *and more will be added*
 
 ## Commands
 
@@ -66,4 +66,24 @@
 
 - !sb reddit - command for view 
 
-_^ stands for necassary data_
+_^ stands for necassary input variables_
+
+
+
+## Plan
+
+- [x] Wishes and dreams
+
+- [ ] Games section
+
+- [ ] Teams section
+
+- [ ] Reddit section
+
+- [ ] Youtube section
+
+- [ ] Hide & seek with a bugs
+
+- [ ] Prelease
+
+- [ ] Release
