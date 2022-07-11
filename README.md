@@ -78,11 +78,13 @@
 
 - `!sb youtube` - commands for youtube section
 
-- `!sb reddit` - command for view 
+- `!sb reddit` - command for view random post
 
 - `!sb invite` - shows URL link for invite bot into Discord server
 
 - `!sb credits` - shows bots credentials
+
+- `!sb channel <channel-ping>` - set up channel where every notification will be sended
 
 - `!sb offer` - commands for bazaar offers section
   
