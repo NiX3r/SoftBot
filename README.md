@@ -1,6 +1,6 @@
 # SoftBot
 
- Discord bot for Czech airsoft communites
+ Discord bot for Czech and Slovak airsoft communites
 
 ## Features
 
