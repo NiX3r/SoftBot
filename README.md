@@ -46,7 +46,9 @@
 
 - `!sb game` - commands for game section
   
-  - `!sb game list` - list of all game that start the day of the command perform to same day after month
+  - `!sb game list <index>` - list of all teams sorted by alphabetic and counted max to 10
+  
+  - `!sb game date <date>` - shows all games to the specific date (date format: '21.08.2002' or '21.8.2002')
   
   - `!sb game show <id>` - show all description of a selected game
   
@@ -140,11 +142,21 @@ _`*` stands for necassary input variables_
 
 - `!sba announcement <message>` - send annoucement message to all servers
 
+### Programmer commands
+
+-  `!sbp admin` - admin commands section
+  
+  - `!sbp admin add <user-discord-id>` - add user as a admin
+  
+  - `!sbp admin remove <user-discord-id>` - remove user as a admin
+
 ## Plan
 
 - [x] Wishes and dreams
 
 - [ ] Games section
+
+- [ ] Programmer commands section
 
 - [ ] Teams section
 
