@@ -56,7 +56,7 @@ Discord bot for Czech airsoft communites
   
   - `!sb game show <id>` - show all description of a selected game
   
-  - `!sb game create <name>` - create game with specific name **PM**
+  - `!sb game create <name>` - create game with specific name. User can create once per time **PM**
   
   - `!sb game edit <id> [*name | *start-date | *end-date | website | *location | *price | *type | *description] <value>` - edit game with specific ID before its show time. For edit game it must be non visible ( only creator of game and bot admins can use this command ) **PM**
   
@@ -72,7 +72,7 @@ Discord bot for Czech airsoft communites
   
   - `!sb team show <id>` - show all description of a selected team
   
-  - `!sb team create <name>` - create a team with specific name **PM**
+  - `!sb team create <name>` - create a team with specific name. User can create once per time **PM**
   
   - `!sb team edit <id> [*name | *create-date | website | Discord server | *type | *logo ]` - edit team with specific ID before its show time. For edit team it must be non visible ( only creator of team and bot admins can use this command ) **PM**
   
@@ -98,7 +98,7 @@ Discord bot for Czech airsoft communites
   
   - `!sb offer show <id>` - show all description of a selected offer
   
-  - `!sb offer create <topic>` - create a offer with specific name **PM**
+  - `!sb offer create <topic>` - create a offer with specific name. User can create once per time **PM**
   
   - `!sb offer edit <id> [*topic | *price | *email | *owners-address | *files | *description ]` - edit offer with specific ID before its show time. For edit offer it must be non visible ( only creator of offer and bot admins can use this command ) **PM**
   
@@ -114,7 +114,7 @@ Discord bot for Czech airsoft communites
   
   - `!sb inquiry show` - show all description of a selected inquiry
   
-  - `!sb inquiry create <topic>` - create a inquiry with specific name **PM**
+  - `!sb inquiry create <topic>` - create a inquiry with specific name. User can create once per time **PM**
   
   - `!sb inquiry edit <id> [*topic | *price | *email | *owners-address | *description ]` - edit inquiry with specific ID before its show time. For edit inquiry it must be non visible ( only creator of inquiry and bot admins can use this command ) **PM**
   

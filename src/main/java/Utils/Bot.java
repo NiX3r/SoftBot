@@ -1,31 +1,48 @@
 package Utils;
 
+import Database.DatabaseConnection;
 import Listeners.nMessageCreateListener;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.activity.ActivityType;
 import org.javacord.api.entity.permission.Permissions;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Bot {
 
-    private static String prefix = "SoftBot";
+    private static String prefix = "§ SoftBot §";
     private static DiscordApi bot;
+    private static Cache cache;
+    private static DatabaseConnection connection;
 
     public static void initializeBot(){
 
         bot = new DiscordApiBuilder().setToken(SecretClass.getDiscordToken()).setAllIntents().login().join();
-        Utils.LogSystem.log(prefix, "bot is ready on : " + bot.createBotInvite(Permissions.fromBitmask(8)), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(prefix, "bot is ready on : " + bot.createBotInvite() + "515396586561", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
-        bot.addMessageCreateListener(new nMessageCreateListener());
-        initializeLogListeners();
+        // TODO - Load cache from .json file
+        cache = new Cache(null); // temp line
 
-        String status = "serving the server";
-        bot.updateActivity(ActivityType.WATCHING, status);
+        connection = new DatabaseConnection();
 
-        Utils.LogSystem.log(prefix, "bot initialize and turned on", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        if(connection.getConnection() != null){
+
+            bot.addMessageCreateListener(new nMessageCreateListener());
+            initializeLogListeners();
+
+            String status = "serving the server";
+            bot.updateActivity(ActivityType.WATCHING, status);
+
+            Utils.LogSystem.log(prefix, "bot initialize and turned on", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+
+        }
+        else
+            bot.disconnect();
 
     }
 
@@ -50,5 +67,16 @@ public class Bot {
             Utils.LogSystem.log(prefix, "resuming", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
         });
     }
-    
+
+    public static Cache getCache() {
+        return cache;
+    }
+
+    public static void setCache(Cache cache) {
+        Bot.cache = cache;
+    }
+
+    public static DatabaseConnection getConnection() {
+        return connection;
+    }
 }
