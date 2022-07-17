@@ -1,5 +1,6 @@
 package Utils;
 
+import Listeners.nMessageCreateListener;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.activity.ActivityType;
@@ -13,23 +14,12 @@ public class Bot {
     private static String prefix = "SoftBot";
     private static DiscordApi bot;
 
-    public static void initializeBot(boolean loadCache){
+    public static void initializeBot(){
 
         bot = new DiscordApiBuilder().setToken(SecretClass.getDiscordToken()).setAllIntents().login().join();
         Utils.LogSystem.log(prefix, "bot is ready on : " + bot.createBotInvite(Permissions.fromBitmask(8)), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
-        if(loadCache){
-            FileUtils.loadCache( cache -> {
-
-                if(cache != null){
-                    Utils.LogSystem.log(prefix, "cache successfully loaded", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                    return;
-                }
-
-                Utils.LogSystem.log(prefix, "can't load cache. Initializing new instances..", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-
-            });
-        }
+        bot.addMessageCreateListener(new nMessageCreateListener());
         initializeLogListeners();
 
         String status = "serving the server";
