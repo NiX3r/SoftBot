@@ -50,15 +50,15 @@
   
   - `!sb game show <id>` - show all description of a selected game
   
-  - `!sb game create <name>` - create game with specific name
+  - `!sb game create <name>` - create game with specific name **PM**
   
-  - `!sb game edit <id> [*name | *start-date | *end-date | website | *location | *price | *type | *description] <value>` - edit game with specific ID before its show time. For edit game it must be non visible ( only creator of game and bot admins can use this command )
+  - `!sb game edit <id> [*name | *start-date | *end-date | website | *location | *price | *type | *description] <value>` - edit game with specific ID before its show time. For edit game it must be non visible ( only creator of game and bot admins can use this command ) **PM**
   
-  - `!sb game finish <id>` - finish creating a specific game ( only creator of game and bot admins can use this command )
+  - `!sb game finish <id>` - finish creating a specific game ( only creator of game and bot admins can use this command ) **PM**
   
-  - `!sb game visible <id> [on | off]` - set visibility of specific game ( only creator of game and bot admins can use this command )
+  - `!sb game visible <id> [on | off]` - set visibility of specific game ( only creator of game and bot admins can use this command ) **PM**
   
-  - `!sb game delete <id>` - delete specific game ( only creator of game and bot admins can use this command )
+  - `!sb game delete <id>` - delete specific game ( only creator of game and bot admins can use this command ) **PM**
 
 - `!sb team` - commands for team section
   
@@ -66,15 +66,15 @@
   
   - `!sb team show <id>` - show all description of a selected team
   
-  - `!sb team create <name>` - create a team with specific name
+  - `!sb team create <name>` - create a team with specific name **PM**
   
-  - `!sb team edit <id> [*name | *create-date | website | Discord server | *type | *logo ]` - edit team with specific ID before its show time. For edit team it must be non visible ( only creator of team and bot admins can use this command )
+  - `!sb team edit <id> [*name | *create-date | website | Discord server | *type | *logo ]` - edit team with specific ID before its show time. For edit team it must be non visible ( only creator of team and bot admins can use this command ) **PM**
   
-  - `!sb team finish <id>` - finish creating a specific team ( only creator of team and bot admins can use this command )
+  - `!sb team finish <id>` - finish creating a specific team ( only creator of team and bot admins can use this command ) **PM**
   
-  - `!sb team visible <id> [on | off]` - set visibility of team ( only creator of team and bot admins can use this command )
+  - `!sb team visible <id> [on | off]` - set visibility of team ( only creator of team and bot admins can use this command ) **PM**
   
-  - `!sb team delete <id>` - delete specific team ( only creator of team and bot admins can use this command )
+  - `!sb team delete <id>` - delete specific team ( only creator of team and bot admins can use this command ) **PM**
 
 - `!sb youtube` - commands for youtube section
 
@@ -84,7 +84,7 @@
 
 - `!sb credits` - shows bots credentials
 
-- `!sb channel <channel-ping>` - set up channel where every notification will be sended
+- `!sb channel <channel-ping>` - set up channel where every notification will be sended ( only creator of offer and bot admins can use this command )
 
 - `!sb offer` - commands for bazaar offers section
   
@@ -92,15 +92,15 @@
   
   - `!sb offer show <id>` - show all description of a selected offer
   
-  - `!sb offer create ` - create a offer with specific name
+  - `!sb offer create <topic>` - create a offer with specific name **PM**
   
-  - `!sb offer edit <id> [*topic | *price | *email | *owners-address | *files | *description ]` - edit offer with specific ID before its show time. For edit offer it must be non visible ( only creator of offer and bot admins can use this command )
+  - `!sb offer edit <id> [*topic | *price | *email | *owners-address | *files | *description ]` - edit offer with specific ID before its show time. For edit offer it must be non visible ( only creator of offer and bot admins can use this command ) **PM**
   
-  - `!sb offer finish <id>` - finish creating a specific offer ( only creator of offer and bot admins can use this command )
+  - `!sb offer finish <id>` - finish creating a specific offer ( only creator of offer and bot admins can use this command ) **PM**
   
-  - `!sb offer visible [on | off]` - set visibility of offer ( only creator of offer and bot admins can use this command )
+  - `!sb offer visible [on | off]` - set visibility of offer ( only creator of offer and bot admins can use this command ) **PM**
   
-  - `!sb offer delete <id>` - delete specific offer ( only creator of offer and bot admins can use this command )
+  - `!sb offer delete <id>` - delete specific offer ( only creator of offer and bot admins can use this command ) **PM**
 
 - `!sb inquiry` - commands for bazaar inquiry section
   
@@ -108,15 +108,15 @@
   
   - `!sb inquiry show ` - show all description of a selected inquiry
   
-  - `!sb inquiry create` - create a inquiry with specific name
+  - `!sb inquiry create <topic>` - create a inquiry with specific name **PM**
   
-  - `!sb inquiry edit <id> [*topic | *price | *email | *owners-address | *description ]` - edit inquiry with specific ID before its show time. For edit inquiry it must be non visible ( only creator of inquiry and bot admins can use this command )
+  - `!sb inquiry edit <id> [*topic | *price | *email | *owners-address | *description ]` - edit inquiry with specific ID before its show time. For edit inquiry it must be non visible ( only creator of inquiry and bot admins can use this command ) **PM**
   
-  - `!sb inquiry finish ` - finish creating a specific inquiry ( only creator of inquiry and bot admins can use this command )
+  - `!sb inquiry finish ` - finish creating a specific inquiry ( only creator of inquiry and bot admins can use this command ) **PM**
   
-  - `!sb inquiry visible [on | off]` - set visibility of inquiry ( only creator of inquiry and bot admins can use this command )
+  - `!sb inquiry visible [on | off]` - set visibility of inquiry ( only creator of inquiry and bot admins can use this command ) **PM**
   
-  - `!sb inquiry delete <id>` - delete specific inquiry ( only creator of inquiry and bot admins can use this command )
+  - `!sb inquiry delete <id>` - delete specific inquiry ( only creator of inquiry and bot admins can use this command ) **PM**
 
 _`*` stands for necassary input variables_
 
