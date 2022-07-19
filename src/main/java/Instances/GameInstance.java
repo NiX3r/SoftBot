@@ -3,26 +3,23 @@ package Instances;
 import Commands.GameCommand;
 import Enums.GameStatusEnum;
 
-import java.time.LocalDateTime;
-
 public class GameInstance {
 
     private String name;
-    private LocalDateTime start_date;
-    private LocalDateTime end_date;
+    private long start_date;
+    private long end_date;
     private String website;
     private String location;
-    private int price;
+    private float price;
     private String type;
     private String description;
 
-    private int id;
     private GameStatusEnum status;
     private boolean visibility;
     private long create_user_id;
-    private LocalDateTime create_date;
+    private long create_date;
     private long last_edit_user_id;
-    private LocalDateTime last_edit_date;
+    private long last_edit_date;
     private GameStatusEnum last_edit_status;
 
     public GameInstance(String name, long user_id){
@@ -32,9 +29,7 @@ public class GameInstance {
         this.status = this.last_edit_status = GameStatusEnum.CREATED;
         this.visibility = true;
         this.create_user_id = this.last_edit_user_id = user_id;
-        this.create_date = this.last_edit_date = LocalDateTime.now();
-
-        id = -1;
+        this.create_date = this.last_edit_date = System.currentTimeMillis();
 
     }
 
@@ -54,11 +49,11 @@ public class GameInstance {
         this.type = type;
     }
 
-    public int getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 
@@ -78,19 +73,19 @@ public class GameInstance {
         this.website = website;
     }
 
-    public LocalDateTime getEnd_date() {
+    public long getEnd_date() {
         return end_date;
     }
 
-    public void setEnd_date(LocalDateTime end_date) {
+    public void setEnd_date(long end_date) {
         this.end_date = end_date;
     }
 
-    public LocalDateTime getStart_date() {
+    public long getStart_date() {
         return start_date;
     }
 
-    public void setStart_date(LocalDateTime start_date) {
+    public void setStart_date(long start_date) {
         this.start_date = start_date;
     }
 
@@ -114,11 +109,11 @@ public class GameInstance {
         this.last_edit_user_id = last_edit_user_id;
     }
 
-    public LocalDateTime getLast_edit_date() {
+    public long getLast_edit_date() {
         return last_edit_date;
     }
 
-    public void setLast_edit_date(LocalDateTime last_edit_date) {
+    public void setLast_edit_date(long last_edit_date) {
         this.last_edit_date = last_edit_date;
     }
 
@@ -142,11 +137,8 @@ public class GameInstance {
         return create_user_id;
     }
 
-    public LocalDateTime getCreate_date() {
+    public long getCreate_date() {
         return create_date;
     }
 
-    public int getId() {
-        return id;
-    }
 }

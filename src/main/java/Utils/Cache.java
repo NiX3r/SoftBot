@@ -11,19 +11,19 @@ public class Cache {
     public Cache(ArrayList<GameInstance> gameInstances){
 
         if(gameInstances == null)
-            gameInstances = new ArrayList<GameInstance>();
+            this.gameInstances = new ArrayList<GameInstance>();
         else
             this.gameInstances = gameInstances;
 
     }
 
-    public int isUserAlreadyInGameInstance(long user_id){
+    public boolean isUserAlreadyInGameInstance(long user_id){
         for(GameInstance game : this.gameInstances){
             if(game.getCreate_user_id() == user_id){
-                game.getId();
+                return true;
             }
         }
-        return -1;
+        return false;
     }
 
     public ArrayList<GameInstance> getGameInstances() {

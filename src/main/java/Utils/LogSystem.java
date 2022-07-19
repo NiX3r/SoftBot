@@ -1,6 +1,7 @@
 package Utils;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -31,6 +32,7 @@ public class LogSystem {
     public static void saveLogs(){
 
         FileWriter fw = null;
+        new File("./data").mkdir();
         try {
             fw = new FileWriter("./data/log.log", true);
             BufferedWriter bw = new BufferedWriter(fw);

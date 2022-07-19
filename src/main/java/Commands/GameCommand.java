@@ -18,7 +18,7 @@ public class GameCommand {
                     break;
 
                 case "edit":
-                    edit();
+                    edit(event.getMessageAuthor().getId(), event.getMessage());
                     break;
 
                 case "finish":
@@ -64,10 +64,8 @@ public class GameCommand {
 
     private static void create(long user_id, Message message){
 
-        int cacheGame = Bot.getCache().isUserAlreadyInGameInstance(user_id);
-
-        if(cacheGame >= 0){
-            message.reply("Omlouvám se, ale již jsi vytvořil jednu hru s ID `" + cacheGame + "`. Prosím první dovyplň tuto hru a ukonči ji nebo ji smaž.");
+        if(Bot.getCache().isUserAlreadyInGameInstance(user_id)){
+            message.reply("Omlouvám se, ale již jsi vytvořil jednu hru s ID. Prosím první dovyplň tuto hru a ukonči ji nebo ji smaž.");
             return;
         }
 
@@ -76,9 +74,18 @@ public class GameCommand {
         GameInstance game = new GameInstance(name, user_id);
         Bot.getCache().getGameInstances().add(game);
 
+        message.reply("Hra s tímto jménem byla lokálně vytvořena. Prosím vyplň všechny zbyle potřebné údaje pro dokončení vytvoření a odeslání. **ID pro editaci s akcí je:**");
+
     }
 
-    private static void edit(){
+    private static void edit(long user_id, Message message){
+
+        if(!Bot.getCache().isUserAlreadyInGameInstance(user_id)){
+            message.reply("Omlouvám se, ale hra s ID neexistuje. Prosím první ji vytvoř.");
+            return;
+        }
+
+
 
     }
 
