@@ -60,8 +60,6 @@ Discord bot for Czech airsoft communites
   
   - `!sb team show <id>` - show all description of a selected team
 
-- `!sb youtube` - commands for youtube section
-
 - `!sb reddit` - command for view random post
 
 - `!sb invite` - shows URL link for invite bot into Discord server
@@ -83,6 +81,12 @@ Discord bot for Czech airsoft communites
   - `!sb inquiry show` - show all description of a selected inquiry
 
 *`*` stands for necassary input variables*
+
+### Server admins commands
+
+- `!sb channel <channel-ping>` - set up channel where every notification will be sended ( only creator of offer and bot admins can use this command )
+
+- `!sb team-role <role-ping>` - set up team role if needed
 
 ### Bot admins commands
 
