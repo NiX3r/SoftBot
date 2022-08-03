@@ -136,34 +136,6 @@ Discord bot for Czech airsoft communites
   
   - `!sbp admin remove <user-discord-id>` - remove user as a admin
 
-## Plan
-
-- [x] Wishes and dreams
-
-- [ ] Games section
-
-- [ ] Programmer commands section
-
-- [ ] Teams section
-
-- [ ] Reddit section
-
-- [ ] Invite & Credits commands
-
-- [ ] Youtube section
-
-- [ ] Bazaar offer section
-
-- [ ] Bazaar inquiry section
-
-- [ ] Admins commands section
-
-- [ ] Hide & seek with a bugs
-
-- [ ] Prelease
-
-- [ ] Release
-
 ## Develop team
 
 **NiX3r** - backend discord bot developer
@@ -172,11 +144,9 @@ Discord bot for Czech airsoft communites
 
 **KiJudo** - web UI designer
 
-
-
 ## Versions
 
-| Version | Release date | Features                    | Bug fixes  | Hot  bug fixes | Description              |
-|:-------:| ------------ | --------------------------- | ---------- | -------------- | ------------------------ |
-| 1.0.0   | NONE         | initialize                  | initialize | initialize     | first release of bot     |
-| 1.1.0   | NONE         | youtube section, newsletter | NONE       | NONE           | adding some new features |
+| Version | Release date | Features                                        | Bug fixes  | Hot  bug fixes | Description              |
+|:-------:| ------------ | ----------------------------------------------- | ---------- | -------------- | ------------------------ |
+| 1.0.0   | NONE         | initialize                                      | initialize | initialize     | first release of bot     |
+| 1.1.0   | NONE         | youtube section, newsletter, game currency type | NONE       | NONE           | adding some new features |
