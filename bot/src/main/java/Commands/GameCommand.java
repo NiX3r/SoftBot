@@ -1,8 +1,10 @@
 package Commands;
 
+import Enums.ReplyEmbedEnum;
 import Instances.CalendarGameInstance;
 import Instances.GameInstance;
 import Utils.Bot;
+import Utils.DiscordUtils;
 import Utils.UTFCorrectionTranslator;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageBuilder;
@@ -45,6 +47,58 @@ public class GameCommand {
 
     private static void list(String[] splitter, Message msg){
 
+        if(splitter.length == 4){
+
+            try {
+
+                if(!isNumber(splitter[3])){
+                    msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Index, který jsi zadal není ve správném formátu (číslo)\n\nFormát příkazu:\n`!sb game list <index stránky>`", ReplyEmbedEnum.ERROR));
+                    return;
+                }
+
+                int page = Integer.parseInt(splitter[3]);
+                int max_page = Bot.getCalendar().calculateGamePages();
+
+                if(page > max_page){
+                    msg.reply(DiscordUtils.createReplyEmbed("Přečíslování stránky", "Stránka, kterou jsi zadal, je moc velká. Maximální stránka je `" + max_page + "`", ReplyEmbedEnum.ERROR));
+                    return;
+                }
+
+                ArrayList<GameInstance> gamesInPage = Bot.getCalendar().getGameArrayByPageIndex(page);
+                String message = "";
+
+                for(GameInstance game : gamesInPage){
+
+                    String repeat_string = "žádné";
+
+                    switch (game.getRepeat_date()){
+                        case "W":
+                            repeat_string = "týdenní";
+                            break;
+                        case "M":
+                            repeat_string = "měsíční";
+                            break;
+                        case "Y":
+                            repeat_string = "roční";
+                            break;
+                    }
+
+                    message += "\n**ID:** _" + game.getId() + "_ | **Název:** _" + game.getName() + "_ | **Typ:** _" + (game.getType().equals("PB") ? "Plácko bitka" : game.getType()) + "_ | **Opakování:** _" + repeat_string + "_";
+
+                }
+
+                msg.reply(DiscordUtils.createReplyEmbed("stránka " + page + "/" + max_page, message, ReplyEmbedEnum.SUCCESS));
+
+            }
+            catch (Exception ex){
+
+                Utils.LogSystem.log(Bot.getPrefix(), "Error: " + ex, new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                msg.reply(DiscordUtils.createReplyEmbed(null, "Nastala chyba aplikace. Prosím upozorněte na tuto chybu správce aplikace.\n\nChybová hláška\n`" + ex + "`", ReplyEmbedEnum.APP_ERROR));
+
+            }
+
+        }
+
     }
 
     private static void date(String[] splitter, Message msg){
@@ -52,7 +106,7 @@ public class GameCommand {
         if(splitter.length == 4){
             try{
 
-                String message = "Byly nalezeny tyto hry (název, typ, začátek):\n";
+                String message = "Byly nalezeny tyto hry (název, typ, začátek):\n\n";
                 ArrayList<CalendarGameInstance> gamesInDate = new ArrayList<CalendarGameInstance>();
                 SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
                 Date to_date = sdf.parse(splitter[3].replace(".", "-"));
@@ -79,7 +133,7 @@ public class GameCommand {
 
                     }
                     else {
-                        msg.reply("Zadal jsi moc vysoké datum. Kalendář je schopný aktuálně vypočítat akce maximálně dva roky dopředu.");
+                        msg.reply(DiscordUtils.createReplyEmbed("Vysoké datum", "Zadal jsi moc vysoké datum. Kalendář je schopný aktuálně vypočítat akce maximálně dva roky dopředu.", ReplyEmbedEnum.ERROR));
                         return;
                     }
 
@@ -102,7 +156,7 @@ public class GameCommand {
 
                     }
                     else {
-                        msg.reply("Zadal jsi moc nízké datum. Kalendář je schopný aktuálně vypočítat akce maximálně rok nazpět.");
+                        msg.reply(DiscordUtils.createReplyEmbed("Nízké datum", "Zadal jsi moc nízké datum. Kalendář je schopný aktuálně vypočítat akce maximálně rok nazpět.", ReplyEmbedEnum.ERROR));
                         return;
                     }
 
@@ -129,19 +183,19 @@ public class GameCommand {
 
                 }
 
-                msg.reply(message);
+                msg.reply(DiscordUtils.createReplyEmbed("Nalezený seznam", message, ReplyEmbedEnum.SUCCESS));
                 gamesInDate.clear();
 
             }
             catch (Exception exception){
 
                 Utils.LogSystem.log(Bot.getPrefix(), "Error: " + exception.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                msg.reply("Incorrect format of date. Please write date like '21.08.2002' or '21-08-2002'");
+                msg.reply(DiscordUtils.createReplyEmbed("Formát data", "Špatný formát data. Prosím napiš datum ve formátu '21.08.2002' nebo '21-08-2002'", ReplyEmbedEnum.ERROR));
 
             }
         }
         else {
-            msg.reply("Incorrect format! Format: !sb game date <date_value>");
+            msg.reply(DiscordUtils.createReplyEmbed("Formát příkazu", "Zadal jste špatný formát data! \n\nSprávný formát\n `!sb game date <datum>`", ReplyEmbedEnum.ERROR));
         }
 
     }
@@ -154,7 +208,7 @@ public class GameCommand {
 
             if(game == null){
 
-                msg.reply("Hra s tímto ID neexistuje. Prosím vyplňte skutečné ID.");
+                msg.reply(DiscordUtils.createReplyEmbed("Neexistující hra", "Hra s tímto ID neexistuje. Prosím vyplňte skutečné ID.", ReplyEmbedEnum.ERROR));
                 return;
 
             }
@@ -186,13 +240,11 @@ public class GameCommand {
                     .addInlineField("Typ", game.getType().equals("PB") ? "Plácko bitka" : game.getType())
                     .setFooter(game.getDescription());
 
-            System.out.println(UTFCorrectionTranslator.translate(game.getDescription()));
-
             msg.reply(builder);
             return;
 
         }
-        msg.reply("Zadané ID není číslo. Prosím zadej číslo.");
+        msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadané ID není číslo. Prosím zadej číslo.", ReplyEmbedEnum.ERROR));
 
     }
 

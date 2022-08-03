@@ -38,4 +38,29 @@ public class CalendarInstance {
         return null;
     }
 
+    public int calculateGamePages(){
+
+        return (games.size() / 10) + 1;
+
+    }
+
+    public ArrayList<GameInstance> getGameArrayByPageIndex(int index){
+
+        ArrayList<GameInstance> output = new ArrayList<GameInstance>();
+
+        for(int i = 10 * (index - 1); i < (9 + (10 * (index - 1))); i++){
+
+            System.out.println(i);
+
+            if(i == games.size())
+                break;
+
+            output.add(games.get(i));
+
+        }
+
+        return output;
+
+    }
+
 }
