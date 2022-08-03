@@ -48,9 +48,7 @@ Discord bot for Czech airsoft communites
 
 - `!sb game` - commands for game section
   
-  - `!sb game help` -
-  
-  - `!sb game list <index>` - list of all teams sorted by alphabetic and counted max to 10
+  - `!sb game list <index>` - list of all teams sorted by ID and counted max to 10
   
   - `!sb game date <date>` - shows all games to the specific date (date format: '21.08.2002' or '21.8.2002')
   
@@ -58,7 +56,7 @@ Discord bot for Czech airsoft communites
 
 - `!sb team` - commands for team section
   
-  - `!sb team list <index>` - list of all teams sorted by alphabetic and counted max to 10
+  - `!sb team list <index>` - list of all teams sorted by ID and counted max to 10
   
   - `!sb team show <id>` - show all description of a selected team
 
@@ -77,32 +75,12 @@ Discord bot for Czech airsoft communites
   - `!sb offer list <index>` - list of all offers sorted by create date and counted max to 10
   
   - `!sb offer show <id>` - show all description of a selected offer
-  
-  - `!sb offer create <topic>` - create a offer with specific name. User can create once per time **PM**
-  
-  - `!sb offer edit <id> [*topic | *price | *email | *owners-address | *files | *description ]` - edit offer with specific ID before its show time. For edit offer it must be non visible ( only creator of offer and bot admins can use this command ) **PM**
-  
-  - `!sb offer finish <id>` - finish creating a specific offer ( only creator of offer and bot admins can use this command ) **PM**
-  
-  - `!sb offer visible [on | off]` - set visibility of offer ( only creator of offer and bot admins can use this command ) **PM**
-  
-  - `!sb offer delete <id>` - delete specific offer ( only creator of offer and bot admins can use this command ) **PM**
 
 - `!sb inquiry` - commands for bazaar inquiry section
   
   - `!sb inquiry list` - list of all inquiries sorted by create date and counted max to 10
   
   - `!sb inquiry show` - show all description of a selected inquiry
-  
-  - `!sb inquiry create <topic>` - create a inquiry with specific name. User can create once per time **PM**
-  
-  - `!sb inquiry edit <id> [*topic | *price | *email | *owners-address | *description ]` - edit inquiry with specific ID before its show time. For edit inquiry it must be non visible ( only creator of inquiry and bot admins can use this command ) **PM**
-  
-  - `!sb inquiry finish` - finish creating a specific inquiry ( only creator of inquiry and bot admins can use this command ) **PM**
-  
-  - `!sb inquiry visible [on | off]` - set visibility of inquiry ( only creator of inquiry and bot admins can use this command ) **PM**
-  
-  - `!sb inquiry delete <id>` - delete specific inquiry ( only creator of inquiry and bot admins can use this command ) **PM**
 
 *`*` stands for necassary input variables*
 
