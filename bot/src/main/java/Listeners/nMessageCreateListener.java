@@ -1,6 +1,7 @@
 package Listeners;
 
 import Commands.GameCommand;
+import Commands.OtherCommands;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
@@ -17,13 +18,8 @@ public class nMessageCreateListener implements MessageCreateListener {
     @Override
     public void onMessageCreate(MessageCreateEvent event) {
 
-        /*if(!event.getMessageAuthor().isYourself()){ // Way to ping Discord bot
-            event.getMessageAuthor().asWebhook().ifPresent(webhook -> {
-
-                event.getMessage().reply("HELLO WORLD");
-
-            });
-        }*/
+        if(event.getMessage().getContent().split(" ").length < 2)
+            return;
 
         if(event.getMessage().getContent().split(" ")[0].equals("!sb")){
 
@@ -32,6 +28,9 @@ public class nMessageCreateListener implements MessageCreateListener {
                 case "game":
                     GameCommand.run(event);
                     break;
+
+                default:
+                    OtherCommands.run(event);
 
             }
 

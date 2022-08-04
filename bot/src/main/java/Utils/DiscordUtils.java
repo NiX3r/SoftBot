@@ -33,6 +33,10 @@ public class DiscordUtils {
                 c = Color.decode("#1f28d3");
                 replyEnum = "Chyba na straně aplikace";
 
+            case EASTER_EGG:
+                c = Color.decode("#7900ff");
+                replyEnum = "Easter Egg";
+
         }
 
         return new EmbedBuilder()
