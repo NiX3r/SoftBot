@@ -128,7 +128,6 @@ Discord bot for Czech airsoft communites
 
 ## Versions
 
-| Version | Release date | Features                                        | Bug fixes  | Hot  bug fixes | Description              |
-|:-------:| ------------ | ----------------------------------------------- | ---------- | -------------- | ------------------------ |
-| 1.0.0   | NONE         | initialize                                      | initialize | initialize     | first release of bot     |
-| 1.1.0   | NONE         | youtube section, newsletter, game currency type | NONE       | NONE           | adding some new features |
+| Version | Release date | Link |
+|:-------:| ------------ | ---- |
+| 1.0.0   | NONE         | NONE |
