@@ -10,11 +10,13 @@ import org.javacord.api.event.message.MessageCreateEvent;
 
 import java.awt.*;
 
-public class OtherCommands {
+public class OtherCommand {
 
     public static void run(MessageCreateEvent event){
 
         String[] splitter = event.getMessage().getContent().split(" ");
+
+        Utils.LogSystem.log(Bot.getPrefix(), "other comand catched by " + event.getMessageAuthor().getName(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
         switch (splitter[1]){
 
@@ -34,6 +36,10 @@ public class OtherCommands {
                 help(splitter, event.getMessage());
                 break;
 
+            default:
+                event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný příkaz.\n\nPro nápovědu\n`!sb help`", ReplyEmbedEnum.ERROR));
+                break;
+
         }
 
     }
@@ -47,7 +53,8 @@ public class OtherCommands {
                 .setTitle(post.getTopic())
                 .addField("Autor", post.getAuthor())
                 .addField("Odkaz", "https://reddit.com" + post.getLink())
-                .setImage(post.getContent());
+                .setImage(post.getContent())
+                .setFooter("Verze: " + Bot.getVersion());
 
         msg.reply(builder);
 
@@ -68,7 +75,7 @@ public class OtherCommands {
                 "KiJudo (KiJudo#3946) - _designérka, design web UI_\n" +
                 "\n" +
                 "**Testeři**\n" +
-                "Kykrobie (Kykrobie#4976) - _tester, testování v beta verzi_", ReplyEmbedEnum.EASTER_EGG));
+                "Kykrovec (Kykrobie#4976) - _tester, testování v beta verzi_", ReplyEmbedEnum.EASTER_EGG));
 
     }
 

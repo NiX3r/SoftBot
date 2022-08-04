@@ -2,6 +2,9 @@ package Utils;
 
 import Database.DatabaseConnection;
 import Database.DatabaseUtils;
+import Database.DeveloperCommandUtils;
+import Database.GameCommandUtils;
+import Instances.AdminInstance;
 import Instances.CalendarInstance;
 import Instances.GameInstance;
 import Instances.RedditInstance;
@@ -16,15 +19,18 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 public class Bot {
 
     private static String prefix = "§ SoftBot §";
+    private static String version = "1.0.0-alpha";
     private static DiscordApi bot;
     private static DatabaseConnection connection;
     private static CalendarInstance calendar;
     private static RedditInstance reddit;
+    private static ArrayList<AdminInstance> admins;
 
     public static void initializeBot(){
 
@@ -39,24 +45,37 @@ public class Bot {
 
             calendar = new CalendarInstance();
             reddit = new RedditInstance();
+            admins = new ArrayList<AdminInstance>();
 
-            DatabaseUtils.loadCalendarInstance(success -> {
+            DeveloperCommandUtils.loadAdmins(load_admins_success -> {
 
-                if(success){
+                if(load_admins_success){
+                    GameCommandUtils.loadCalendarInstance(load_calendar_success -> {
 
-                    bot = new DiscordApiBuilder().setToken(SecretClass.getDiscordToken()).setAllIntents().login().join();
-                    Utils.LogSystem.log(prefix, "bot is ready on : " + bot.createBotInvite() + "515396586561", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                        if(load_calendar_success){
 
-                    bot.addMessageCreateListener(new nMessageCreateListener());
-                    initializeLogListeners();
+                            bot = new DiscordApiBuilder().setToken(SecretClass.getDiscordToken()).setAllIntents().login().join();
+                            Utils.LogSystem.log(prefix, "bot is ready on : " + bot.createBotInvite() + "515396586561", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
-                    String status = "serving the server";
-                    bot.updateActivity(ActivityType.WATCHING, status);
+                            bot.addMessageCreateListener(new nMessageCreateListener());
+                            initializeLogListeners();
 
-                    Utils.LogSystem.log(prefix, "bot initialize and turned on", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                            String status = "serving the server";
+                            bot.updateActivity(ActivityType.WATCHING, status);
 
-                    saveCache(saved -> {});
+                            Utils.LogSystem.log(prefix, "bot initialize and turned on", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
+                            saveCache(saved -> {});
+
+                        }
+                        else {
+                            Utils.LogSystem.log(prefix, "error while loading calendar. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                        }
+
+                    });
+                }
+                else {
+                    Utils.LogSystem.log(prefix, "error while loading admins. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
                 }
 
             });
@@ -120,5 +139,13 @@ public class Bot {
 
     public static RedditInstance getReddit() {
         return reddit;
+    }
+
+    public static String getVersion() {
+        return version;
+    }
+
+    public static ArrayList<AdminInstance> getAdmins() {
+        return admins;
     }
 }

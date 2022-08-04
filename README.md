@@ -114,9 +114,11 @@ Discord bot for Czech airsoft communites
 
 - `!sbp admin` - admin commands section
   
-  - `!sbp admin add <user-discord-id>` - add user as a admin
+  - `!sbp admin add <user-discord-ping>` - add user as a admin
   
-  - `!sbp admin remove <user-discord-id>` - remove user as a admin
+  - `!sbp admin remove <user-discord-ping>` - remove user as a admin
+  
+  - `!sbp admin list` - list of all admins
 
 ## Develop team
 

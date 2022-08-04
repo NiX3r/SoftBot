@@ -23,6 +23,8 @@ public class GameCommand {
 
         event.getServer().ifPresent(server -> {
 
+            Utils.LogSystem.log(Bot.getPrefix(), "game comand catched by " + event.getMessageAuthor().getName(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+
             String[] splitter = event.getMessage().getContent().split(" ");
 
             switch (splitter[2]){
@@ -37,6 +39,10 @@ public class GameCommand {
 
                 case "show":
                     show(splitter, event.getMessage());
+                    break;
+
+                default:
+                    event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný podpříkaz sekce `" + splitter[1]  + "` .\n\nPro nápovědu\n`!sb help`", ReplyEmbedEnum.ERROR));
                     break;
 
             }
@@ -238,7 +244,8 @@ public class GameCommand {
                     .addInlineField("Vstupné", String.valueOf(game.getPrice()))
                     .addInlineField("Opakování", repeat_string)
                     .addInlineField("Typ", game.getType().equals("PB") ? "Plácko bitka" : game.getType())
-                    .setFooter(game.getDescription());
+                    .setDescription(game.getDescription())
+                    .setFooter("Verze: " + Bot.getVersion());
 
             msg.reply(builder);
             return;

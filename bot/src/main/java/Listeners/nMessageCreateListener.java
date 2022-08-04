@@ -1,7 +1,8 @@
 package Listeners;
 
 import Commands.GameCommand;
-import Commands.OtherCommands;
+import Commands.OtherCommand;
+import Commands.ProgrammerCommand;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
@@ -30,9 +31,14 @@ public class nMessageCreateListener implements MessageCreateListener {
                     break;
 
                 default:
-                    OtherCommands.run(event);
+                    OtherCommand.run(event);
 
             }
+
+        }
+        else if(event.getMessage().getContent().split(" ")[0].equals("!sbp")){
+
+            ProgrammerCommand.run(event);
 
         }
 

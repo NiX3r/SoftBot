@@ -32,17 +32,20 @@ public class DiscordUtils {
             case APP_ERROR:
                 c = Color.decode("#1f28d3");
                 replyEnum = "Chyba na straně aplikace";
+                break;
 
             case EASTER_EGG:
                 c = Color.decode("#7900ff");
                 replyEnum = "Easter Egg";
+                break;
 
         }
 
         return new EmbedBuilder()
                 .setTitle(replyEnum + (replyTopic == null ? "" : " - " + replyTopic))
                 .setColor(c)
-                .setDescription(replyMessage);
+                .setDescription(replyMessage)
+                .setFooter("Verze: " + Bot.getVersion());
 
     }
 

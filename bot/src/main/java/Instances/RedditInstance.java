@@ -55,7 +55,7 @@ public class RedditInstance {
                 redditPost.setContent(content);
                 redditPosts.add(redditPost);
             }
-            
+
         }
         Utils.LogSystem.log(Bot.getPrefix(), "Data successfully mapped", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 

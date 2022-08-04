@@ -50,14 +50,16 @@ public class CalendarInstance {
 
         for(int i = 10 * (index - 1); i < (9 + (10 * (index - 1))); i++){
 
-            System.out.println(i);
-
             if(i == games.size())
                 break;
+
+            System.out.println("adding " + i);
 
             output.add(games.get(i));
 
         }
+
+        System.out.println(output.size());
 
         return output;
 
