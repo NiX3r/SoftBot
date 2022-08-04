@@ -53,8 +53,6 @@ public class CalendarInstance {
             if(i == games.size())
                 break;
 
-            System.out.println("adding " + i);
-
             output.add(games.get(i));
 
         }

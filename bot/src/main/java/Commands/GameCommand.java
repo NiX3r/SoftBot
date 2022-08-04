@@ -33,8 +33,8 @@ public class GameCommand {
                     list(splitter, event.getMessage());
                     break;
 
-                case "date":
-                    date(splitter, event.getMessage());
+                case "to":
+                    to(splitter, event.getMessage());
                     break;
 
                 case "show":
@@ -107,7 +107,7 @@ public class GameCommand {
 
     }
 
-    private static void date(String[] splitter, Message msg){
+    private static void to(String[] splitter, Message msg){
 
         if(splitter.length == 4){
             try{

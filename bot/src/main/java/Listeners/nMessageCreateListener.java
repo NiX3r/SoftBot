@@ -3,6 +3,7 @@ package Listeners;
 import Commands.GameCommand;
 import Commands.OtherCommand;
 import Commands.ProgrammerCommand;
+import Commands.TeamCommand;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 
@@ -28,6 +29,10 @@ public class nMessageCreateListener implements MessageCreateListener {
 
                 case "game":
                     GameCommand.run(event);
+                    break;
+
+                case "team":
+                    TeamCommand.run(event);
                     break;
 
                 default:

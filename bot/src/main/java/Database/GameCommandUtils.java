@@ -27,7 +27,6 @@ public class GameCommandUtils {
                         .prepareStatement("SELECT * FROM Game WHERE Status='APPROVED'");
 
                 ResultSet results = statement.executeQuery();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
                 while(results.next()){
 

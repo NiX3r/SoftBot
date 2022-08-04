@@ -22,7 +22,8 @@ public class UTFCorrectionTranslator {
                 .replaceAll("◄cd►", "ď")
                 .replaceAll("Åˆ", "ň")
                 .replaceAll("Å¥", "ť")
-                .replaceAll("â€“", "-");
+                .replaceAll("â€“", "-")
+                .replaceAll("◄co►", "'");
 
     }
 

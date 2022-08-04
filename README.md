@@ -59,6 +59,8 @@ Discord bot for Czech airsoft communites
   - `!sb team list <index>` - list of all teams sorted by ID and counted max to 10
   
   - `!sb team show <id>` - show all description of a selected team
+  
+  - `!sb team invite <id>` create and send invite for a teams server
 
 - `!sb reddit` - command for view random post
 
@@ -108,7 +110,7 @@ Discord bot for Czech airsoft communites
 
 - `!sba announcement <message>` - send annoucement message to all servers
 
-- `!sba game pending` - send oldest game in pending status to approve
+- `!sba pending [game | team | offer | inquiry]` - send oldest game in pending status to approve
 
 ### Programmer commands
 
