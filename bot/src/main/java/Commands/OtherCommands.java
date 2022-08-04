@@ -1,9 +1,14 @@
 package Commands;
 
 import Enums.ReplyEmbedEnum;
+import Instances.RedditPostInstance;
+import Utils.Bot;
 import Utils.DiscordUtils;
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
+
+import java.awt.*;
 
 public class OtherCommands {
 
@@ -34,6 +39,17 @@ public class OtherCommands {
     }
 
     private static void reddit(String[] splitter, Message msg){
+
+        RedditPostInstance post = Bot.getReddit().getRandomPost();
+
+        EmbedBuilder builder = new EmbedBuilder()
+                .setColor(Color.decode("#D1A841"))
+                .setTitle(post.getTopic())
+                .addField("Autor", post.getAuthor())
+                .addField("Odkaz", "https://reddit.com" + post.getLink())
+                .setImage(post.getContent());
+
+        msg.reply(builder);
 
     }
 

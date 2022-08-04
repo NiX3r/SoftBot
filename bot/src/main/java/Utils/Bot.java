@@ -4,6 +4,7 @@ import Database.DatabaseConnection;
 import Database.DatabaseUtils;
 import Instances.CalendarInstance;
 import Instances.GameInstance;
+import Instances.RedditInstance;
 import Listeners.nMessageCreateListener;
 import Threads.ShutdownThread;
 import com.google.gson.GsonBuilder;
@@ -23,6 +24,7 @@ public class Bot {
     private static DiscordApi bot;
     private static DatabaseConnection connection;
     private static CalendarInstance calendar;
+    private static RedditInstance reddit;
 
     public static void initializeBot(){
 
@@ -36,6 +38,7 @@ public class Bot {
             Utils.LogSystem.log(prefix, "successfully connected to the database", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             calendar = new CalendarInstance();
+            reddit = new RedditInstance();
 
             DatabaseUtils.loadCalendarInstance(success -> {
 
@@ -115,4 +118,7 @@ public class Bot {
         });
     }
 
+    public static RedditInstance getReddit() {
+        return reddit;
+    }
 }
