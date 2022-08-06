@@ -1,6 +1,7 @@
 package Database;
 
 import Enums.GameStatusEnum;
+import Enums.LogTypeEnum;
 import Instances.AdminInstance;
 import Instances.CalendarGameInstance;
 import Instances.GameInstance;
@@ -17,13 +18,13 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.function.Consumer;
 
-public class DeveloperCommandUtils {
+public class DeveloperUtils {
 
     public static void loadAdmins(Consumer<Boolean> callback){
 
         if(!Bot.getDatabaseConnection().isClosed()){
 
-            Utils.LogSystem.log("PROGRAM", "loading admins into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "loading admins into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             PreparedStatement statement = null;
             try {
@@ -47,18 +48,18 @@ public class DeveloperCommandUtils {
 
                 }
             }catch (ParseException e) {
-                Utils.LogSystem.log("PROGRAM", "error while parsing. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                Utils.LogSystem.log(LogTypeEnum.ERROR, "error while parsing. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
                 callback.accept(false);
             }
             catch (SQLException e) {
-                Utils.LogSystem.log("PROGRAM", "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                Utils.LogSystem.log(LogTypeEnum.ERROR, "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
                 callback.accept(false);
             }
 
 
         }
 
-        Utils.LogSystem.log("PROGRAM", "admins successfully initialized and loaded", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(LogTypeEnum.INFO, "admins successfully initialized and loaded", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
         callback.accept(true);
 
     }
@@ -67,7 +68,7 @@ public class DeveloperCommandUtils {
 
         if(!Bot.getDatabaseConnection().isClosed()){
 
-            Utils.LogSystem.log("PROGRAM", "adding new admin '" + admin.getNick() + "'", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "adding new admin '" + admin.getNick() + "'", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             PreparedStatement statement = null;
             try {
@@ -88,17 +89,18 @@ public class DeveloperCommandUtils {
                 }
 
             }catch (SQLException e) {
-                Utils.LogSystem.log("PROGRAM", "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                Utils.LogSystem.log(LogTypeEnum.ERROR, "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
                 callback.accept(false);
                 return;
             }
 
-            Utils.LogSystem.log("PROGRAM", "admin '" + admin.getNick() + "' successfully added", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "admin '" + admin.getNick() + "' successfully added", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
             return;
 
         }
 
-        Utils.LogSystem.log("PROGRAM", "admin '" + admin.getNick() + "' cannot be added - database is not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(LogTypeEnum.ERROR, "admin '" + admin.getNick() + "' cannot be added - database is not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        callback.accept(false);
 
     }
 
@@ -106,7 +108,7 @@ public class DeveloperCommandUtils {
 
         if(!Bot.getDatabaseConnection().isClosed()){
 
-            Utils.LogSystem.log("PROGRAM", "removing  admin by Discord ID '" + discord_id + "'", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "removing  admin by Discord ID '" + discord_id + "'", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             PreparedStatement statement = null;
             try {
@@ -125,17 +127,18 @@ public class DeveloperCommandUtils {
                 }
 
             }catch (SQLException e) {
-                Utils.LogSystem.log("PROGRAM", "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                Utils.LogSystem.log(LogTypeEnum.ERROR, "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
                 callback.accept(false);
                 return;
             }
 
-            Utils.LogSystem.log("PROGRAM", "admin '" + discord_id + "' successfully removed", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "admin '" + discord_id + "' successfully removed", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
             return;
 
         }
 
-        Utils.LogSystem.log("PROGRAM", "admin '" + discord_id + "' cannot be removed - database is not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(LogTypeEnum.ERROR, "admin '" + discord_id + "' cannot be removed - database is not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        callback.accept(false);
 
     }
 

@@ -55,7 +55,10 @@ public class DatabaseUtils {
 
     public static String encodeDiscordId(long id){
 
-        return String.valueOf(id);
+        if(id == -1)
+            return "";
+        else
+            return String.valueOf(id);
 
     }
 

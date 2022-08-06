@@ -1,7 +1,8 @@
 package Commands;
 
 import Database.DatabaseUtils;
-import Database.DeveloperCommandUtils;
+import Database.DeveloperUtils;
+import Enums.LogTypeEnum;
 import Enums.ReplyEmbedEnum;
 import Instances.AdminInstance;
 import Utils.Bot;
@@ -20,7 +21,7 @@ public class ProgrammerCommand {
             return;
         }
 
-        Utils.LogSystem.log(Bot.getPrefix(), "programmer comand catched by " + event.getMessageAuthor().getName(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(LogTypeEnum.INFO, "programmer comand catched by " + event.getMessageAuthor().getName(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
         switch (splitter[1]){
 
@@ -63,7 +64,7 @@ public class ProgrammerCommand {
                         System.currentTimeMillis());
                 Bot.getAdmins().add(admin);
 
-                DeveloperCommandUtils.addAdmin(admin, success -> {
+                DeveloperUtils.addAdmin(admin, success -> {
 
                     if(success){
                         msg.reply(DiscordUtils.createReplyEmbed("", "Úspěsně jsi přidal admina `" + admin.getNick() + "`", ReplyEmbedEnum.SUCCESS));
@@ -99,7 +100,7 @@ public class ProgrammerCommand {
                 return;
             }
 
-            DeveloperCommandUtils.removeAdmin(selectedAdmin, success -> {
+            DeveloperUtils.removeAdmin(selectedAdmin, success -> {
 
                 if(success){
                     msg.reply(DiscordUtils.createReplyEmbed("", "Úspěsně jsi smazal admina `" + selectedAdmin + "`", ReplyEmbedEnum.SUCCESS));

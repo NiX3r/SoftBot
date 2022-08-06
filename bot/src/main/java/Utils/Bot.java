@@ -1,6 +1,7 @@
 package Utils;
 
 import Database.*;
+import Enums.LogTypeEnum;
 import Instances.*;
 import Listeners.nMessageCreateListener;
 import Tasks.RotateStatusTask;
@@ -27,7 +28,9 @@ public class Bot {
     private static CalendarInstance calendar;
     private static TeamUtilInstance teamUtil;
     private static RedditInstance reddit;
+    private static PunishmentInstance punishments;
     private static ArrayList<AdminInstance> admins;
+    private static ArrayList<ServerOptionInstance> serverOptions;
     private static Timer timer;
 
     public static void initializeBot(){
@@ -35,65 +38,87 @@ public class Bot {
         Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 
         connection = new DatabaseConnection();
-        Utils.LogSystem.log(prefix, "trying to connect to the database", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(LogTypeEnum.INFO, "trying to connect to the database", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
         if(connection != null){
 
-            Utils.LogSystem.log(prefix, "successfully connected to the database", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "successfully connected to the database", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             calendar = new CalendarInstance();
             teamUtil = new TeamUtilInstance();
             reddit = new RedditInstance();
+            punishments = new PunishmentInstance();
             admins = new ArrayList<AdminInstance>();
+            serverOptions = new ArrayList<ServerOptionInstance>();
 
-            TeamCommandUtils.loadCalendarInstance(load_teams_success -> {
+            ServerOptionUtils.loadServerOptionInstance(load_server_option_success -> {
 
-                if(load_teams_success){
-                    DeveloperCommandUtils.loadAdmins(load_admins_success -> {
+                if(load_server_option_success){
+                    BanUtils.loadBansInstance(load_bans_success -> {
 
-                        if(load_admins_success){
-                            GameCommandUtils.loadCalendarInstance(load_calendar_success -> {
+                        if(load_bans_success){
+                            TeamUtils.loadTeamsInstance(load_teams_success -> {
 
-                                if(load_calendar_success){
+                                if(load_teams_success){
+                                    DeveloperUtils.loadAdmins(load_admins_success -> {
 
-                                    bot = new DiscordApiBuilder().setToken(SecretClass.getDiscordToken()).setAllIntents().login().join();
-                                    Utils.LogSystem.log(prefix, "bot is ready on : " + bot.createBotInvite() + "515396586561", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                                        if(load_admins_success){
+                                            GameUtils.loadCalendarInstance(load_calendar_success -> {
 
-                                    bot.addMessageCreateListener(new nMessageCreateListener());
-                                    initializeLogListeners();
+                                                if(load_calendar_success){
 
-                                    teamUtil.recalculateMemberCount();
+                                                    bot = new DiscordApiBuilder().setToken(SecretClass.getDiscordToken()).setAllIntents().login().join();
+                                                    Utils.LogSystem.log(LogTypeEnum.INFO, "bot is ready on : " + bot.createBotInvite() + "515396586561", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
-                                    timer = new Timer("softbot-timer");
-                                    timer.schedule(new RotateStatusTask(), 0, 30000);
+                                                    bot.addMessageCreateListener(new nMessageCreateListener());
+                                                    initializeLogListeners();
 
-                                    Utils.LogSystem.log(prefix, "bot initialize and turned on", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                                                    teamUtil.recalculateMemberCount();
 
-                                    //saveCache(saved -> {});
+                                                    timer = new Timer("softbot-timer");
+                                                    timer.schedule(new RotateStatusTask(), 0, 30000);
 
+                                                    Utils.LogSystem.log(LogTypeEnum.INFO, "bot initialize and turned on", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+
+                                                    //saveCache(saved -> {});
+
+                                                }
+                                                else {
+                                                    Utils.LogSystem.log(LogTypeEnum.ERROR, "error while loading calendar. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                                                }
+
+                                            });
+                                        }
+                                        else {
+                                            Utils.LogSystem.log(LogTypeEnum.ERROR, "error while loading admins. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                                        }
+
+                                    });
                                 }
                                 else {
-                                    Utils.LogSystem.log(prefix, "error while loading calendar. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                                    Utils.LogSystem.log(LogTypeEnum.ERROR, "error while loading teams. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
                                 }
 
                             });
                         }
                         else {
-                            Utils.LogSystem.log(prefix, "error while loading admins. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                            Utils.LogSystem.log(LogTypeEnum.ERROR, "error while loading bans. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
                         }
 
                     });
                 }
                 else {
-                    Utils.LogSystem.log(prefix, "error while loading teams. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                    Utils.LogSystem.log(LogTypeEnum.ERROR, "error while loading server options. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
                 }
 
             });
 
+
+
         }
         else {
 
-            Utils.LogSystem.log(prefix, "can't connect to the database. Turning bot down ..", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.ERROR, "can't connect to the database. Turning bot down ..", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
         }
 
@@ -112,10 +137,10 @@ public class Bot {
             f_writer.write(json);
             f_writer.flush();
             f_writer.close();
-            LogSystem.log(Bot.getPrefix(), "cache saved", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            LogSystem.log(LogTypeEnum.INFO, "cache saved", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
             consumer.accept(null);
         } catch (Exception e){
-            LogSystem.log(Bot.getPrefix(), "can't save cache. Error: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            LogSystem.log(LogTypeEnum.ERROR, "can't save cache. Error: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
             e.printStackTrace();
             consumer.accept(e);
         }
@@ -137,13 +162,13 @@ public class Bot {
 
     private static void initializeLogListeners(){
         bot.addLostConnectionListener(listener -> {
-            Utils.LogSystem.log(prefix, "lost connection", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.ERROR, "lost connection", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
         });
         bot.addReconnectListener(listener -> {
-            Utils.LogSystem.log(prefix, "reconnecting", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.WARNING, "reconnecting", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
         });
         bot.addResumeListener(listener -> {
-            Utils.LogSystem.log(prefix, "resuming", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.WARNING, "resuming", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
         });
     }
 
@@ -169,7 +194,40 @@ public class Bot {
         return false;
     }
 
+    public static boolean isUserAdmin(long id){
+        for(AdminInstance admin : admins){
+            if(admin.getDiscord_id() == id)
+                return true;
+        }
+        return false;
+    }
+
     public static TeamUtilInstance getTeamUtil() {
         return teamUtil;
     }
+
+    public static PunishmentInstance getPunishments() {
+        return punishments;
+    }
+
+    public static ArrayList<ServerOptionInstance> getServerOptions() {
+        return serverOptions;
+    }
+
+    public static ServerOptionInstance getServerOption(long server_id){
+        for(ServerOptionInstance serverOption : serverOptions){
+            if(serverOption.getServer_id() == server_id)
+                return serverOption;
+        }
+        return null;
+    }
+
+    public static boolean isServerOptionInList(long server_id){
+        for(ServerOptionInstance serverOption : serverOptions){
+            if(serverOption.getServer_id() == server_id)
+                return true;
+        }
+        return false;
+    }
+
 }

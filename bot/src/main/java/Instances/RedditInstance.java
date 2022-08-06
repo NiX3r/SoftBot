@@ -1,5 +1,6 @@
 package Instances;
 
+import Enums.LogTypeEnum;
 import Utils.Bot;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
@@ -21,7 +22,7 @@ public class RedditInstance {
 
     public RedditInstance(){
 
-        Utils.LogSystem.log(Bot.getPrefix(), "initializing reddit posts", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(LogTypeEnum.INFO, "initializing reddit posts", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
         redditPosts = new ArrayList<>();
         loadRedditPosts();
@@ -31,10 +32,10 @@ public class RedditInstance {
     public void loadRedditPosts(){
 
         JsonParser parser = new JsonParser();
-        Utils.LogSystem.log(Bot.getPrefix(), "loading data from Reddit", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(LogTypeEnum.INFO, "loading data from Reddit", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
         JsonElement element = parser.parse(readHtmlContent());
         JsonArray children = element.getAsJsonObject().getAsJsonObject("data").getAsJsonArray("children");
-        Utils.LogSystem.log(Bot.getPrefix(), "data from Reddit loaded. Looping and mapping it", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(LogTypeEnum.INFO, "data from Reddit loaded. Looping and mapping it", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
         for(int i = 0; i < children.size(); i++){
 
@@ -57,7 +58,7 @@ public class RedditInstance {
             }
 
         }
-        Utils.LogSystem.log(Bot.getPrefix(), "Data successfully mapped", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(LogTypeEnum.INFO, "Data successfully mapped", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
     }
 

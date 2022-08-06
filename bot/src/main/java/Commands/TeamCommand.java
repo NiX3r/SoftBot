@@ -1,5 +1,6 @@
 package Commands;
 
+import Enums.LogTypeEnum;
 import Enums.ReplyEmbedEnum;
 import Instances.TeamInstance;
 import Utils.Bot;
@@ -17,7 +18,7 @@ public class TeamCommand {
 
         String[] splitter = event.getMessage().getContent().split(" ");
 
-        Utils.LogSystem.log(Bot.getPrefix(), "team comand catched by " + event.getMessageAuthor().getName(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(LogTypeEnum.INFO, "team comand catched by " + event.getMessageAuthor().getName(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
         switch (splitter[2]){
 
@@ -88,7 +89,7 @@ public class TeamCommand {
             }
             catch (Exception ex){
 
-                Utils.LogSystem.log(Bot.getPrefix(), "Error: " + ex, new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                Utils.LogSystem.log(LogTypeEnum.ERROR, "Error: " + ex, new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
                 msg.reply(DiscordUtils.createReplyEmbed(null, "Nastala chyba aplikace. Prosím upozorněte na tuto chybu správce aplikace.\n\nChybová hláška\n`" + ex + "`", ReplyEmbedEnum.APP_ERROR));
 
             }

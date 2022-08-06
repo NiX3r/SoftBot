@@ -1,6 +1,7 @@
 package Utils;
 
 import Enums.ReplyEmbedEnum;
+import org.javacord.api.entity.message.MessageAuthor;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 
 import java.awt.*;
@@ -46,6 +47,16 @@ public class DiscordUtils {
                 .setColor(c)
                 .setDescription(replyMessage)
                 .setFooter("Verze: " + Bot.getVersion());
+
+    }
+
+    public static EmbedBuilder createAnnouncementEmbed(String content, MessageAuthor author){
+
+        return new EmbedBuilder()
+                .setTitle("Oznamovací systém :ear:")
+                .setDescription(content)
+                .setColor(Color.decode("#D1A841"))
+                .setFooter("Administrátor: " + author.getName() + " | Verze: " + Bot.getVersion(), author.getAvatar().getUrl().toString());
 
     }
 

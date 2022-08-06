@@ -21,7 +21,7 @@ public class RotateStatusTask extends TimerTask {
                 for (Server server : Bot.getBot().getServers()){
                     total_members += server.getMemberCount();
                 }
-                Bot.getBot().updateActivity(ActivityType.WATCHING, "celkem " + total_members + " uživatelů");
+                Bot.getBot().updateActivity(ActivityType.WATCHING, total_members + " uživatelů");
                 index++;
 
                 break;
@@ -29,7 +29,7 @@ public class RotateStatusTask extends TimerTask {
             case 1:
 
                 int total_games = Bot.getCalendar().getGames().size();
-                Bot.getBot().updateActivity(ActivityType.WATCHING, "celkem " + total_games + " her");
+                Bot.getBot().updateActivity(ActivityType.WATCHING, total_games + " her");
                 index++;
 
                 break;
@@ -37,7 +37,7 @@ public class RotateStatusTask extends TimerTask {
             case 2:
 
                 int total_servers = Bot.getBot().getServers().size();
-                Bot.getBot().updateActivity(ActivityType.WATCHING, "celkem " + total_servers + " serverů");
+                Bot.getBot().updateActivity(ActivityType.WATCHING, total_servers + " serverů");
                 index++;
 
                 break;
@@ -45,7 +45,7 @@ public class RotateStatusTask extends TimerTask {
             case 3:
 
                 int total_teams = Bot.getTeamUtil().getTeams().size();
-                Bot.getBot().updateActivity(ActivityType.WATCHING, "celkem " + total_teams + " týmů");
+                Bot.getBot().updateActivity(ActivityType.WATCHING, total_teams + " týmů");
                 index++;
 
                 break;

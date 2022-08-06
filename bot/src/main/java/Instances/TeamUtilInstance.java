@@ -42,8 +42,6 @@ public class TeamUtilInstance {
 
         }
 
-        System.out.println(output.size());
-
         return output;
 
     }
@@ -54,6 +52,22 @@ public class TeamUtilInstance {
                 return team;
         }
         return null;
+    }
+
+    public TeamInstance getTeamByDiscordId(long discord_id){
+        for(TeamInstance team : teams){
+            if(team.getDiscord_server_id() == discord_id)
+                return team;
+        }
+        return null;
+    }
+
+    public boolean hasTeamSetupDiscord(long discord_id){
+        for(TeamInstance team : teams){
+            if(team.getDiscord_server_id() == discord_id)
+                return true;
+        }
+        return false;
     }
 
 }

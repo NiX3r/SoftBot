@@ -1,6 +1,7 @@
 package Database;
 
 import Enums.GameStatusEnum;
+import Enums.LogTypeEnum;
 import Instances.CalendarGameInstance;
 import Instances.GameInstance;
 import Utils.Bot;
@@ -13,13 +14,13 @@ import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.function.Consumer;
 
-public class GameCommandUtils {
+public class GameUtils {
 
     public static void loadCalendarInstance(Consumer<Boolean> callback){
 
         if(!Bot.getDatabaseConnection().isClosed()){
 
-            Utils.LogSystem.log("PROGRAM", "loading calendar into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "loading calendar into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             PreparedStatement statement = null;
             try {
@@ -96,7 +97,7 @@ public class GameCommandUtils {
 
                 }
             }catch (SQLException e) {
-                Utils.LogSystem.log("PROGRAM", "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                Utils.LogSystem.log(LogTypeEnum.ERROR, "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
                 callback.accept(false);
             }
 
@@ -104,7 +105,7 @@ public class GameCommandUtils {
         }
 
         Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
-        Utils.LogSystem.log("PROGRAM", "calendar successfully initialized, loaded and sorted", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(LogTypeEnum.INFO, "calendar successfully initialized, loaded and sorted", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
         callback.accept(true);
 
     }

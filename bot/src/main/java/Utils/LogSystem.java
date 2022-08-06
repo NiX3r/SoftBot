@@ -1,5 +1,7 @@
 package Utils;
 
+import Enums.LogTypeEnum;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -14,12 +16,12 @@ public class LogSystem {
 
     private static List<String> logs;
 
-    public static void log(String prefix, String content, int lineNo, String fileName, String methodName){
+    public static void log(LogTypeEnum type, String content, int lineNo, String fileName, String methodName){
 
         if(logs == null)
             logs = new ArrayList<String>();
 
-        String line = "[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.MEDIUM)) + "] (" + prefix + ") " + fileName + " : " + methodName + "(" + lineNo + ") >> " + content;
+        String line = "[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.MEDIUM)) + "] (" + type.toString() + ") " + fileName + " : " + methodName + "(" + lineNo + ") >> " + content;
 
         logs.add(line);
         System.out.println(line);

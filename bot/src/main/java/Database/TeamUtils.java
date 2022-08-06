@@ -1,6 +1,7 @@
 package Database;
 
 import Enums.GameStatusEnum;
+import Enums.LogTypeEnum;
 import Enums.TeamStatusEnum;
 import Instances.CalendarGameInstance;
 import Instances.GameInstance;
@@ -15,13 +16,13 @@ import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.function.Consumer;
 
-public class TeamCommandUtils {
+public class TeamUtils {
 
-    public static void loadCalendarInstance(Consumer<Boolean> callback){
+    public static void loadTeamsInstance(Consumer<Boolean> callback){
 
         if(!Bot.getDatabaseConnection().isClosed()){
 
-            Utils.LogSystem.log("PROGRAM", "loading teams into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "loading teams into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             PreparedStatement statement = null;
             try {
@@ -39,8 +40,6 @@ public class TeamCommandUtils {
                             results.getString("Website"),
                             UTFCorrectionTranslator.translate(results.getString("Type")),
                             DatabaseUtils.decodeDiscordId(results.getString("DiscordServerID")),
-                            DatabaseUtils.decodeDiscordId(results.getString("DiscordUserCreatorID")),
-                            DatabaseUtils.decodeDiscordId(results.getString("DiscordServerMemberRoleID")),
                             UTFCorrectionTranslator.translate(results.getString("Description")),
                             TeamStatusEnum.valueOf(results.getString("Status")),
                             DatabaseUtils.decodeDiscordId(results.getString("LastEditAuthor")),
@@ -52,7 +51,7 @@ public class TeamCommandUtils {
 
                 }
             }catch (SQLException e) {
-                Utils.LogSystem.log("PROGRAM", "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                Utils.LogSystem.log(LogTypeEnum.ERROR, "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
                 callback.accept(false);
             }
 
@@ -60,7 +59,7 @@ public class TeamCommandUtils {
         }
 
         Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
-        Utils.LogSystem.log("PROGRAM", "calendar successfully initialized, loaded and sorted", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(LogTypeEnum.INFO, "teams successfully initialized and loaded", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
         callback.accept(true);
 
     }

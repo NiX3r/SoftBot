@@ -11,8 +11,6 @@ public class TeamInstance {
     private String website;
     private String type;
     private long discord_server_id;
-    private long discord_creator_id;
-    private long discord_server_member_role_id;
     private String description;
     private TeamStatusEnum status;
     private long last_edit_author;
@@ -22,7 +20,7 @@ public class TeamInstance {
 
     private int member_count;
 
-    public TeamInstance(int id, String name, String thumbnail, String website, String type, long discord_server_id, long discord_creator_id, long discord_server_member_role_id, String description, TeamStatusEnum status, long last_edit_author, long last_edit_date, TeamStatusEnum last_status, long create_date){
+    public TeamInstance(int id, String name, String thumbnail, String website, String type, long discord_server_id, String description, TeamStatusEnum status, long last_edit_author, long last_edit_date, TeamStatusEnum last_status, long create_date){
 
         this.id = id;
         this.name = name;
@@ -30,8 +28,6 @@ public class TeamInstance {
         this.website = website;
         this.type = type;
         this.discord_server_id = discord_server_id;
-        this.discord_creator_id = discord_creator_id;
-        this.discord_server_member_role_id = discord_server_member_role_id;
         this.description = description;
         this.status = status;
         this.last_edit_author = last_edit_author;
@@ -45,17 +41,25 @@ public class TeamInstance {
 
     public void recalculateMemberCount(){
 
-        if(discord_server_id != 0 && discord_server_member_role_id != 0){
+        if(discord_server_id != 0){
 
-            Bot.getBot().getServerById(discord_server_id).ifPresent(server -> {
+            ServerOptionInstance serverOption = Bot.getServerOption(discord_server_id);
 
-                server.getRoleById(discord_server_member_role_id).ifPresent(role -> {
+            if(serverOption != null){
+                if(serverOption.getTeam_member_role_id() != -1){
 
-                    member_count = role.getUsers().size();
+                    Bot.getBot().getServerById(discord_server_id).ifPresent(server -> {
 
-                });
+                        server.getRoleById(serverOption.getTeam_member_role_id()).ifPresent(role -> {
 
-            });
+                            member_count = role.getUsers().size();
+
+                        });
+
+                    });
+
+                }
+            }
 
         }
 
@@ -103,22 +107,6 @@ public class TeamInstance {
 
     public void setDiscord_server_id(long discord_server_id) {
         this.discord_server_id = discord_server_id;
-    }
-
-    public long getDiscord_creator_id() {
-        return discord_creator_id;
-    }
-
-    public void setDiscord_creator_id(long discord_creator_id) {
-        this.discord_creator_id = discord_creator_id;
-    }
-
-    public long getDiscord_server_member_role_id() {
-        return discord_server_member_role_id;
-    }
-
-    public void setDiscord_server_member_role_id(long discord_server_member_role_id) {
-        this.discord_server_member_role_id = discord_server_member_role_id;
     }
 
     public String getDescription() {
