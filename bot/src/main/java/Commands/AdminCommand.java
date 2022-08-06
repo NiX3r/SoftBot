@@ -33,7 +33,7 @@ public class AdminCommand {
                     break;
 
                 case "server":
-                    server(splitter, event.getMessage());
+                    server(event);
                     break;
 
                 case "announcement":
@@ -76,7 +76,8 @@ public class AdminCommand {
     private static void unban(String[] splitter, Message message) {
     }
 
-    private static void server(String[] splitter, Message message) {
+    private static void server(MessageCreateEvent event) {
+        ServerCommand.run(event);
     }
 
     private static void ban(String[] splitter, Message message) {
