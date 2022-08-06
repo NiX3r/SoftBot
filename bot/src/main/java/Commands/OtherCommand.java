@@ -179,7 +179,7 @@ public class OtherCommand {
 
     private static void invite(String[] splitter, Message msg){
 
-        msg.reply(DiscordUtils.createReplyEmbed("Pozvánka bota", "Odkaz na pozvání SoftBota na vlastní server\n\n**Link**\n https://www.softbot.ncodes.eu/discord", ReplyEmbedEnum.SUCCESS));
+        msg.reply(DiscordUtils.createReplyEmbed("Pozvánka bota", "Odkaz na pozvání SoftBota na vlastní server\n\n**Link**\n http://softbot.ncodes.eu/discord", ReplyEmbedEnum.SUCCESS));
 
     }
 
