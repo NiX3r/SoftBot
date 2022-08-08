@@ -50,50 +50,58 @@ public class GameUtils {
                             DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)));
 
                     Bot.getCalendar().getGames().add(mainInstance);
+                    Bot.getCalendar().addCalendarGame(mainInstance);
 
-                    long appendTime = 0;
+                }
+            }catch (SQLException e) {
+                Utils.LogSystem.log(LogTypeEnum.ERROR, "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                callback.accept(false);
+            }
 
-                    switch (mainInstance.getRepeat_date()){
 
-                        case "W":
-                            appendTime = Long.parseLong("604800000");
-                            break;
+        }
 
-                        case "M":
-                            appendTime = Long.parseLong("2629746000");
-                            break;
+        Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
+        Utils.LogSystem.log(LogTypeEnum.INFO, "calendar successfully initialized, loaded and sorted", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        callback.accept(true);
 
-                        case "Y":
-                            appendTime = Long.parseLong("31556952000");
-                            break;
+    }
 
-                    }
+    public static void loadPendingCalendarInstance(Consumer<Boolean> callback){
 
-                    if(appendTime == 0){
+        if(!Bot.getDatabaseConnection().isClosed()){
 
-                        Bot.getCalendar().getCalendar().add(new CalendarGameInstance(mainInstance.getId(), mainInstance.getStart_date(), mainInstance.getEnd_date()));
+            Utils.LogSystem.log(LogTypeEnum.INFO, "loading calendar into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
-                    }
-                    else {
+            PreparedStatement statement = null;
+            try {
+                statement = Bot.getConnection()
+                        .prepareStatement("SELECT * FROM Game WHERE Status='APPROVED'");
 
-                        long game_length = mainInstance.getEnd_date() - mainInstance.getStart_date();
+                ResultSet results = statement.executeQuery();
 
-                        for(long index = mainInstance.getStart_date(); index >= System.currentTimeMillis() - Long.parseLong("31556952000"); index = index - appendTime){ // DECREASING
+                while(results.next()){
 
-                            Bot.getCalendar().getCalendar().add(new CalendarGameInstance(mainInstance.getId(), index, index + game_length));
+                    String last_edit_date = results.getObject("LastEditDate", String.class);
+                    GameInstance mainInstance = new GameInstance(results.getInt("ID"),
+                            UTFCorrectionTranslator.translate(results.getString("Name")),
+                            results.getString("Thumbnail"),
+                            DatabaseUtils.decodeDateTime(results.getObject("StartDate", String.class)),
+                            DatabaseUtils.decodeDateTime(results.getObject("EndDate", String.class)),
+                            results.getString("RepeatDate"),
+                            results.getString("Website"),
+                            UTFCorrectionTranslator.translate(results.getString("Location")),
+                            results.getFloat("Price"),
+                            UTFCorrectionTranslator.translate(results.getString("Type")),
+                            UTFCorrectionTranslator.translate(results.getString("Description")),
+                            GameStatusEnum.valueOf(results.getString("Status")),
+                            DatabaseUtils.decodeDiscordId(results.getString("LastEditAuthor")),
+                            (last_edit_date == null ? 0 : DatabaseUtils.decodeDateTime(last_edit_date)),
+                            GameStatusEnum.valueOf(results.getString("LastEditStatus") == null ? "NULL" : results.getString("LastEditStatus")),
+                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)));
 
-                        }
+                    Bot.getPendingData().getGames().add(mainInstance);
 
-                        for(long index = mainInstance.getEnd_date(); index <= System.currentTimeMillis() + (2 * Long.parseLong("31556952000")); index = index + appendTime){
-
-                            if(index == mainInstance.getEnd_date())
-                                continue;
-
-                            Bot.getCalendar().getCalendar().add(new CalendarGameInstance(mainInstance.getId(), index - game_length, index));
-
-                        }
-
-                    }
 
                 }
             }catch (SQLException e) {

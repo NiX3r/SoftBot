@@ -2,9 +2,12 @@ package Commands;
 
 import Enums.LogTypeEnum;
 import Enums.ReplyEmbedEnum;
+import Instances.ServerOptionInstance;
 import Utils.Bot;
 import Utils.DiscordUtils;
+import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.user.User;
 import org.javacord.api.event.message.MessageCreateEvent;
 
 public class AdminCommand {
@@ -18,7 +21,7 @@ public class AdminCommand {
                 return;
             }
 
-            Utils.LogSystem.log(LogTypeEnum.INFO, "game comand catched by " + event.getMessageAuthor().getName(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "admin comand catched by '" + event.getMessageAuthor().getName() + "' on server '" + server.getName() + "'", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             String[] splitter = event.getMessage().getContent().split(" ");
 
@@ -41,7 +44,7 @@ public class AdminCommand {
                     break;
 
                 case "pending":
-                    pending(splitter, event.getMessage());
+                    PendingCommand.run(event);
                     break;
 
                 default:
@@ -54,20 +57,29 @@ public class AdminCommand {
 
     }
 
-    private static void pending(String[] splitter, Message message) {
-    }
-
     private static void announcement(String[] splitter, Message message) {
 
         String content = message.getContent().replace("!sba announcement ", "").replaceAll("<n>", "\n");
 
         Bot.getBot().getServers().forEach(server -> {
 
-            long announcement_channel_id = Bot.getServerOption(server.getId()).getAnnouncement_channel_id();
+            ServerOptionInstance option = Bot.getServerOption(server.getId());
 
-            server.getTextChannelById(announcement_channel_id).ifPresent(channel -> {
-                channel.sendMessage(DiscordUtils.createAnnouncementEmbed(content, message.getAuthor()));
-            });
+            if(option == null){
+                for(ServerTextChannel channel : server.getTextChannels()){
+                    if(channel.asPrivateChannel().isPresent())
+                        continue;
+                    channel.sendMessage(DiscordUtils.createAnnouncementEmbed(content + "\n\nPro administrátory serveru\nTato zpráva byla poslána do místnosti, do které mají všichni přistup, jelikož nebyla nastavena místnost pro automatické zprávy, kterou nastavíte pomocí `!sb channel <označení místnosti>`", message.getAuthor()));
+                    break;
+                }
+            }
+            else {
+                long announcement_channel_id = option.getAnnouncement_channel_id();
+
+                server.getTextChannelById(announcement_channel_id).ifPresent(channel -> {
+                    channel.sendMessage(DiscordUtils.createAnnouncementEmbed(content, message.getAuthor()));
+                });
+            }
 
         });
 

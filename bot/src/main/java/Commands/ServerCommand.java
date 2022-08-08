@@ -4,6 +4,8 @@ import Enums.LogTypeEnum;
 import Enums.ReplyEmbedEnum;
 import Utils.Bot;
 import Utils.DiscordUtils;
+import org.javacord.api.entity.channel.ServerTextChannel;
+import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.event.message.MessageCreateEvent;
@@ -14,7 +16,7 @@ public class ServerCommand {
 
         event.getServer().ifPresent(server -> {
 
-            Utils.LogSystem.log(LogTypeEnum.INFO, "game comand catched by " + event.getMessageAuthor().getName(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "server comand catched by " + event.getMessageAuthor().getName() + "' on server '" + event.getServer().get().getName() + "'", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             String[] splitter = event.getMessage().getContent().split(" ");
 
@@ -91,6 +93,9 @@ public class ServerCommand {
                         server.getSystemChannel().ifPresent(channel -> {
                             channel.createInviteBuilder().create().thenAccept(finalInvite -> {
                                 message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Úspěšně jsi vytvořil invite link na server '" + server.getName() + "'\n\nOdkaz\n" + finalInvite.getUrl(), ReplyEmbedEnum.SUCCESS));
+                            }).exceptionally(err -> {
+                                message.reply(DiscordUtils.createReplyEmbed("", "Nastala chyba aplikace. Prosím kontaktuje vývojáře.\n\nChybová hláška\n" + err.getMessage(), ReplyEmbedEnum.APP_ERROR));
+                                return null;
                             });
                         });
                     }
@@ -98,6 +103,16 @@ public class ServerCommand {
                         server.getTextChannels().get(0).createInviteBuilder().create().thenAccept(finalInvite -> {
                             message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Úspěšně jsi vytvořil invite link na server '" + server.getName() + "'\n\nOdkaz\n" + finalInvite.getUrl(), ReplyEmbedEnum.SUCCESS));
                         });
+                        for(ServerTextChannel channel : server.getTextChannels()){
+                            if(channel.canSee(server.getEveryoneRole().getUsers().iterator().next())){
+                                channel.createInviteBuilder().create().thenAccept(finalInvite -> {
+                                    message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Úspěšně jsi vytvořil invite link na server '" + server.getName() + "'\n\nOdkaz\n" + finalInvite.getUrl(), ReplyEmbedEnum.SUCCESS));
+                                }).exceptionally(err -> {
+                                    message.reply(DiscordUtils.createReplyEmbed("", "Nastala chyba aplikace. Prosím kontaktuje vývojáře.\n\nChybová hláška\n" + err.getMessage(), ReplyEmbedEnum.APP_ERROR));
+                                    return null;
+                                });
+                            }
+                        }
                     }
                 });
             }

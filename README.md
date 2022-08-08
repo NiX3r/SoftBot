@@ -50,7 +50,7 @@ Discord bot for Czech airsoft communites
   
   - `!sb game list <index>` - list of all teams sorted by ID and counted max to 10
   
-  - `!sb game date <date>` - shows all games to the specific date (date format: '21.08.2002' or '21.8.2002')
+  - `!sb game to <date>` - shows all games to the specific date (date format: '21.08.2002' or '21.8.2002')
   
   - `!sb game show <id>` - show all description of a selected game
 
@@ -110,7 +110,7 @@ Discord bot for Czech airsoft communites
 
 - `!sba announcement <message>` - send annoucement message to all servers
 
-- `!sba pending [game | team | offer | inquiry]` - send oldest game in pending status to approve
+- `!sba pending [game | team | bazaar | shop]` - send oldest game in pending status to approve
 
 ### Programmer commands
 

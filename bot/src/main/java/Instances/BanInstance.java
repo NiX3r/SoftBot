@@ -1,6 +1,7 @@
 package Instances;
 
 import Enums.BanStatusEnum;
+import Enums.BanTypeEnum;
 
 public class BanInstance {
 
@@ -9,18 +10,20 @@ public class BanInstance {
     private String discord_admin_nick;
     private String reason;
     private BanStatusEnum status;
+    private BanTypeEnum type;
     private long last_edit_author;
     private long last_edit_date;
     private BanStatusEnum last_edit_status;
     private String last_edit_reason;
     private long create_date;
 
-    public BanInstance(long discord_user_id, long discord_admin_id, String discord_admin_nick, String reason, BanStatusEnum status, long last_edit_author, long last_edit_date, BanStatusEnum last_edit_status, String last_edit_reason, long create_date) {
+    public BanInstance(long discord_user_id, long discord_admin_id, String discord_admin_nick, String reason, BanStatusEnum status, BanTypeEnum type, long last_edit_author, long last_edit_date, BanStatusEnum last_edit_status, String last_edit_reason, long create_date) {
         this.discord_user_id = discord_user_id;
         this.discord_admin_id = discord_admin_id;
         this.discord_admin_nick = discord_admin_nick;
         this.reason = reason;
         this.status = status;
+        this.type = type;
         this.last_edit_author = last_edit_author;
         this.last_edit_date = last_edit_date;
         this.last_edit_status = last_edit_status;
@@ -86,5 +89,9 @@ public class BanInstance {
 
     public long getCreate_date() {
         return create_date;
+    }
+
+    public BanTypeEnum getType() {
+        return type;
     }
 }

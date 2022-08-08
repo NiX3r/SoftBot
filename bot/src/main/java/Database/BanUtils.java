@@ -1,11 +1,10 @@
 package Database;
 
 import Enums.BanStatusEnum;
+import Enums.BanTypeEnum;
 import Enums.LogTypeEnum;
-import Enums.TeamStatusEnum;
 import Instances.BanInstance;
 import Instances.CalendarGameInstance;
-import Instances.TeamInstance;
 import Utils.Bot;
 import Utils.UTFCorrectionTranslator;
 
@@ -38,6 +37,7 @@ public class BanUtils {
                             UTFCorrectionTranslator.translate(results.getString("DiscordAdminNick")),
                             UTFCorrectionTranslator.translate(results.getString("Reason")),
                             BanStatusEnum.valueOf(results.getString("Status")),
+                            BanTypeEnum.valueOf(results.getString("BanType")),
                             DatabaseUtils.decodeDiscordId(results.getString("LastEditAuthor")),
                             DatabaseUtils.decodeDateTime(results.getString("LastEditDate")),
                             BanStatusEnum.valueOf(results.getString("LastEditStatus") == null ? "NULL" : results.getString("LastEditStatus")),

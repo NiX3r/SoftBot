@@ -19,7 +19,7 @@ public class OtherCommand {
 
         String[] splitter = event.getMessage().getContent().split(" ");
 
-        Utils.LogSystem.log(LogTypeEnum.INFO, "other comand catched by " + event.getMessageAuthor().getName(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(LogTypeEnum.INFO, "other comand catched by '" + event.getMessageAuthor().getName() + "' on server '" + (event.getServer().isPresent() ? event.getServer().get().getName() : "PrivateMessage") + "'", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
         switch (splitter[1]){
 
@@ -35,6 +35,10 @@ public class OtherCommand {
                 credits(splitter, event.getMessage());
                 break;
 
+            case "sponsors":
+                sponsors(splitter, event.getMessage());
+                break;
+
             case "help":
                 help(splitter, event.getMessage());
                 break;
@@ -45,6 +49,14 @@ public class OtherCommand {
 
             case "team-role":
                 teamRole(splitter, event.getMessage());
+                break;
+
+            case "offer":
+                OfferCommand.run(event);
+                break;
+
+            case "inquiry":
+                InquiryCommand.run(event);
                 break;
 
             default:
@@ -185,14 +197,30 @@ public class OtherCommand {
 
     private static void credits(String[] splitter, Message msg){
 
-        msg.reply(DiscordUtils.createReplyEmbed("Otroci projektu",
-                "**Vývojářský tým**\n" +
+        msg.reply(DiscordUtils.createReplyEmbed("Otroci projektu :muscle:",
+                "**Vývojářský tým :technologist: **\n" +
                 "NiX3r (NiX3r#0272) - _hlavní vývojář, back-end Discord bot_\n" +
                 "Orim0 (Orim0#7985) - _web vývojář, back-end web services_\n" +
                 "KiJudo (KiJudo#3946) - _designérka, design web UI_\n" +
                 "\n" +
-                "**Testeři**\n" +
-                "Kykrovec (Kykrobie#4976) - _tester, testování v beta verzi_", ReplyEmbedEnum.EASTER_EGG));
+                "**PR tým :office_worker: **\n" +
+                "Ravenbie (Ravenbie#8833) - _PR, zajištění slevových kódů_\n" +
+                "\n" +
+                "**Testeři :bug: **\n" +
+                "Kykrovec (Kykrobie#4976) - _tester, testování v alpha verzi_", ReplyEmbedEnum.EASTER_EGG));
+
+    }
+
+    // TODO - Add automatically generated list of BuyMeACoffee sponsors
+    private static void sponsors(String[] splitter, Message msg){
+
+        msg.reply(DiscordUtils.createReplyEmbed("Sponzoři projektu",
+                "**Hlavní sponzoři projektu, díky kterým se mohl SoftBot spustit :heart: **\n" +
+                        "Ravenbie (Ravenbie#8833) - 250 Kč\n" +
+                        "KiJudo (KiJudo#3946) - 50 Kč\n" +
+                        "\n" +
+                        "**Sponzoři přes BuyMeACoffee**\n" +
+                        "", ReplyEmbedEnum.EASTER_EGG));
 
     }
 

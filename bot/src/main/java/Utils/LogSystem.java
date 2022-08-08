@@ -21,7 +21,21 @@ public class LogSystem {
         if(logs == null)
             logs = new ArrayList<String>();
 
-        String line = "[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.MEDIUM)) + "] (" + type.toString() + ") " + fileName + " : " + methodName + "(" + lineNo + ") >> " + content;
+        String color = "";
+
+        switch (type){
+            case ERROR:
+                color = (char)27 + "[31m";
+                break;
+            case WARNING:
+                color = (char)27 + "[33m";
+                break;
+            case INFO:
+                color = (char)27 + "[0m";
+                break;
+        }
+
+        String line = color + "[" + LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.MEDIUM)) + "] (" + type.toString() + ") " + fileName + " : " + methodName + "(" + lineNo + ") >> " + content;
 
         logs.add(line);
         System.out.println(line);

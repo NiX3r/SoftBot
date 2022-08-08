@@ -24,7 +24,7 @@ public class GameCommand {
 
         event.getServer().ifPresent(server -> {
 
-            Utils.LogSystem.log(LogTypeEnum.INFO, "game comand catched by " + event.getMessageAuthor().getName(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "game comand catched by '" + event.getMessageAuthor().getName() + "' on server '" + server.getName() + "'", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             String[] splitter = event.getMessage().getContent().split(" ");
 
