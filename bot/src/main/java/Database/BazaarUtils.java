@@ -67,7 +67,7 @@ public class BazaarUtils {
 
         if(!Bot.getDatabaseConnection().isClosed()){
 
-            Utils.LogSystem.log(LogTypeEnum.INFO, "loading bazaar into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "loading pending bazaar into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             PreparedStatement statement = null;
             try {
@@ -105,7 +105,7 @@ public class BazaarUtils {
         }
 
         Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
-        Utils.LogSystem.log(LogTypeEnum.INFO, "bazaar successfully initialized and loaded", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(LogTypeEnum.INFO, "pending bazaar successfully initialized and loaded", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
         callback.accept(true);
 
     }

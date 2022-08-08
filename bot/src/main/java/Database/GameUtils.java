@@ -10,7 +10,6 @@ import Utils.UTFCorrectionTranslator;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.function.Consumer;
 
@@ -35,6 +34,8 @@ public class GameUtils {
                     GameInstance mainInstance = new GameInstance(results.getInt("ID"),
                             UTFCorrectionTranslator.translate(results.getString("Name")),
                             results.getString("Thumbnail"),
+                            results.getString("Email"),
+                            results.getString("IPAddress"),
                             DatabaseUtils.decodeDateTime(results.getObject("StartDate", String.class)),
                             DatabaseUtils.decodeDateTime(results.getObject("EndDate", String.class)),
                             results.getString("RepeatDate"),
@@ -71,12 +72,12 @@ public class GameUtils {
 
         if(!Bot.getDatabaseConnection().isClosed()){
 
-            Utils.LogSystem.log(LogTypeEnum.INFO, "loading calendar into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "loading pending calendar into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             PreparedStatement statement = null;
             try {
                 statement = Bot.getConnection()
-                        .prepareStatement("SELECT * FROM Game WHERE Status='APPROVED'");
+                        .prepareStatement("SELECT * FROM Game WHERE Status='PENDING'");
 
                 ResultSet results = statement.executeQuery();
 
@@ -86,6 +87,8 @@ public class GameUtils {
                     GameInstance mainInstance = new GameInstance(results.getInt("ID"),
                             UTFCorrectionTranslator.translate(results.getString("Name")),
                             results.getString("Thumbnail"),
+                            results.getString("Email"),
+                            results.getString("IPAddress"),
                             DatabaseUtils.decodeDateTime(results.getObject("StartDate", String.class)),
                             DatabaseUtils.decodeDateTime(results.getObject("EndDate", String.class)),
                             results.getString("RepeatDate"),
@@ -113,7 +116,7 @@ public class GameUtils {
         }
 
         Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
-        Utils.LogSystem.log(LogTypeEnum.INFO, "calendar successfully initialized, loaded and sorted", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(LogTypeEnum.INFO, "pending calendar successfully initialized, loaded and sorted", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
         callback.accept(true);
 
     }
