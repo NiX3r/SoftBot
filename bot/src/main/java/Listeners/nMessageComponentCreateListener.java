@@ -1,5 +1,6 @@
 package Listeners;
 
+import ComponentButtons.BazaarButton;
 import ComponentButtons.GameButton;
 import ComponentButtons.TeamButton;
 import Database.GameUtils;
@@ -33,7 +34,8 @@ public class nMessageComponentCreateListener implements MessageComponentCreateLi
             event.getMessageComponentInteraction().acknowledge();
         }
         else if (custom_id.contains("ncodes-softbot-pending-bazaar-")){
-
+            BazaarButton.run(event);
+            event.getMessageComponentInteraction().acknowledge();
         }
 
     }

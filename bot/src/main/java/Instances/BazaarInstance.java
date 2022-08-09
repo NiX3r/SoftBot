@@ -7,6 +7,8 @@ public class BazaarInstance {
 
     private int id;
     private String name;
+    private String email;
+    private String ip_address;
     private long creator_id;
     private BazaarTypeEnum type;
     private int zip;
@@ -21,9 +23,11 @@ public class BazaarInstance {
 
     private String creator_ping;
 
-    public BazaarInstance(int id, String name, long creator_id, BazaarTypeEnum type, int zip, double price, String images_dir, String description, BazaarStatusEnum status, long create_date, long last_edit_user_id, long last_edit_date, BazaarStatusEnum last_edit_status, String creator_ping) {
+    public BazaarInstance(int id, String name, String email, String ip_address, long creator_id, BazaarTypeEnum type, int zip, double price, String images_dir, String description, BazaarStatusEnum status, long create_date, long last_edit_user_id, long last_edit_date, BazaarStatusEnum last_edit_status, String creator_ping) {
         this.id = id;
         this.name = name;
+        this.email = email;
+        this.ip_address = ip_address;
         this.creator_id = creator_id;
         this.type = type;
         this.zip = zip;
@@ -128,5 +132,13 @@ public class BazaarInstance {
 
     public String getCreator_ping() {
         return creator_ping;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getIp_address() {
+        return ip_address;
     }
 }

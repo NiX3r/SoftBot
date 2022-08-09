@@ -3,6 +3,7 @@ package Database;
 import Enums.BazaarStatusEnum;
 import Enums.BazaarTypeEnum;
 import Enums.LogTypeEnum;
+import Enums.TeamStatusEnum;
 import Instances.BazaarInstance;
 import Instances.CalendarGameInstance;
 import Utils.Bot;
@@ -33,6 +34,8 @@ public class BazaarUtils {
 
                     BazaarInstance bazaar = new BazaarInstance(results.getInt("ID"),
                             UTFCorrectionTranslator.translate(results.getString("Name")),
+                            results.getString("Email"),
+                            results.getString("IPAddress"),
                             DatabaseUtils.decodeDiscordId(results.getString("DiscordUserID")),
                             BazaarTypeEnum.valueOf(results.getString("Type")),
                             results.getInt("ZIP"),
@@ -80,6 +83,8 @@ public class BazaarUtils {
 
                     BazaarInstance bazaar = new BazaarInstance(results.getInt("ID"),
                             UTFCorrectionTranslator.translate(results.getString("Name")),
+                            results.getString("Email"),
+                            results.getString("IPAddress"),
                             DatabaseUtils.decodeDiscordId(results.getString("DiscordUserID")),
                             BazaarTypeEnum.valueOf(results.getString("Type")),
                             results.getInt("ZIP"),
@@ -112,6 +117,42 @@ public class BazaarUtils {
         }
 
         Utils.LogSystem.log(LogTypeEnum.ERROR, "pending bazaar not loaded. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        callback.accept(false);
+
+    }
+
+    public static void updateBazaarStatus(int id, BazaarStatusEnum status, Consumer<Boolean> callback){
+        if(!Bot.getDatabaseConnection().isClosed()){
+
+            Utils.LogSystem.log(LogTypeEnum.INFO, "updating bazaar with id: " + id, new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+
+            PreparedStatement statement = null;
+            try {
+                statement = Bot.getConnection()
+                        .prepareStatement("UPDATE Bazaar SET Status=? WHERE ID=?");
+                statement.setString(1, status.toString());
+                statement.setInt(2, id);
+
+                boolean success = !statement.execute();
+
+                if(success){
+                    callback.accept(true);
+                    return;
+                }
+                else {
+                    callback.accept(false);
+                    return;
+                }
+
+            }catch (SQLException e) {
+                Utils.LogSystem.log(LogTypeEnum.ERROR, "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                callback.accept(false);
+                return;
+            }
+
+        }
+
+        Utils.LogSystem.log(LogTypeEnum.ERROR, "bazaar not updated. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
         callback.accept(false);
 
     }

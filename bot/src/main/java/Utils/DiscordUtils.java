@@ -3,6 +3,7 @@ package Utils;
 import Enums.ReplyEmbedEnum;
 import org.javacord.api.entity.message.MessageAuthor;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
+import org.javacord.api.entity.server.Server;
 
 import java.awt.*;
 
@@ -58,6 +59,15 @@ public class DiscordUtils {
                 .setColor(Color.decode("#D1A841"))
                 .setFooter("Administrátor: " + author.getName() + " | Verze: " + Bot.getVersion(), author.getAvatar().getUrl().toString());
 
+    }
+
+    public static String getNickPingById(long id){
+        for(Server server : Bot.getBot().getServers()){
+            if(server.getMemberById(id).isPresent()){
+                return server.getMemberById(id).get().getMentionTag();
+            }
+        }
+        return null;
     }
 
 }

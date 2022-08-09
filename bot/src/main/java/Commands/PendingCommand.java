@@ -1,7 +1,10 @@
 package Commands;
 
+import Database.BazaarUtils;
 import Database.DatabaseUtils;
+import Enums.BazaarStatusEnum;
 import Enums.ReplyEmbedEnum;
+import Instances.BazaarInstance;
 import Instances.GameInstance;
 import Instances.TeamInstance;
 import Utils.Bot;
@@ -43,6 +46,7 @@ public class PendingCommand {
 
             case "bazaar":
 
+                bazaar(event.getMessage(), event.getMessageAuthor().getId());
                 break;
 
             case "shop":
@@ -50,6 +54,60 @@ public class PendingCommand {
                 break;
 
         }
+
+    }
+
+    private static void bazaar(Message msg, long user_id) {
+        if(Bot.getPendingData().getBazaar().size() == 0){
+            msg.reply(DiscordUtils.createReplyEmbed("Žádná data", "Již byla zpracována všechna data, která být zpracována měla. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", ReplyEmbedEnum.WARNING));
+            return;
+        }
+
+        BazaarInstance bazaar = Bot.getPendingData().getBazaar().get(0);
+        Bot.getPendingData().getBazaar().remove(0);
+
+        String user_ping = DiscordUtils.getNickPingById(bazaar.getCreator_id());
+
+        EmbedBuilder builder = new EmbedBuilder()
+                .setColor(Color.decode("#D1A841"))
+                .setTitle("Potvrzení registrace hry")
+                .addInlineField("ID", bazaar.getId() + "")
+                .addInlineField("Jméno", bazaar.getName())
+                .addInlineField("Email", bazaar.getEmail())
+                .addInlineField("IP adresa", bazaar.getIp_address())
+                .addInlineField("Majitel nabídky/poptávky id", bazaar.getCreator_id() + "")
+                .addInlineField("Majitel nabídky/poptávky nick", user_ping == null ? "nenastaveno" : user_ping)
+                .addInlineField("Typ", bazaar.getType().toString())
+                .addInlineField("PSČ", bazaar.getZip() + "")
+                .addInlineField("Cena", bazaar.getPrice() + "")
+                .setDescription(bazaar.getDescription())
+                .setFooter("Verze: " + Bot.getVersion());
+
+        MessageBuilder msg_builder = new MessageBuilder()
+                .setEmbed(builder);
+
+        if(user_ping == null){
+            msg_builder.send(msg.getChannel()).thenAccept(success -> {
+
+                BazaarUtils.updateBazaarStatus(bazaar.getId(), BazaarStatusEnum.DENIED, denied_success -> {
+                    success.reply(DiscordUtils.createReplyEmbed("Špatné nastavení", "Uživatel zadal špatné Discord ID. Automaticky zamítám tuto nabídku/poptávku. Prosím napiš příkaz znovu", ReplyEmbedEnum.WARNING));
+                });
+
+            });
+        }
+        else {
+            msg_builder.addComponents(
+                    ActionRow.of(Button.success("ncodes-softbot-pending-bazaar-approve-" + user_id, "Povolit"),
+                            Button.danger("ncodes-softbot-pending-bazaar-deny-" + user_id, "Zakákat"),
+                            Button.danger("ncodes-softbot-pending-bazaar-remove-" + user_id, "Smazat"))
+            );
+            msg_builder.send(msg.getChannel()).thenAccept(success -> {
+
+                Bot.getPendingData().getCheckingData().put(user_id, bazaar);
+
+            });
+        }
+
 
     }
 

@@ -3,7 +3,7 @@ package Enums;
 public enum BazaarStatusEnum {
     PENDING,
     APPROVED,
-    EDITED,
+    DENIED,
     REMOVED,
     NULL
 }
