@@ -68,7 +68,7 @@ Discord bot for Czech airsoft communites
 
 - `!sb credits` - shows bots credentials
 
-- `!sb channel <channel-ping>` - set up channel where every notification will be sended ( only creator of offer and bot admins can use this command )
+- 
 
 - `!sb offer` - commands for bazaar offers section
   
