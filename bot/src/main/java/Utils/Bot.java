@@ -3,6 +3,7 @@ package Utils;
 import Database.*;
 import Enums.LogTypeEnum;
 import Instances.*;
+import Listeners.nMessageComponentCreateListener;
 import Listeners.nMessageCreateListener;
 import Tasks.RotateStatusTask;
 import Threads.ShutdownThread;
@@ -86,6 +87,7 @@ public class Bot {
                                                                                     Utils.LogSystem.log(LogTypeEnum.INFO, "bot is ready on : " + bot.createBotInvite() + "515396586561", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
                                                                                     bot.addMessageCreateListener(new nMessageCreateListener());
+                                                                                    bot.addMessageComponentCreateListener(new nMessageComponentCreateListener());
                                                                                     initializeLogListeners();
 
                                                                                     teamUtil.recalculateMemberCount();

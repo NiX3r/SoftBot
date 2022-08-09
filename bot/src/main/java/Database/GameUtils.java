@@ -54,17 +54,21 @@ public class GameUtils {
                     Bot.getCalendar().addCalendarGame(mainInstance);
 
                 }
+
+                Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
+                Utils.LogSystem.log(LogTypeEnum.INFO, "calendar successfully initialized, loaded and sorted", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                callback.accept(true);
+                return;
+
             }catch (SQLException e) {
                 Utils.LogSystem.log(LogTypeEnum.ERROR, "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
                 callback.accept(false);
+                return;
             }
 
-
         }
-
-        Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
-        Utils.LogSystem.log(LogTypeEnum.INFO, "calendar successfully initialized, loaded and sorted", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-        callback.accept(true);
+        Utils.LogSystem.log(LogTypeEnum.ERROR, "pending calendar not loaded. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        callback.accept(false);
 
     }
 
@@ -105,19 +109,59 @@ public class GameUtils {
 
                     Bot.getPendingData().getGames().add(mainInstance);
 
-
                 }
+
+                Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
+                Utils.LogSystem.log(LogTypeEnum.INFO, "pending calendar successfully initialized, loaded and sorted", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                callback.accept(true);
+                return;
+
             }catch (SQLException e) {
                 Utils.LogSystem.log(LogTypeEnum.ERROR, "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
                 callback.accept(false);
+                return;
             }
-
 
         }
 
-        Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
-        Utils.LogSystem.log(LogTypeEnum.INFO, "pending calendar successfully initialized, loaded and sorted", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-        callback.accept(true);
+        Utils.LogSystem.log(LogTypeEnum.ERROR, "pending calendar not loaded. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        callback.accept(false);
+
+    }
+
+    public static void updateGameStatus(int id, GameStatusEnum status, Consumer<Boolean> callback){
+        if(!Bot.getDatabaseConnection().isClosed()){
+
+            Utils.LogSystem.log(LogTypeEnum.INFO, "updating game with id: " + id, new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+
+            PreparedStatement statement = null;
+            try {
+                statement = Bot.getConnection()
+                        .prepareStatement("UPDATE Game SET Status=? WHERE ID=?");
+                statement.setString(1, status.toString());
+                statement.setInt(2, id);
+
+                boolean success = !statement.execute();
+
+                if(success){
+                    callback.accept(true);
+                    return;
+                }
+                else {
+                    callback.accept(false);
+                    return;
+                }
+
+            }catch (SQLException e) {
+                Utils.LogSystem.log(LogTypeEnum.ERROR, "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                callback.accept(false);
+                return;
+            }
+
+        }
+
+        Utils.LogSystem.log(LogTypeEnum.ERROR, "game not updated. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        callback.accept(false);
 
     }
 

@@ -7,6 +7,8 @@ public class TeamInstance {
 
     private int id;
     private String name;
+    private String email;
+    private String ip_address;
     private String thumbnail;
     private String website;
     private String type;
@@ -20,10 +22,12 @@ public class TeamInstance {
 
     private int member_count;
 
-    public TeamInstance(int id, String name, String thumbnail, String website, String type, long discord_server_id, String description, TeamStatusEnum status, long last_edit_author, long last_edit_date, TeamStatusEnum last_status, long create_date){
+    public TeamInstance(int id, String name, String email, String ip_address, String thumbnail, String website, String type, long discord_server_id, String description, TeamStatusEnum status, long last_edit_author, long last_edit_date, TeamStatusEnum last_status, long create_date){
 
         this.id = id;
         this.name = name;
+        this.email = email;
+        this.ip_address = ip_address;
         this.thumbnail = thumbnail;
         this.website = website;
         this.type = type;
@@ -155,5 +159,13 @@ public class TeamInstance {
 
     public int getMember_count() {
         return member_count;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getIp_address() {
+        return ip_address;
     }
 }

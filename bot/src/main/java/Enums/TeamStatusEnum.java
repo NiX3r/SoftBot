@@ -4,7 +4,7 @@ public enum TeamStatusEnum {
 
     PENDING,
     APPROVED,
-    EDITED,
+    DENIED,
     REMOVED,
     NULL
 

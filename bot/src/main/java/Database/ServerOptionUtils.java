@@ -38,17 +38,22 @@ public class ServerOptionUtils {
                     Bot.getServerOptions().add(serverOption);
 
                 }
+
+                Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
+                Utils.LogSystem.log(LogTypeEnum.INFO, "server options successfully initialized and loaded", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                callback.accept(true);
+                return;
+
             }catch (SQLException e) {
                 Utils.LogSystem.log(LogTypeEnum.ERROR, "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
                 callback.accept(false);
+                return;
             }
-
 
         }
 
-        Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
-        Utils.LogSystem.log(LogTypeEnum.INFO, "server options successfully initialized and loaded", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-        callback.accept(true);
+        Utils.LogSystem.log(LogTypeEnum.ERROR, "server options not loaded. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        callback.accept(false);
 
     }
 

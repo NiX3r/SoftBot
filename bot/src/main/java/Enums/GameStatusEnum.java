@@ -4,7 +4,7 @@ public enum GameStatusEnum {
 
     PENDING,
     APPROVED,
-    EDITED,
+    DENIED,
     REMOVED,
     NULL
 
