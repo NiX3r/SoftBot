@@ -134,6 +134,10 @@ public class BazaarInstance {
         return creator_ping;
     }
 
+    public void setCreator_ping(String creator_ping){
+        this.creator_ping = creator_ping;
+    }
+
     public String getEmail() {
         return email;
     }

@@ -121,17 +121,26 @@ public class BazaarUtils {
 
     }
 
-    public static void updateBazaarStatus(int id, BazaarStatusEnum status, Consumer<Boolean> callback){
+    public static void updateBazaarStatus(int id, BazaarStatusEnum status, String user_ping, Consumer<Boolean> callback){
         if(!Bot.getDatabaseConnection().isClosed()){
 
             Utils.LogSystem.log(LogTypeEnum.INFO, "updating bazaar with id: " + id, new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             PreparedStatement statement = null;
             try {
-                statement = Bot.getConnection()
-                        .prepareStatement("UPDATE Bazaar SET Status=? WHERE ID=?");
-                statement.setString(1, status.toString());
-                statement.setInt(2, id);
+                if(user_ping == null) {
+                    statement = Bot.getConnection()
+                            .prepareStatement("UPDATE Bazaar SET Status=? WHERE ID=?");
+                    statement.setString(1, status.toString());
+                    statement.setInt(2, id);
+                }
+                else {
+                    statement = Bot.getConnection()
+                            .prepareStatement("UPDATE Bazaar SET Status=?,DiscordUserPing=? WHERE ID=?");
+                    statement.setString(1, status.toString());
+                    statement.setString(2, user_ping);
+                    statement.setInt(3, id);
+                }
 
                 boolean success = !statement.execute();
 

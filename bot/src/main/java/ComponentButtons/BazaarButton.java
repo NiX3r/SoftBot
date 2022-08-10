@@ -47,7 +47,7 @@ public class BazaarButton {
             Bot.getPendingData().getCheckingData().remove(user_id);
             Bot.getBazaar().getBazaar().add(bazaar);
 
-            BazaarUtils.updateBazaarStatus(bazaar.getId(), bazaar.getStatus(), success -> {
+            BazaarUtils.updateBazaarStatus(bazaar.getId(), bazaar.getStatus(), bazaar.getCreator_ping(), success -> {
 
                 if(success){
                     message.reply(DiscordUtils.createReplyEmbed("", "Této nabídce/poptávce bylo úspěšně povoleno jeho vytvoření", ReplyEmbedEnum.SUCCESS));
@@ -76,7 +76,7 @@ public class BazaarButton {
 
             Bot.getPendingData().getCheckingData().remove(user_id);
 
-            BazaarUtils.updateBazaarStatus(bazaar.getId(), bazaar.getStatus(), success -> {
+            BazaarUtils.updateBazaarStatus(bazaar.getId(), bazaar.getStatus(), bazaar.getCreator_ping(), success -> {
 
                 if(success){
                     message.reply(DiscordUtils.createReplyEmbed("", "Této nabídce/poptávce bylo úspěšně zakázáno jeho vytvoření", ReplyEmbedEnum.SUCCESS));
@@ -105,7 +105,7 @@ public class BazaarButton {
 
             Bot.getPendingData().getCheckingData().remove(user_id);
 
-            BazaarUtils.updateBazaarStatus(bazaar.getId(), bazaar.getStatus(), success -> {
+            BazaarUtils.updateBazaarStatus(bazaar.getId(), bazaar.getStatus(), bazaar.getCreator_ping(), success -> {
 
                 if(success){
                     message.reply(DiscordUtils.createReplyEmbed("", "Tato poptávka/nabídka byla úspěšně smazán", ReplyEmbedEnum.SUCCESS));

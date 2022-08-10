@@ -89,7 +89,7 @@ public class PendingCommand {
         if(user_ping == null){
             msg_builder.send(msg.getChannel()).thenAccept(success -> {
 
-                BazaarUtils.updateBazaarStatus(bazaar.getId(), BazaarStatusEnum.DENIED, denied_success -> {
+                BazaarUtils.updateBazaarStatus(bazaar.getId(), BazaarStatusEnum.DENIED, null, denied_success -> {
                     success.reply(DiscordUtils.createReplyEmbed("Špatné nastavení", "Uživatel zadal špatné Discord ID. Automaticky zamítám tuto nabídku/poptávku. Prosím napiš příkaz znovu", ReplyEmbedEnum.WARNING));
                 });
 
@@ -103,7 +103,9 @@ public class PendingCommand {
             );
             msg_builder.send(msg.getChannel()).thenAccept(success -> {
 
+                bazaar.setCreator_ping(user_ping);
                 Bot.getPendingData().getCheckingData().put(user_id, bazaar);
+
 
             });
         }
