@@ -42,6 +42,10 @@ public class GameCommand {
                     show(splitter, event.getMessage());
                     break;
 
+                case "create":
+                    create(event.getMessage());
+                    break;
+                    
                 default:
                     event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný podpříkaz sekce `" + splitter[1]  + "` .\n\nPro nápovědu\n`!sb help`", ReplyEmbedEnum.ERROR));
                     break;
@@ -50,6 +54,10 @@ public class GameCommand {
 
         });
 
+    }
+
+    private static void create(Message message) {
+        message.reply(DiscordUtils.createReplyEmbed("Web", "Vytvořit hru lze na stránkách\n https://softbot.ncodes.eu/game/", ReplyEmbedEnum.SUCCESS));
     }
 
     private static void list(String[] splitter, Message msg){

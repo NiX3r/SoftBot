@@ -30,12 +30,20 @@ public class InquiryCommand {
                 show(splitter, event.getMessage());
                 break;
 
+            case "create":
+                create(event.getMessage());
+                break;
+
             default:
                 event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný příkaz.\n\nPro nápovědu\n`!sb help`", ReplyEmbedEnum.ERROR));
                 break;
 
         }
 
+    }
+
+    private static void create(Message message) {
+        message.reply(DiscordUtils.createReplyEmbed("Web", "Vytvořit poptávku lze na stránkách\n https://softbot.ncodes.eu/bazaar/", ReplyEmbedEnum.SUCCESS));
     }
 
     private static void list(String[] splitter, Message msg) {

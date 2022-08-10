@@ -225,7 +225,7 @@ public class OtherCommand {
     }
 
     private static void help(String[] splitter, Message msg){
-
+        msg.reply(DiscordUtils.createReplyEmbed("Nápověda", "Nápovědu lze najít na stránkách\n https://softbot.ncodes.eu/wiki/", ReplyEmbedEnum.SUCCESS));
     }
 
 }
