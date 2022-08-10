@@ -98,8 +98,6 @@ public class OfferCommand {
 
             }
 
-            System.out.println(offer.getName() + " | " + offer.getPrice() + " | " + offer.getZip() + " | " + offer.getCreator_ping() + " | " + offer.getDescription());
-
             EmbedBuilder builder = new EmbedBuilder()
                     .setColor(Color.decode("#D1A841"))
                     .setTitle("Nabízím: " + offer.getName())
