@@ -5,12 +5,15 @@ import Enums.ReplyEmbedEnum;
 import Instances.BazaarInstance;
 import Utils.Bot;
 import Utils.DiscordUtils;
+import Utils.FileUtils;
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.message.MessageAttachment;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class InquiryCommand {
 
@@ -34,12 +37,59 @@ public class InquiryCommand {
                 create(event.getMessage());
                 break;
 
+            case "image":
+                image(splitter, event.getMessage());
+
             default:
                 event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný příkaz.\n\nPro nápovědu\n`!sb help`", ReplyEmbedEnum.ERROR));
                 break;
 
         }
 
+    }
+
+    // TODO - test it
+    private static void image(String[] splitter, Message msg) {
+        if(splitter.length == 5){
+
+            if(msg.getAttachments().size() > 0){
+                try {
+
+                    if(!isNumber(splitter[3])){
+                        msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Index, který jsi zadal není ve správném formátu (číslo)\n\nFormát příkazu:\n`!sb inquiry list <index stránky>`", ReplyEmbedEnum.ERROR));
+                        return;
+                    }
+
+                    int id = Integer.parseInt(splitter[3]);
+                    String password = splitter[4];
+
+                    if(Bot.getBazaar().isCorrectPassword(id, password)){
+                        BazaarInstance inquiry = Bot.getBazaar().getInquiryById(id);
+                        List<MessageAttachment> attachments = msg.getAttachments();
+                        FileUtils.saveAttachments(attachments, "inquiry", id, success -> {
+
+                            if (success)
+                                msg.reply(DiscordUtils.createReplyEmbed("Uloženo", "Všechny soubory byli úspěšně uloženy", ReplyEmbedEnum.SUCCESS));
+
+                            else
+                                msg.reply(DiscordUtils.createReplyEmbed("", "Nastala chyba aplikce, prosím kontaktujte vývojáře aplikace", ReplyEmbedEnum.APP_ERROR));
+
+                        });
+                    }
+                    else {
+                        msg.reply(DiscordUtils.createReplyEmbed("Autorizace", "Uvedené ID a heslo neexistují, Prosím zkuste to později", ReplyEmbedEnum.WARNING));
+                    }
+
+                }
+                catch (Exception ex){
+
+                    Utils.LogSystem.log(LogTypeEnum.ERROR, "Error: " + ex, new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                    msg.reply(DiscordUtils.createReplyEmbed(null, "Nastala chyba aplikace. Prosím upozorněte na tuto chybu správce aplikace.\n\nChybová hláška\n`" + ex + "`", ReplyEmbedEnum.APP_ERROR));
+
+                }
+            }
+
+        }
     }
 
     private static void create(Message message) {
@@ -82,7 +132,6 @@ public class InquiryCommand {
                 msg.reply(DiscordUtils.createReplyEmbed(null, "Nastala chyba aplikace. Prosím upozorněte na tuto chybu správce aplikace.\n\nChybová hláška\n`" + ex + "`", ReplyEmbedEnum.APP_ERROR));
 
             }
-
         }
     }
 

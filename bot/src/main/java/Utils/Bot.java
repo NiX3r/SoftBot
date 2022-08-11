@@ -22,8 +22,7 @@ import java.util.function.Consumer;
 
 public class Bot {
 
-    private static boolean isTest = true;
-
+    private static boolean isTest = false;
     private static String prefix = "§ SoftBot §";
     private static String version = "1.1.0-alpha";
     private static DiscordApi bot;
@@ -38,7 +37,10 @@ public class Bot {
     private static ArrayList<ServerOptionInstance> serverOptions;
     private static Timer timer;
 
-    public static void initializeBot(){
+    public static void initializeBot(String argument){
+
+        if(argument.equals("test"))
+            isTest = true;
 
         Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 

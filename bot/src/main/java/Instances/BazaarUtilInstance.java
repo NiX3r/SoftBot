@@ -2,6 +2,7 @@ package Instances;
 
 import Database.BazaarUtils;
 import Enums.BazaarTypeEnum;
+import Utils.PasswordUtils;
 
 import java.util.ArrayList;
 
@@ -57,6 +58,15 @@ public class BazaarUtilInstance {
                 return bazaar;
         }
         return null;
+    }
+
+    public boolean isCorrectPassword(int id, String password){
+        for(BazaarInstance bazaar : this.bazaar){
+            if(bazaar.getHashed_password().equals(PasswordUtils.getHashedPassword(password)) &&
+                    bazaar.getId() == id)
+                return true;
+        }
+        return false;
     }
 
     public int calculateInquiryPages(){

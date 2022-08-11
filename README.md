@@ -48,6 +48,8 @@ Discord bot for Czech airsoft communites
 
 - `!sb game` - commands for game section
   
+  - `!sb game create` - send create form
+  
   - `!sb game list <index>` - list of all teams sorted by ID and counted max to 10
   
   - `!sb game to <date>` - shows all games to the specific date (date format: '21.08.2002' or '21.8.2002')
@@ -55,6 +57,8 @@ Discord bot for Czech airsoft communites
   - `!sb game show <id>` - show all description of a selected game
 
 - `!sb team` - commands for team section
+  
+  - `!sb team create` - send create form
   
   - `!sb team list <index>` - list of all teams sorted by ID and counted max to 10
   
@@ -72,11 +76,19 @@ Discord bot for Czech airsoft communites
 
 - `!sb offer` - commands for bazaar offers section
   
+  - `!sb offer create` - send create form
+  
+  - `!sb offer file <id> <password>` - set files to be shown with offer. Files have to be attached on message
+  
   - `!sb offer list <index>` - list of all offers sorted by create date and counted max to 10
   
   - `!sb offer show <id>` - show all description of a selected offer
 
 - `!sb inquiry` - commands for bazaar inquiry section
+  
+  - `!sb inquiry create` - send create form
+  
+  - `!sb inquiry file <id> <password>` - set files to be shown with inquiry. Files have to be attached on message
   
   - `!sb inquiry list` - list of all inquiries sorted by create date and counted max to 10
   
