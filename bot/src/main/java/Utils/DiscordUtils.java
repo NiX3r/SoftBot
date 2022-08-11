@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class DiscordUtils {
 
-    public static EmbedBuilder createReplyEmbed(String replyTopic, String replyMessage, ReplyEmbedEnum replyEmbedEnum){
+    public static EmbedBuilder createReplyEmbed(String replyTopic, String replyMessage, String author, ReplyEmbedEnum replyEmbedEnum){
 
         Color c = null;
         String replyEnum = "";
@@ -47,7 +47,7 @@ public class DiscordUtils {
                 .setTitle(replyEnum + (replyTopic == null ? "" : " - " + replyTopic))
                 .setColor(c)
                 .setDescription(replyMessage)
-                .setFooter("Verze: " + Bot.getVersion());
+                .setFooter("Zdroj: " + author + " | Verze: " + Bot.getVersion());
 
     }
 

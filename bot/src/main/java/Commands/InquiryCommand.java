@@ -37,11 +37,12 @@ public class InquiryCommand {
                 create(event.getMessage());
                 break;
 
-            case "image":
-                image(splitter, event.getMessage());
+            case "file":
+                file(splitter, event.getMessage());
+                break;
 
             default:
-                event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný příkaz.\n\nPro nápovědu\n`!sb help`", ReplyEmbedEnum.ERROR));
+                event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný příkaz.\n\nPro nápovědu\n`!sb help`", "InquiryCommand.run", ReplyEmbedEnum.ERROR));
                 break;
 
         }
@@ -49,14 +50,14 @@ public class InquiryCommand {
     }
 
     // TODO - test it
-    private static void image(String[] splitter, Message msg) {
+    private static void file(String[] splitter, Message msg) {
         if(splitter.length == 5){
 
             if(msg.getAttachments().size() > 0){
                 try {
 
                     if(!isNumber(splitter[3])){
-                        msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Index, který jsi zadal není ve správném formátu (číslo)\n\nFormát příkazu:\n`!sb inquiry list <index stránky>`", ReplyEmbedEnum.ERROR));
+                        msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Index, který jsi zadal není ve správném formátu (číslo)\n\nFormát příkazu:\n`!sb inquiry list <index stránky>`", "InquiryCommand.file", ReplyEmbedEnum.ERROR));
                         return;
                     }
 
@@ -69,31 +70,34 @@ public class InquiryCommand {
                         FileUtils.saveAttachments(attachments, "inquiry", id, success -> {
 
                             if (success)
-                                msg.reply(DiscordUtils.createReplyEmbed("Uloženo", "Všechny soubory byli úspěšně uloženy", ReplyEmbedEnum.SUCCESS));
+                                msg.reply(DiscordUtils.createReplyEmbed("Uloženo", "Všechny soubory byli úspěšně uloženy", "InquiryCommand.file", ReplyEmbedEnum.SUCCESS));
 
                             else
-                                msg.reply(DiscordUtils.createReplyEmbed("", "Nastala chyba aplikce, prosím kontaktujte vývojáře aplikace", ReplyEmbedEnum.APP_ERROR));
+                                msg.reply(DiscordUtils.createReplyEmbed("", "Nastala chyba aplikce, prosím kontaktujte vývojáře aplikace", "InquiryCommand.file", ReplyEmbedEnum.APP_ERROR));
 
                         });
                     }
                     else {
-                        msg.reply(DiscordUtils.createReplyEmbed("Autorizace", "Uvedené ID a heslo neexistují, Prosím zkuste to později", ReplyEmbedEnum.WARNING));
+                        msg.reply(DiscordUtils.createReplyEmbed("Autorizace", "Uvedené ID a heslo neexistují, Prosím zkuste to později", "InquiryCommand.file", ReplyEmbedEnum.ERROR));
                     }
 
                 }
                 catch (Exception ex){
 
                     Utils.LogSystem.log(LogTypeEnum.ERROR, "Error: " + ex, new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                    msg.reply(DiscordUtils.createReplyEmbed(null, "Nastala chyba aplikace. Prosím upozorněte na tuto chybu správce aplikace.\n\nChybová hláška\n`" + ex + "`", ReplyEmbedEnum.APP_ERROR));
+                    msg.reply(DiscordUtils.createReplyEmbed("", "Nastala chyba aplikace. Prosím upozorněte na tuto chybu správce aplikace.\n\nChybová hláška\n`" + ex + "`", "InquiryCommand.file", ReplyEmbedEnum.APP_ERROR));
 
                 }
             }
-
+            else {
+                msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zpráva musí obsahovat přiložené soubory\n\nFormát příkazu:\n`!sb inquiry file <id> <heslo pro editaci>`", "InquiryCommand.file", ReplyEmbedEnum.ERROR));
+                return;
+            }
         }
     }
 
     private static void create(Message message) {
-        message.reply(DiscordUtils.createReplyEmbed("Web", "Vytvořit poptávku lze na stránkách\n https://softbot.ncodes.eu/bazaar/", ReplyEmbedEnum.SUCCESS));
+        message.reply(DiscordUtils.createReplyEmbed("Web", "Vytvořit poptávku lze na stránkách\n https://softbot.ncodes.eu/bazaar/", "InquiryCommand.create", ReplyEmbedEnum.SUCCESS));
     }
 
     private static void list(String[] splitter, Message msg) {
@@ -102,7 +106,7 @@ public class InquiryCommand {
             try {
 
                 if(!isNumber(splitter[3])){
-                    msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Index, který jsi zadal není ve správném formátu (číslo)\n\nFormát příkazu:\n`!sb inquiry list <index stránky>`", ReplyEmbedEnum.ERROR));
+                    msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Index, který jsi zadal není ve správném formátu (číslo)\n\nFormát příkazu:\n`!sb inquiry list <index stránky>`", "InquiryCommand.list", ReplyEmbedEnum.ERROR));
                     return;
                 }
 
@@ -110,7 +114,7 @@ public class InquiryCommand {
                 int max_page = Bot.getBazaar().calculateInquiryPages();
 
                 if(page > max_page){
-                    msg.reply(DiscordUtils.createReplyEmbed("Přečíslování stránky", "Stránka, kterou jsi zadal, je moc velká. Maximální stránka je `" + max_page + "`", ReplyEmbedEnum.ERROR));
+                    msg.reply(DiscordUtils.createReplyEmbed("Přečíslování stránky", "Stránka, kterou jsi zadal, je moc velká. Maximální stránka je `" + max_page + "`", "InquiryCommand.list", ReplyEmbedEnum.ERROR));
                     return;
                 }
 
@@ -123,13 +127,13 @@ public class InquiryCommand {
 
                 }
 
-                msg.reply(DiscordUtils.createReplyEmbed("stránka " + page + "/" + max_page, message, ReplyEmbedEnum.SUCCESS));
+                msg.reply(DiscordUtils.createReplyEmbed("stránka " + page + "/" + max_page, message, "InquiryCommand.list", ReplyEmbedEnum.SUCCESS));
 
             }
             catch (Exception ex){
 
                 Utils.LogSystem.log(LogTypeEnum.ERROR, "Error: " + ex, new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                msg.reply(DiscordUtils.createReplyEmbed(null, "Nastala chyba aplikace. Prosím upozorněte na tuto chybu správce aplikace.\n\nChybová hláška\n`" + ex + "`", ReplyEmbedEnum.APP_ERROR));
+                msg.reply(DiscordUtils.createReplyEmbed(null, "Nastala chyba aplikace. Prosím upozorněte na tuto chybu správce aplikace.\n\nChybová hláška\n`" + ex + "`", "InquiryCommand.list", ReplyEmbedEnum.APP_ERROR));
 
             }
         }
@@ -142,7 +146,7 @@ public class InquiryCommand {
 
             if(offer == null){
 
-                msg.reply(DiscordUtils.createReplyEmbed("Neexistující poptávka", "Nabídka s tímto ID neexistuje. Prosím vyplňte skutečné ID.", ReplyEmbedEnum.ERROR));
+                msg.reply(DiscordUtils.createReplyEmbed("Neexistující poptávka", "Nabídka s tímto ID neexistuje. Prosím vyplňte skutečné ID.", "InquiryCommand.show", ReplyEmbedEnum.ERROR));
                 return;
 
             }
@@ -160,7 +164,7 @@ public class InquiryCommand {
             return;
 
         }
-        msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadané ID není číslo. Prosím zadej číslo.", ReplyEmbedEnum.ERROR));
+        msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadané ID není číslo. Prosím zadej číslo.", "InquiryCommand.show", ReplyEmbedEnum.ERROR));
     }
 
     private static boolean isNumber(String value){
