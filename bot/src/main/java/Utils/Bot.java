@@ -22,10 +22,10 @@ import java.util.function.Consumer;
 
 public class Bot {
 
-    private static boolean isTest = false;
+    private static boolean isTest = true;
 
     private static String prefix = "§ SoftBot §";
-    private static String version = "1.0.0-beta";
+    private static String version = "1.1.0-alpha";
     private static DiscordApi bot;
     private static DatabaseConnection connection;
     private static CalendarInstance calendar;
@@ -83,7 +83,7 @@ public class Bot {
 
                                                                                 if(load_calendar_success){
 
-                                                                                    bot = new DiscordApiBuilder().setToken(SecretClass.getDiscordToken()).setAllIntents().login().join();
+                                                                                    bot = new DiscordApiBuilder().setToken(isTest ? SecretClass.getDiscordTestToken() : SecretClass.getDiscordToken()).setAllIntents().login().join();
                                                                                     Utils.LogSystem.log(LogTypeEnum.INFO, "bot is ready on : " + bot.createBotInvite() + "515396586561", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
                                                                                     bot.addMessageCreateListener(new nMessageCreateListener());
