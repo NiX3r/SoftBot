@@ -50,10 +50,10 @@ public class BazaarButton {
             BazaarUtils.updateBazaarStatus(bazaar.getId(), bazaar.getStatus(), bazaar.getCreator_ping(), success -> {
 
                 if(success){
-                    message.reply(DiscordUtils.createReplyEmbed("", "Této nabídce/poptávce bylo úspěšně povoleno jeho vytvoření", ReplyEmbedEnum.SUCCESS));
+                    message.reply(DiscordUtils.createReplyEmbed("Úspěšné povolení", "Této nabídce/poptávce bylo úspěšně povoleno jeho vytvoření", "BazaarButton.onApprove", ReplyEmbedEnum.SUCCESS));
                 }
                 else {
-                    message.reply(DiscordUtils.createReplyEmbed("", "Této nabídce/poptávce bylo neúspěšně povoleno jeho vytvoření. Zkuste to prosím později.", ReplyEmbedEnum.ERROR));
+                    message.reply(DiscordUtils.createReplyEmbed("", "Této nabídce/poptávce bylo neúspěšně povoleno jeho vytvoření. Zkuste to prosím později.", "BazaarButton.onApprove", ReplyEmbedEnum.APP_ERROR));
                 }
 
             });
@@ -79,10 +79,10 @@ public class BazaarButton {
             BazaarUtils.updateBazaarStatus(bazaar.getId(), bazaar.getStatus(), bazaar.getCreator_ping(), success -> {
 
                 if(success){
-                    message.reply(DiscordUtils.createReplyEmbed("", "Této nabídce/poptávce bylo úspěšně zakázáno jeho vytvoření", ReplyEmbedEnum.SUCCESS));
+                    message.reply(DiscordUtils.createReplyEmbed("Úspěšné zakázání", "Této nabídce/poptávce bylo úspěšně zakázáno jeho vytvoření", "BazaarButton.onDeny", ReplyEmbedEnum.SUCCESS));
                 }
                 else {
-                    message.reply(DiscordUtils.createReplyEmbed("", "Této nabídce/poptávce bylo neúspěšně zakázáno jeho vytvoření. Zkuste to prosím později.", ReplyEmbedEnum.ERROR));
+                    message.reply(DiscordUtils.createReplyEmbed("", "Této nabídce/poptávce bylo neúspěšně zakázáno jeho vytvoření. Zkuste to prosím později.", "BazaarButton.onDeny", ReplyEmbedEnum.APP_ERROR));
                 }
 
             });
@@ -108,10 +108,10 @@ public class BazaarButton {
             BazaarUtils.updateBazaarStatus(bazaar.getId(), bazaar.getStatus(), bazaar.getCreator_ping(), success -> {
 
                 if(success){
-                    message.reply(DiscordUtils.createReplyEmbed("", "Tato poptávka/nabídka byla úspěšně smazán", ReplyEmbedEnum.SUCCESS));
+                    message.reply(DiscordUtils.createReplyEmbed("Úspěšné smazání", "Tato poptávka/nabídka byla úspěšně smazán", "BazaarButton.onRemove", ReplyEmbedEnum.SUCCESS));
                 }
                 else {
-                    message.reply(DiscordUtils.createReplyEmbed("", "Tato poptávka/nabídka byla neúšpěšně smazán. Zkuste to prosím později.", ReplyEmbedEnum.ERROR));
+                    message.reply(DiscordUtils.createReplyEmbed("", "Tato poptávka/nabídka byla neúšpěšně smazán. Zkuste to prosím později.", "BazaarButton.onRemove", ReplyEmbedEnum.APP_ERROR));
                 }
 
             });

@@ -60,7 +60,7 @@ public class OtherCommand {
                 break;
 
             default:
-                event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný příkaz.\n\nPro nápovědu\n`!sb help`", ReplyEmbedEnum.ERROR));
+                event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný příkaz.\n\nPro nápovědu\n`!sb help`", "OtherCommand.run", ReplyEmbedEnum.ERROR));
                 break;
 
         }
@@ -82,10 +82,10 @@ public class OtherCommand {
 
                                     if(edit_success){
                                         Bot.getTeamUtil().getTeamByDiscordId(server.getId()).recalculateMemberCount();
-                                        message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit týmovou roli.", ReplyEmbedEnum.SUCCESS));
+                                        message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit týmovou roli.", "OtherCommand.teamRole", ReplyEmbedEnum.SUCCESS));
                                     }
                                     else{
-                                        message.reply(DiscordUtils.createReplyEmbed("Chyba", "Nastala chyba, prosím kontaktujte správce SoftBota", ReplyEmbedEnum.APP_ERROR));
+                                        message.reply(DiscordUtils.createReplyEmbed("Chyba", "Nastala chyba, prosím kontaktujte správce SoftBota", "OtherCommand.teamRole", ReplyEmbedEnum.APP_ERROR));
                                     }
 
                                 });
@@ -97,7 +97,7 @@ public class OtherCommand {
                                 Bot.getServerOptions().add(serverOption);
                                 ServerOptionUtils.addServerOption(server.getId(), -1, message.getMentionedRoles().get(0).getId(), add_success -> {
                                     Bot.getTeamUtil().getTeamByDiscordId(server.getId()).recalculateMemberCount();
-                                    message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit týmovou roli.", ReplyEmbedEnum.SUCCESS));
+                                    message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit týmovou roli.", "OtherCommand.teamRole", ReplyEmbedEnum.SUCCESS));
 
                                 });
 
@@ -106,19 +106,19 @@ public class OtherCommand {
                         });
                     }
                     else {
-                        message.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Pro správné využítí tohoto příkazu musíš označit roli.\n\nFormát příkazu\n`!sb team-role <označení role>`", ReplyEmbedEnum.WARNING));
+                        message.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Pro správné využítí tohoto příkazu musíš označit roli.\n\nFormát příkazu\n`!sb team-role <označení role>`", "OtherCommand.teamRole", ReplyEmbedEnum.WARNING));
                     }
                 }
                 else {
-                    message.reply(DiscordUtils.createReplyEmbed("Nenastavenost", "Tento server není nastaven jako týmový server. Prosím upravte jej v sekcí týmu", ReplyEmbedEnum.WARNING));
+                    message.reply(DiscordUtils.createReplyEmbed("Nenastavenost", "Tento server není nastaven jako týmový server. Prosím upravte jej v sekcí týmu", "OtherCommand.teamRole", ReplyEmbedEnum.WARNING));
                 }
             }
             else {
-                message.reply(DiscordUtils.createReplyEmbed("Práva", "Tyto příkazy jsou pouze pro administrátory tohoto serveru", ReplyEmbedEnum.WARNING));
+                message.reply(DiscordUtils.createReplyEmbed("Práva", "Tyto příkazy jsou pouze pro administrátory tohoto serveru", "OtherCommand.teamRole", ReplyEmbedEnum.WARNING));
             }
         }
         else {
-            message.reply(DiscordUtils.createReplyEmbed("Lokace příkazu", "Tento příkaz lze vykonat pouze na serveru", ReplyEmbedEnum.WARNING));
+            message.reply(DiscordUtils.createReplyEmbed("Lokace příkazu", "Tento příkaz lze vykonat pouze na serveru", "OtherCommand.teamRole", ReplyEmbedEnum.WARNING));
         }
     }
 
@@ -135,10 +135,10 @@ public class OtherCommand {
                             ServerOptionUtils.editChannel(server.getId(), message.getMentionedChannels().get(0).getId(), edit_success -> {
 
                                 if(edit_success){
-                                    message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit oznamovací kanál.", ReplyEmbedEnum.SUCCESS));
+                                    message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit oznamovací kanál.", "OtherCommand.channel", ReplyEmbedEnum.SUCCESS));
                                 }
                                 else{
-                                    message.reply(DiscordUtils.createReplyEmbed("Chyba", "Nastala chyba, prosím kontaktujte správce SoftBota", ReplyEmbedEnum.APP_ERROR));
+                                    message.reply(DiscordUtils.createReplyEmbed("Chyba", "Nastala chyba, prosím kontaktujte správce SoftBota", "OtherCommand.channel", ReplyEmbedEnum.APP_ERROR));
                                 }
 
                             });
@@ -150,7 +150,7 @@ public class OtherCommand {
                             Bot.getServerOptions().add(serverOption);
                             ServerOptionUtils.addServerOption(server.getId(), message.getMentionedChannels().get(0).getId(), -1, add_success -> {
 
-                                message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit oznamovací kanál.", ReplyEmbedEnum.SUCCESS));
+                                message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit oznamovací kanál.", "OtherCommand.channel", ReplyEmbedEnum.SUCCESS));
 
                             });
 
@@ -159,16 +159,16 @@ public class OtherCommand {
                     });
                 }
                 else {
-                    message.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Pro správné využítí tohoto příkazu musíš označit kanál.\n\nFormát příkazu\n`!sb channel <označení kanálu>`", ReplyEmbedEnum.WARNING));
+                    message.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Pro správné využítí tohoto příkazu musíš označit kanál.\n\nFormát příkazu\n`!sb channel <označení kanálu>`", "OtherCommand.channel", ReplyEmbedEnum.WARNING));
                 }
 
             }
             else {
-                message.reply(DiscordUtils.createReplyEmbed("Práva", "Tyto příkazy jsou pouze pro administrátory tohoto serveru", ReplyEmbedEnum.WARNING));
+                message.reply(DiscordUtils.createReplyEmbed("Práva", "Tyto příkazy jsou pouze pro administrátory tohoto serveru", "OtherCommand.channel", ReplyEmbedEnum.WARNING));
             }
         }
         else {
-            message.reply(DiscordUtils.createReplyEmbed("Lokace příkazu", "Tento příkaz lze vykonat pouze na serveru", ReplyEmbedEnum.WARNING));
+            message.reply(DiscordUtils.createReplyEmbed("Lokace příkazu", "Tento příkaz lze vykonat pouze na serveru", "OtherCommand.channel", ReplyEmbedEnum.WARNING));
         }
 
     }
@@ -183,7 +183,7 @@ public class OtherCommand {
                 .addField("Autor", post.getAuthor())
                 .addField("Odkaz", "https://reddit.com" + post.getLink())
                 .setImage(post.getContent())
-                .setFooter("Verze: " + Bot.getVersion());
+                .setFooter("Zdroj: OtherCommand.run | Verze: " + Bot.getVersion());
 
         msg.reply(builder);
 
@@ -191,7 +191,7 @@ public class OtherCommand {
 
     private static void invite(String[] splitter, Message msg){
 
-        msg.reply(DiscordUtils.createReplyEmbed("Pozvánka bota", "Odkaz na pozvání SoftBota na vlastní server\n\n**Link**\n http://softbot.ncodes.eu/discord", ReplyEmbedEnum.SUCCESS));
+        msg.reply(DiscordUtils.createReplyEmbed("Pozvánka bota", "Odkaz na pozvání SoftBota na vlastní server\n\n**Link**\n http://softbot.ncodes.eu/discord", "OtherCommand.invite", ReplyEmbedEnum.SUCCESS));
 
     }
 
@@ -207,7 +207,9 @@ public class OtherCommand {
                 "Ravenbie (Ravenbie#8833) - _PR, zajištění slevových kódů_\n" +
                 "\n" +
                 "**Testeři :bug: **\n" +
-                "Kykrovec (Kykrobie#4976) - _tester, testování v alpha verzi_", ReplyEmbedEnum.EASTER_EGG));
+                "Kykrovec (Kykrobie#4976) - _tester, testování v alpha verzi_",
+                "OtherCommand.credits",
+                ReplyEmbedEnum.EASTER_EGG));
 
     }
 
@@ -220,12 +222,14 @@ public class OtherCommand {
                         "KiJudo (KiJudo#3946) - 50 Kč\n" +
                         "\n" +
                         "**Sponzoři přes BuyMeACoffee**\n" +
-                        "", ReplyEmbedEnum.EASTER_EGG));
+                        ""
+                        ,"OtherCommand.sponsors",
+                        ReplyEmbedEnum.EASTER_EGG));
 
     }
 
     private static void help(String[] splitter, Message msg){
-        msg.reply(DiscordUtils.createReplyEmbed("Nápověda", "Nápovědu lze najít na stránkách\n https://softbot.ncodes.eu/wiki/", ReplyEmbedEnum.SUCCESS));
+        msg.reply(DiscordUtils.createReplyEmbed("Nápověda", "Nápovědu lze najít na stránkách\n https://softbot.ncodes.eu/wiki/", "OtherCommand.help", ReplyEmbedEnum.SUCCESS));
     }
 
 }

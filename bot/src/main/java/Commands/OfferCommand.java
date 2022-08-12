@@ -35,7 +35,7 @@ public class OfferCommand {
                 break;
 
             default:
-                event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný příkaz.\n\nPro nápovědu\n`!sb help`", ReplyEmbedEnum.ERROR));
+                event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný příkaz.\n\nPro nápovědu\n`!sb help`", "OfferCommand.run", ReplyEmbedEnum.ERROR));
                 break;
 
         }
@@ -43,7 +43,7 @@ public class OfferCommand {
     }
 
     private static void create(Message message) {
-        message.reply(DiscordUtils.createReplyEmbed("Web", "Vytvořit nabídku lze na stránkách\n https://softbot.ncodes.eu/bazaar/", ReplyEmbedEnum.SUCCESS));
+        message.reply(DiscordUtils.createReplyEmbed("Web", "Vytvořit nabídku lze na stránkách\n https://softbot.ncodes.eu/bazaar/", "OfferCommand.create", ReplyEmbedEnum.SUCCESS));
     }
 
     private static void list(String[] splitter, Message msg) {
@@ -52,7 +52,7 @@ public class OfferCommand {
             try {
 
                 if(!isNumber(splitter[3])){
-                    msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Index, který jsi zadal není ve správném formátu (číslo)\n\nFormát příkazu:\n`!sb offer list <index stránky>`", ReplyEmbedEnum.ERROR));
+                    msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Index, který jsi zadal není ve správném formátu (číslo)\n\nFormát příkazu:\n`!sb offer list <index stránky>`", "OfferCommand.list", ReplyEmbedEnum.ERROR));
                     return;
                 }
 
@@ -60,7 +60,7 @@ public class OfferCommand {
                 int max_page = Bot.getBazaar().calculateOfferPages();
 
                 if(page > max_page){
-                    msg.reply(DiscordUtils.createReplyEmbed("Přečíslování stránky", "Stránka, kterou jsi zadal, je moc velká. Maximální stránka je `" + max_page + "`", ReplyEmbedEnum.ERROR));
+                    msg.reply(DiscordUtils.createReplyEmbed("Přečíslování stránky", "Stránka, kterou jsi zadal, je moc velká. Maximální stránka je `" + max_page + "`", "OfferCommand.list", ReplyEmbedEnum.ERROR));
                     return;
                 }
 
@@ -73,13 +73,13 @@ public class OfferCommand {
 
                 }
 
-                msg.reply(DiscordUtils.createReplyEmbed("stránka " + page + "/" + max_page, message, ReplyEmbedEnum.SUCCESS));
+                msg.reply(DiscordUtils.createReplyEmbed("stránka " + page + "/" + max_page, message, "OfferCommand.list", ReplyEmbedEnum.SUCCESS));
 
             }
             catch (Exception ex){
 
                 Utils.LogSystem.log(LogTypeEnum.ERROR, "Error: " + ex, new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                msg.reply(DiscordUtils.createReplyEmbed(null, "Nastala chyba aplikace. Prosím upozorněte na tuto chybu správce aplikace.\n\nChybová hláška\n`" + ex + "`", ReplyEmbedEnum.APP_ERROR));
+                msg.reply(DiscordUtils.createReplyEmbed(null, "Nastala chyba aplikace. Prosím upozorněte na tuto chybu správce aplikace.\n\nChybová hláška\n`" + ex + "`", "OfferCommand.list", ReplyEmbedEnum.APP_ERROR));
 
             }
 
@@ -93,7 +93,7 @@ public class OfferCommand {
 
             if(offer == null){
 
-                msg.reply(DiscordUtils.createReplyEmbed("Neexistující nabídka", "Nabídka s tímto ID neexistuje. Prosím vyplňte skutečné ID.", ReplyEmbedEnum.ERROR));
+                msg.reply(DiscordUtils.createReplyEmbed("Neexistující nabídka", "Nabídka s tímto ID neexistuje. Prosím vyplňte skutečné ID.", "OfferCommand.show", ReplyEmbedEnum.ERROR));
                 return;
 
             }
@@ -112,7 +112,7 @@ public class OfferCommand {
             return;
 
         }
-        msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadané ID není číslo. Prosím zadej číslo.", ReplyEmbedEnum.ERROR));
+        msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadané ID není číslo. Prosím zadej číslo.", "OfferCommand.show", ReplyEmbedEnum.ERROR));
     }
 
     private static boolean isNumber(String value){

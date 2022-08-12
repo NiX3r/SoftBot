@@ -59,7 +59,7 @@ public class PendingCommand {
 
     private static void bazaar(Message msg, long user_id) {
         if(Bot.getPendingData().getBazaar().size() == 0){
-            msg.reply(DiscordUtils.createReplyEmbed("Žádná data", "Již byla zpracována všechna data, která být zpracována měla. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", ReplyEmbedEnum.WARNING));
+            msg.reply(DiscordUtils.createReplyEmbed("Žádná data", "Již byla zpracována všechna data, která být zpracována měla. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", "PendingCommand.bazaar", ReplyEmbedEnum.WARNING));
             return;
         }
 
@@ -90,7 +90,7 @@ public class PendingCommand {
             msg_builder.send(msg.getChannel()).thenAccept(success -> {
 
                 BazaarUtils.updateBazaarStatus(bazaar.getId(), BazaarStatusEnum.DENIED, null, denied_success -> {
-                    success.reply(DiscordUtils.createReplyEmbed("Špatné nastavení", "Uživatel zadal špatné Discord ID. Automaticky zamítám tuto nabídku/poptávku. Prosím napiš příkaz znovu", ReplyEmbedEnum.WARNING));
+                    success.reply(DiscordUtils.createReplyEmbed("Špatné nastavení", "Uživatel zadal špatné Discord ID. Automaticky zamítám tuto nabídku/poptávku. Prosím napiš příkaz znovu", "PendingCommand.bazaar", ReplyEmbedEnum.WARNING));
                 });
 
             });
@@ -115,7 +115,7 @@ public class PendingCommand {
 
     private static void team(Message msg, long user_id) {
         if(Bot.getPendingData().getTeams().size() == 0){
-            msg.reply(DiscordUtils.createReplyEmbed("Žádná data", "Již byla zpracována všechna data, která být zpracována měla. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", ReplyEmbedEnum.WARNING));
+            msg.reply(DiscordUtils.createReplyEmbed("Žádná data", "Již byla zpracována všechna data, která být zpracována měla. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", "PendingCommand.team", ReplyEmbedEnum.WARNING));
             return;
         }
 
@@ -154,7 +154,7 @@ public class PendingCommand {
     private static void game(Message msg, long user_id){
 
         if(Bot.getPendingData().getGames().size() == 0){
-            msg.reply(DiscordUtils.createReplyEmbed("Žádná data", "Již byla zpracována všechna data, která být zpracována měla. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", ReplyEmbedEnum.WARNING));
+            msg.reply(DiscordUtils.createReplyEmbed("Žádná data", "Již byla zpracována všechna data, která být zpracována měla. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", "PendingCommand.game", ReplyEmbedEnum.WARNING));
             return;
         }
 

@@ -17,7 +17,7 @@ public class ProgrammerCommand {
         String[] splitter = event.getMessage().getContent().split(" ");
 
         if(!event.getMessageAuthor().getIdAsString().equals("397714589548019722")){
-            event.getMessage().reply(DiscordUtils.createReplyEmbed("Práva", "Tyto příkazy jsou pouze pro vývojáře SoftBota", ReplyEmbedEnum.WARNING));
+            event.getMessage().reply(DiscordUtils.createReplyEmbed("Práva", "Tyto příkazy jsou pouze pro vývojáře SoftBota", "ProgrammerCommand.run", ReplyEmbedEnum.WARNING));
             return;
         }
 
@@ -38,14 +38,14 @@ public class ProgrammerCommand {
                         break;
 
                     default:
-                        event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný podpříkaz sekce `" + splitter[1]  + "` .\n\nPro nápovědu\n`!sb help`", ReplyEmbedEnum.ERROR));
+                        event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný podpříkaz sekce `" + splitter[1]  + "` .\n\nPro nápovědu\n`!sb help`", "ProgrammerCommand.run", ReplyEmbedEnum.ERROR));
                         break;
 
                 }
                 break;
 
             default:
-                event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný příkaz.\n\nPro nápovědu\n`!sb help`", ReplyEmbedEnum.ERROR));
+                event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný příkaz.\n\nPro nápovědu\n`!sb help`", "ProgrammerCommand.run", ReplyEmbedEnum.ERROR));
                 break;
 
 
@@ -67,17 +67,17 @@ public class ProgrammerCommand {
                 DeveloperUtils.addAdmin(admin, success -> {
 
                     if(success){
-                        msg.reply(DiscordUtils.createReplyEmbed("", "Úspěsně jsi přidal admina `" + admin.getNick() + "`", ReplyEmbedEnum.SUCCESS));
+                        msg.reply(DiscordUtils.createReplyEmbed("", "Úspěsně jsi přidal admina `" + admin.getNick() + "`", "ProgrammerCommand.add", ReplyEmbedEnum.SUCCESS));
                     }
                     else {
-                        msg.reply(DiscordUtils.createReplyEmbed("", "Vznikla chyba v SoftBotu při přidávání admina `" + admin.getNick() + "`", ReplyEmbedEnum.APP_ERROR));
+                        msg.reply(DiscordUtils.createReplyEmbed("", "Vznikla chyba v SoftBotu při přidávání admina `" + admin.getNick() + "`", "ProgrammerCommand.add", ReplyEmbedEnum.APP_ERROR));
                     }
 
                 });
 
             }
             else {
-                msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Musíš označit uživatele, kterého chceš přidat.\n\nPoužití příkazu\n`!sbp admin add <označení uživatele>`", ReplyEmbedEnum.ERROR));
+                msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Musíš označit uživatele, kterého chceš přidat.\n\nPoužití příkazu\n`!sbp admin add <označení uživatele>`", "ProgrammerCommand.add", ReplyEmbedEnum.ERROR));
             }
 
         }
@@ -91,22 +91,22 @@ public class ProgrammerCommand {
             long selectedAdmin = DatabaseUtils.decodeDiscordId(splitter[3]);
 
             if(selectedAdmin == -1){
-                msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadané ID není číslo. Prosím zadej číselné ID", ReplyEmbedEnum.ERROR));
+                msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadané ID není číslo. Prosím zadej číselné ID", "ProgrammerCommand.remove", ReplyEmbedEnum.ERROR));
                 return;
             }
 
             if(!Bot.removeAdminByDiscordId(selectedAdmin)){
-                msg.reply(DiscordUtils.createReplyEmbed("Neexistující ID", "Zadané ID neexistuje. Prosím zadej skutečné ID", ReplyEmbedEnum.ERROR));
+                msg.reply(DiscordUtils.createReplyEmbed("Neexistující ID", "Zadané ID neexistuje. Prosím zadej skutečné ID", "ProgrammerCommand.remove", ReplyEmbedEnum.ERROR));
                 return;
             }
 
             DeveloperUtils.removeAdmin(selectedAdmin, success -> {
 
                 if(success){
-                    msg.reply(DiscordUtils.createReplyEmbed("", "Úspěsně jsi smazal admina `" + selectedAdmin + "`", ReplyEmbedEnum.SUCCESS));
+                    msg.reply(DiscordUtils.createReplyEmbed("", "Úspěsně jsi smazal admina `" + selectedAdmin + "`", "ProgrammerCommand.remove", ReplyEmbedEnum.SUCCESS));
                 }
                 else {
-                    msg.reply(DiscordUtils.createReplyEmbed("", "Vznikla chyba v SoftBotu při odebírání admina `" + selectedAdmin + "`", ReplyEmbedEnum.APP_ERROR));
+                    msg.reply(DiscordUtils.createReplyEmbed("", "Vznikla chyba v SoftBotu při odebírání admina `" + selectedAdmin + "`", "ProgrammerCommand.remove", ReplyEmbedEnum.APP_ERROR));
                 }
 
             });

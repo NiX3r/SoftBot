@@ -35,7 +35,7 @@ public class TeamCommand {
                 break;
 
             default:
-                event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný příkaz.\n\nPro nápovědu\n`!sb help`", ReplyEmbedEnum.ERROR));
+                event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný příkaz.\n\nPro nápovědu\n`!sb help`", "TeamCommand.run", ReplyEmbedEnum.ERROR));
                 break;
 
         }
@@ -43,7 +43,7 @@ public class TeamCommand {
     }
 
     private static void create(Message message) {
-        message.reply(DiscordUtils.createReplyEmbed("Web", "Vytvořit tým lze na stránkách\n https://softbot.ncodes.eu/team/", ReplyEmbedEnum.SUCCESS));
+        message.reply(DiscordUtils.createReplyEmbed("Web", "Vytvořit tým lze na stránkách\n https://softbot.ncodes.eu/team/", "TeamCommand.create", ReplyEmbedEnum.SUCCESS));
     }
 
     private static void list(String[] splitter, Message msg) {
@@ -53,7 +53,7 @@ public class TeamCommand {
             try {
 
                 if(!isNumber(splitter[3])){
-                    msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Index, který jsi zadal není ve správném formátu (číslo)\n\nFormát příkazu:\n`!sb team list <index stránky>`", ReplyEmbedEnum.ERROR));
+                    msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Index, který jsi zadal není ve správném formátu (číslo)\n\nFormát příkazu:\n`!sb team list <index stránky>`", "TeamCommand.list", ReplyEmbedEnum.ERROR));
                     return;
                 }
 
@@ -61,7 +61,7 @@ public class TeamCommand {
                 int max_page = Bot.getTeamUtil().calculateTeamPages();
 
                 if(page > max_page){
-                    msg.reply(DiscordUtils.createReplyEmbed("Přečíslování stránky", "Stránka, kterou jsi zadal, je moc velká. Maximální stránka je `" + max_page + "`", ReplyEmbedEnum.ERROR));
+                    msg.reply(DiscordUtils.createReplyEmbed("Přečíslování stránky", "Stránka, kterou jsi zadal, je moc velká. Maximální stránka je `" + max_page + "`", "TeamCommand.list", ReplyEmbedEnum.ERROR));
                     return;
                 }
 
@@ -92,13 +92,13 @@ public class TeamCommand {
 
                 }
 
-                msg.reply(DiscordUtils.createReplyEmbed("stránka " + page + "/" + max_page, message, ReplyEmbedEnum.SUCCESS));
+                msg.reply(DiscordUtils.createReplyEmbed("stránka " + page + "/" + max_page, message, "TeamCommand.list", ReplyEmbedEnum.SUCCESS));
 
             }
             catch (Exception ex){
 
                 Utils.LogSystem.log(LogTypeEnum.ERROR, "Error: " + ex, new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                msg.reply(DiscordUtils.createReplyEmbed(null, "Nastala chyba aplikace. Prosím upozorněte na tuto chybu správce aplikace.\n\nChybová hláška\n`" + ex + "`", ReplyEmbedEnum.APP_ERROR));
+                msg.reply(DiscordUtils.createReplyEmbed(null, "Nastala chyba aplikace. Prosím upozorněte na tuto chybu správce aplikace.\n\nChybová hláška\n`" + ex + "`", "TeamCommand.list", ReplyEmbedEnum.APP_ERROR));
 
             }
 
@@ -115,7 +115,7 @@ public class TeamCommand {
 
                 if(team == null){
 
-                    msg.reply(DiscordUtils.createReplyEmbed("Neexistující tým", "Hra s tímto ID neexistuje. Prosím vyplňte skutečné ID.", ReplyEmbedEnum.ERROR));
+                    msg.reply(DiscordUtils.createReplyEmbed("Neexistující tým", "Hra s tímto ID neexistuje. Prosím vyplňte skutečné ID.", "TeamCommand.show", ReplyEmbedEnum.ERROR));
                     return;
 
                 }
@@ -155,7 +155,7 @@ public class TeamCommand {
                 return;
 
             }
-            msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadané ID není číslo. Prosím zadej číslo.", ReplyEmbedEnum.ERROR));
+            msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadané ID není číslo. Prosím zadej číslo.", "TeamCommand.show", ReplyEmbedEnum.ERROR));
         }
 
     }

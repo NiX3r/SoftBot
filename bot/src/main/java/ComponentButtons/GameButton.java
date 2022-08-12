@@ -52,10 +52,10 @@ public class GameButton {
             GameUtils.updateGameStatus(game.getId(), game.getStatus(), success -> {
 
                 if(success){
-                    message.reply(DiscordUtils.createReplyEmbed("", "Této hře bylo úspěšně povoleno její vytvoření", ReplyEmbedEnum.SUCCESS));
+                    message.reply(DiscordUtils.createReplyEmbed("Povolení", "Této hře bylo úspěšně povoleno její vytvoření", "GameButton.onApprove", ReplyEmbedEnum.SUCCESS));
                 }
                 else {
-                    message.reply(DiscordUtils.createReplyEmbed("", "Této hře bylo neúspěšně povoleno její vytvoření. Zkuste to prosím později.", ReplyEmbedEnum.ERROR));
+                    message.reply(DiscordUtils.createReplyEmbed("", "Této hře bylo neúspěšně povoleno její vytvoření. Zkuste to prosím později.", "GameButton.onApprove", ReplyEmbedEnum.APP_ERROR));
                 }
 
             });
@@ -81,10 +81,10 @@ public class GameButton {
             GameUtils.updateGameStatus(game.getId(), game.getStatus(), success -> {
 
                 if(success){
-                    message.reply(DiscordUtils.createReplyEmbed("", "Této hře bylo úspěšně zakázáno její vytvoření", ReplyEmbedEnum.SUCCESS));
+                    message.reply(DiscordUtils.createReplyEmbed("Zakázání", "Této hře bylo úspěšně zakázáno její vytvoření", "GameButton.onDeny", ReplyEmbedEnum.SUCCESS));
                 }
                 else {
-                    message.reply(DiscordUtils.createReplyEmbed("", "Této hře bylo neúspěšně zakázáno její vytvoření. Zkuste to prosím později.", ReplyEmbedEnum.ERROR));
+                    message.reply(DiscordUtils.createReplyEmbed("", "Této hře bylo neúspěšně zakázáno její vytvoření. Zkuste to prosím později.", "GameButton.onDeny", ReplyEmbedEnum.APP_ERROR));
                 }
 
             });
@@ -110,10 +110,10 @@ public class GameButton {
             GameUtils.updateGameStatus(game.getId(), game.getStatus(), success -> {
 
                 if(success){
-                    message.reply(DiscordUtils.createReplyEmbed("", "Tato hra byla úspěšně smazána", ReplyEmbedEnum.SUCCESS));
+                    message.reply(DiscordUtils.createReplyEmbed("Smazáni", "Tato hra byla úspěšně smazána", "GameButton.onRemove", ReplyEmbedEnum.SUCCESS));
                 }
                 else {
-                    message.reply(DiscordUtils.createReplyEmbed("", "Tuto hru se nepodařilo smazat. Zkuste to prosím později.", ReplyEmbedEnum.ERROR));
+                    message.reply(DiscordUtils.createReplyEmbed("", "Tuto hru se nepodařilo smazat. Zkuste to prosím později.", "GameButton.onRemove", ReplyEmbedEnum.APP_ERROR));
                 }
 
             });

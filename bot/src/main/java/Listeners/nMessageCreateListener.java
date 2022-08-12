@@ -29,14 +29,14 @@ public class nMessageCreateListener implements MessageCreateListener {
                     event.getMessage().reply(DiscordUtils.createReplyEmbed("Verze SoftBota", "Bohužel není možné v tuto chvíli využívat služeb SoftBota v soukromych zpravach, jelikož je momentálně aktivní verze pro vývojáře a testerský tým. " +
                             "\n" +
                             "\nProsíme o strpení," +
-                            "\n_SoftBot tým_", ReplyEmbedEnum.WARNING));
+                            "\n_SoftBot tým_", "nMessageCreateListener.onMessageCreate", ReplyEmbedEnum.WARNING));
                     return;
                 }
                 if(!event.getServer().get().getIdAsString().equals("938754626025574420")){
                     event.getMessage().reply(DiscordUtils.createReplyEmbed("Verze SoftBota", "Bohužel není možné v tuto chvíli využívat služeb SoftBota, jelikož je momentálně aktivní verze pro vývojáře a testerský tým. " +
                             "\n" +
                             "\nProsíme o strpení," +
-                            "\n_SoftBot tým_", ReplyEmbedEnum.WARNING));
+                            "\n_SoftBot tým_", "nMessageCreateListener.onMessageCreate", ReplyEmbedEnum.WARNING));
                     return;
                 }
             }
