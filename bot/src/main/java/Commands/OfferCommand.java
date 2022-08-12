@@ -84,6 +84,12 @@ public class OfferCommand {
             }
 
         }
+        else if(splitter.length == 3){
+            msg.reply(DiscordUtils.createReplyEmbed("Počet stran", "Maximální počet stran je od 1 do " + Bot.getBazaar().calculateOfferPages(), "OfferCommand.list", ReplyEmbedEnum.SUCCESS));
+        }
+        else {
+            msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. \n\nFormát příkazu\n`!sb offer list <index>`", "OfferCommand.list", ReplyEmbedEnum.ERROR));
+        }
     }
 
     private static void show(String[] splitter, Message msg) {

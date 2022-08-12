@@ -103,6 +103,12 @@ public class TeamCommand {
             }
 
         }
+        else if(splitter.length == 3){
+            msg.reply(DiscordUtils.createReplyEmbed("Počet stran", "Maximální počet stran je od 1 do " + Bot.getTeamUtil().calculateTeamPages(), "TeamCommand.list", ReplyEmbedEnum.SUCCESS));
+        }
+        else {
+            msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. \n\nFormát příkazu\n`!sb team list <index>`", "TeamCommand.list", ReplyEmbedEnum.ERROR));
+        }
 
     }
 
