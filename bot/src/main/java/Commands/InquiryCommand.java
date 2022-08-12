@@ -65,7 +65,6 @@ public class InquiryCommand {
                     String password = splitter[4];
 
                     if(Bot.getBazaar().isCorrectPassword(id, password)){
-                        BazaarInstance inquiry = Bot.getBazaar().getInquiryById(id);
                         List<MessageAttachment> attachments = msg.getAttachments();
                         FileUtils.saveAttachments(attachments, "inquiry", id, success -> {
 
@@ -93,6 +92,9 @@ public class InquiryCommand {
                 msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zpráva musí obsahovat přiložené soubory\n\nFormát příkazu:\n`!sb inquiry file <id> <heslo pro editaci>`", "InquiryCommand.file", ReplyEmbedEnum.ERROR));
                 return;
             }
+        }
+        else {
+            msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu.\n\nFormát příkazu\n`!sb inquiry file <id> <heslo>`", "InquiryCommand.file", ReplyEmbedEnum.ERROR));
         }
     }
 

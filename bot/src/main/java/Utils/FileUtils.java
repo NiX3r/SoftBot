@@ -22,7 +22,6 @@ public class FileUtils {
             try {
 
                 byte[] file = attachment.downloadAsByteArray().get();
-                System.out.println(file.length);
                 fileName = attachment.getFileName();
                 key = fileName.substring(0, fileName.indexOf("."));
                 String path = "./data/attachments/" + objectToSave + "/" + id;
@@ -33,14 +32,19 @@ public class FileUtils {
                     fos.write(file);
                     fos.flush();
                 }
+                callback.accept(true);
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                callback.accept(false);
             } catch (ExecutionException e) {
                 e.printStackTrace();
+                callback.accept(false);
             } catch (FileNotFoundException e) {
+                callback.accept(false);
                 throw new RuntimeException(e);
             } catch (IOException e) {
+                callback.accept(false);
                 throw new RuntimeException(e);
             }
 
