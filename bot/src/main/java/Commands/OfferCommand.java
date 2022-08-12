@@ -5,12 +5,15 @@ import Enums.ReplyEmbedEnum;
 import Instances.BazaarInstance;
 import Utils.Bot;
 import Utils.DiscordUtils;
+import Utils.FileUtils;
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.message.MessageAttachment;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class OfferCommand {
 
@@ -21,6 +24,10 @@ public class OfferCommand {
         Utils.LogSystem.log(LogTypeEnum.INFO, "offer comand catched by '" + event.getMessageAuthor().getName() + "' on server '" + (event.getServer().isPresent() ? event.getServer().get().getName() : "PrivateMessage") + "'", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
         switch (splitter[2]){
+
+            case "file":
+                file(splitter, event.getMessage());
+                break;
 
             case "list":
                 list(splitter, event.getMessage());
@@ -42,6 +49,53 @@ public class OfferCommand {
 
     }
 
+    private static void file(String[] splitter, Message msg) {
+        if(splitter.length == 5){
+
+            if(msg.getAttachments().size() > 0){
+                try {
+
+                    if(!isNumber(splitter[3])){
+                        msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Index, který jsi zadal není ve správném formátu (číslo)\n\nFormát příkazu:\n`!sb offer list <index stránky>`", "OfferCommand.file", ReplyEmbedEnum.ERROR));
+                        return;
+                    }
+
+                    int id = Integer.parseInt(splitter[3]);
+                    String password = splitter[4];
+
+                    if(Bot.getBazaar().isCorrectPassword(id, password)){
+                        List<MessageAttachment> attachments = msg.getAttachments();
+                        FileUtils.saveAttachments(attachments, "offer", id, success -> {
+
+                            if (success)
+                                msg.reply(DiscordUtils.createReplyEmbed("Uloženo", "Všechny soubory byli úspěšně uloženy", "OfferCommand.file", ReplyEmbedEnum.SUCCESS));
+
+                            else
+                                msg.reply(DiscordUtils.createReplyEmbed("", "Nastala chyba aplikce, prosím kontaktujte vývojáře aplikace", "OfferCommand.file", ReplyEmbedEnum.APP_ERROR));
+
+                        });
+                    }
+                    else {
+                        msg.reply(DiscordUtils.createReplyEmbed("Autorizace", "Uvedené ID a heslo neexistují, Prosím zkuste to později", "OfferCommand.file", ReplyEmbedEnum.ERROR));
+                    }
+
+                }
+                catch (Exception ex){
+
+                    Utils.LogSystem.log(LogTypeEnum.ERROR, "Error: " + ex, new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                    msg.reply(DiscordUtils.createReplyEmbed("", "Nastala chyba aplikace. Prosím upozorněte na tuto chybu správce aplikace.\n\nChybová hláška\n`" + ex + "`", "OfferCommand.file", ReplyEmbedEnum.APP_ERROR));
+
+                }
+            }
+            else {
+                msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zpráva musí obsahovat přiložené soubory\n\nFormát příkazu:\n`!sb inquiry file <id> <heslo pro editaci>`", "OfferCommand.file", ReplyEmbedEnum.ERROR));
+                return;
+            }
+        }
+        else {
+            msg.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu.\n\nFormát příkazu\n`!sb inquiry file <id> <heslo>`", "OfferCommand.file", ReplyEmbedEnum.ERROR));
+        }
+    }
     private static void create(Message message) {
         message.reply(DiscordUtils.createReplyEmbed("Web", "Vytvořit nabídku lze na stránkách\n https://softbot.ncodes.eu/bazaar/", "OfferCommand.create", ReplyEmbedEnum.SUCCESS));
     }

@@ -48,8 +48,6 @@ public class InquiryCommand {
         }
 
     }
-
-    // TODO - test it
     private static void file(String[] splitter, Message msg) {
         if(splitter.length == 5){
 
