@@ -8,10 +8,12 @@ import Utils.DiscordUtils;
 import Utils.FileUtils;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.MessageAttachment;
+import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -158,17 +160,28 @@ public class OfferCommand {
 
             }
 
+            System.out.println(offer.getId() + " | " + offer.getPrice() + " | " + offer.getZip() + " | " + offer.getCreator_ping() + " | " + offer.getDescription());
+
+            MessageBuilder messageBuilder = new MessageBuilder();
             EmbedBuilder builder = new EmbedBuilder()
                     .setColor(Color.decode("#D1A841"))
                     .setTitle("Nabízím: " + offer.getName())
                     .addInlineField("Cena", String.valueOf(offer.getPrice()))
                     .addInlineField("PSČ", String.valueOf(offer.getZip()))
-                    .addInlineField("Kontakt", offer.getCreator_ping())
+                    .addInlineField("Kontakt", offer.getCreator_ping().equals("") ? "nenastaven" : offer.getCreator_ping())
                     .setDescription(offer.getDescription())
-                    .setFooter("Verze: " + Bot.getVersion());
+                    .setFooter("Zdroj: OfferCommand.show | Verze: " + Bot.getVersion());
 
+            messageBuilder.setEmbed(builder);
+            FileUtils.loadFiles(offer.getId(), "offer", files -> {
 
-            msg.reply(builder);
+                for(File file : files){
+                    messageBuilder.addAttachment(file);
+                }
+                messageBuilder.send(msg.getChannel());
+
+            });
+
             return;
 
         }
