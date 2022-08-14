@@ -1,5 +1,6 @@
 package Utils;
 
+import Commands.CreateDefaultSlashCommand;
 import Database.*;
 import Enums.LogTypeEnum;
 import Instances.*;
@@ -88,6 +89,7 @@ public class Bot {
                                                                                     bot = new DiscordApiBuilder().setToken(isTest ? SecretClass.getDiscordTestToken() : SecretClass.getDiscordToken()).setAllIntents().login().join();
                                                                                     Utils.LogSystem.log(LogTypeEnum.INFO, "bot is ready on : " + bot.createBotInvite() + "515396586561", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
+                                                                                    CreateDefaultSlashCommand.create();
                                                                                     bot.addMessageCreateListener(new nMessageCreateListener());
                                                                                     bot.addMessageComponentCreateListener(new nMessageComponentCreateListener());
                                                                                     initializeLogListeners();
