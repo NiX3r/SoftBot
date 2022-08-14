@@ -1,8 +1,9 @@
-package Commands;
+package SlashCommands;
 
 import Utils.Bot;
 import org.javacord.api.interaction.SlashCommand;
 import org.javacord.api.interaction.SlashCommandOption;
+import org.javacord.api.interaction.SlashCommandOptionChoice;
 import org.javacord.api.interaction.SlashCommandOptionType;
 
 import java.util.Arrays;
@@ -81,9 +82,60 @@ public class CreateDefaultSlashCommand {
         ).createGlobal(Bot.getBot()).join();
 
         SlashCommand.with("sba", "Main command of SoftBot admin team section", Arrays.asList(
-                
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "ban", "Subcommand for ban user", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.LONG, "user-id", "ID of a target user", true),
+                        SlashCommandOption.createWithChoices(SlashCommandOptionType.DECIMAL, "type", "Type of ban", true, Arrays.asList(
+                                SlashCommandOptionChoice.create("bazaar", 1),
+                                SlashCommandOptionChoice.create("anywhere", 2)
+                        )),
+                        SlashCommandOption.create(SlashCommandOptionType.STRING, "reason", "Reason of a ban", true)
+                )),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "unban", "Subcommand for unban user", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.LONG, "user-id", "ID of a target user", true),
+                        SlashCommandOption.create(SlashCommandOptionType.STRING, "reason", "Reason of a ban", true)
+                )),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND_GROUP, "server", "Subcommand group for a server section", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.SUB_COMMAND, "list", "Subcommand for a server list"),
+                        SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "link", "Subcommand for create a link to a server", Arrays.asList(
+                                SlashCommandOption.create(SlashCommandOptionType.LONG, "server-id", "ID of a target server", true)
+                        )),
+                        SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "disconnect", "Subcommand for disconnect from a server", Arrays.asList(
+                                SlashCommandOption.create(SlashCommandOptionType.LONG, "server-id", "ID of a target server", true),
+                                SlashCommandOption.create(SlashCommandOptionType.STRING, "reason", "Reason of a disconnect", true)
+                        )),
+                        SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "ban", "Subcommand for ban server from using bot", Arrays.asList(
+                                SlashCommandOption.create(SlashCommandOptionType.LONG, "server-id", "ID of a target server", true),
+                                SlashCommandOption.create(SlashCommandOptionType.STRING, "reason", "Reason of a disconnect", true)
+                        )),
+                        SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "unban", "Subcommand for an unban server from using bot", Arrays.asList(
+                                SlashCommandOption.create(SlashCommandOptionType.LONG, "server-id", "ID of a target server", true),
+                                SlashCommandOption.create(SlashCommandOptionType.STRING, "reason", "Reason of a disconnect", true)
+                        ))
+                )),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "announcement", "Subcommand for an announcement system", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.STRING, "content", "Content of an announcement", true)
+                )),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "pending", "Subcommand for administrate pending data", Arrays.asList(
+                        SlashCommandOption.createWithChoices(SlashCommandOptionType.DECIMAL, "type", "Type of pending data", true, Arrays.asList(
+                                SlashCommandOptionChoice.create("game", 1),
+                                SlashCommandOptionChoice.create("team", 2),
+                                SlashCommandOptionChoice.create("bazaar", 3),
+                                SlashCommandOptionChoice.create("shop", 4)
+                        ))
+                ))
                 )
         ).createGlobal(Bot.getBot()).join();
+
+        SlashCommand.with("sbp", "Main command of SoftBot developer section", Arrays.asList(
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND_GROUP, "admin", "Subcommand group for admin section", Arrays.asList(
+                        SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "add", "Subcommand for add bot admin", Arrays.asList(
+                                SlashCommandOption.create(SlashCommandOptionType.LONG, "user-id", "ID of a target user", true)
+                        )),
+                        SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "remove", "Subcommand for remove bot admin", Arrays.asList(
+                                SlashCommandOption.create(SlashCommandOptionType.LONG, "user-id", "ID of a target user", true)
+                        ))
+                ))
+        )).createGlobal(Bot.getBot()).join();
 
     }
 
