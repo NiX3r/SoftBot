@@ -11,7 +11,7 @@ public class CreateDefaultSlashCommand {
 
     public static void create(){
 
-        SlashCommand command = SlashCommand.with("sb", "Main command of SoftBot",
+        SlashCommand.with("sb", "Main command of SoftBot",
                 Arrays.asList(
                         SlashCommandOption.create(SlashCommandOptionType.SUB_COMMAND, "help", "Subcommand for help menu"),
                         SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND_GROUP, "game", "Subcommand group for game section", Arrays.asList(
@@ -77,7 +77,13 @@ public class CreateDefaultSlashCommand {
                                 SlashCommandOption.create(SlashCommandOptionType.MENTIONABLE, "role-ping", "Role ping of role which should be set", true)
                         ))
 
-                )).createGlobal(Bot.getBot()).join();
+                )
+        ).createGlobal(Bot.getBot()).join();
+
+        SlashCommand.with("sba", "Main command of SoftBot admin team section", Arrays.asList(
+                
+                )
+        ).createGlobal(Bot.getBot()).join();
 
     }
 
