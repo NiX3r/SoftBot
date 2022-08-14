@@ -20,7 +20,7 @@ public class CreateDefaultSlashCommand {
                                         SlashCommandOption.create(SlashCommandOptionType.LONG, "index", "Index of a page to show", false)
                                 )),
                                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "to", "Subcommand for show games to specific date", Arrays.asList(
-                                        SlashCommandOption.create(SlashCommandOptionType.STRING, "date", "Date until which games are shown", true)
+                                        SlashCommandOption.create(SlashCommandOptionType.STRING, "date", "Date since games are displayed till today", true)
                                 )),
                                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "show", "Subcommand for show specific game by it's ID", Arrays.asList(
                                         SlashCommandOption.create(SlashCommandOptionType.LONG, "id", "ID of a specific game", true)
