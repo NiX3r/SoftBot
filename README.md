@@ -72,7 +72,7 @@ Discord bot for Czech airsoft communites
 
 - `!sb credits` - shows bots credentials
 
-- 
+- `!sb sponsors` - shows bot's sponsors
 
 - `!sb offer` - commands for bazaar offers section
   
