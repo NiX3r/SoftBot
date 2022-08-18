@@ -59,7 +59,7 @@ public class AdminCommand {
 
     private static void announcement(String[] splitter, Message message) {
 
-        String content = message.getContent().replace("!sba announcement ", "").replaceAll("<n>", "\n");
+        /*String content = message.getContent().replace("!sba announcement ", "").replaceAll("<n>", "\n");
 
         Bot.getBot().getServers().forEach(server -> {
 
@@ -81,7 +81,7 @@ public class AdminCommand {
                 });
             }
 
-        });
+        });*/
 
     }
 

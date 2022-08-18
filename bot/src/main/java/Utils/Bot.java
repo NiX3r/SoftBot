@@ -1,12 +1,12 @@
 package Utils;
 
-import SlashCommands.CreateDefaultSlashCommand;
 import Database.*;
 import Enums.LogTypeEnum;
 import Instances.*;
 import Listeners.nMessageComponentCreateListener;
 import Listeners.nMessageCreateListener;
 import Listeners.nSlashCommandCreateListener;
+import SlashCommands.SlashCommandUtils;
 import Tasks.RotateStatusTask;
 import Threads.ShutdownThread;
 import com.google.gson.GsonBuilder;
@@ -90,7 +90,10 @@ public class Bot {
                                                                                     bot = new DiscordApiBuilder().setToken(isTest ? SecretClass.getDiscordTestToken() : SecretClass.getDiscordToken()).setAllIntents().login().join();
                                                                                     Utils.LogSystem.log(LogTypeEnum.INFO, "bot is ready on : " + bot.createBotInvite() + "515396586561", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
-                                                                                    CreateDefaultSlashCommand.create();
+                                                                                    // Bot slash commands already created
+                                                                                    //SlashCommandUtils.delete();
+                                                                                    //SlashCommandUtils.create();
+
                                                                                     bot.addSlashCommandCreateListener(new nSlashCommandCreateListener());
                                                                                     bot.addMessageCreateListener(new nMessageCreateListener());
                                                                                     bot.addMessageComponentCreateListener(new nMessageComponentCreateListener());

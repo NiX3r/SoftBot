@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class DiscordUtils {
 
-    public static EmbedBuilder createReplyEmbed(String replyTopic, String replyMessage, String author, ReplyEmbedEnum replyEmbedEnum){
+    public static EmbedBuilder createReplyEmbed(String replyTopic, String replyMessage, String source, ReplyEmbedEnum replyEmbedEnum){
 
         Color c = null;
         String replyEnum = "";
@@ -47,17 +47,17 @@ public class DiscordUtils {
                 .setTitle(replyEnum + (replyTopic == null ? "" : " - " + replyTopic))
                 .setColor(c)
                 .setDescription(replyMessage)
-                .setFooter("Zdroj: " + author + " | Verze: " + Bot.getVersion());
+                .setFooter("Zdroj: " + source + " | Verze: " + Bot.getVersion());
 
     }
 
-    public static EmbedBuilder createAnnouncementEmbed(String content, MessageAuthor author){
+    public static EmbedBuilder createAnnouncementEmbed(String content, String author, String author_avatar){
 
         return new EmbedBuilder()
                 .setTitle("Oznamovací systém :ear:")
                 .setDescription(content)
                 .setColor(Color.decode("#D1A841"))
-                .setFooter("Administrátor: " + author.getName() + " | Verze: " + Bot.getVersion(), author.getAvatar().getUrl().toString());
+                .setFooter("Administrátor: " + author + " | Verze: " + Bot.getVersion(), author_avatar);
 
     }
 
