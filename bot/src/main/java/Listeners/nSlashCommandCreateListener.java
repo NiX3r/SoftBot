@@ -58,7 +58,12 @@ public class nSlashCommandCreateListener implements SlashCommandCreateListener {
             case "announcement":
                 BotAdminCommand.announcement(interaction);
                 break;
-                // TODO - Add programming commands
+            case "admin":
+                AdminCommand.run(interaction);
+                break;
+            case "pending":
+                BotAdminCommand.pending(interaction);
+                break;
 
         }
 

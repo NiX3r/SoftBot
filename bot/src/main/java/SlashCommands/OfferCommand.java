@@ -73,7 +73,7 @@ public class OfferCommand {
     }
 
     private static void file(SlashCommandInteraction interaction) {
-        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Nehotová funkce", "Tato funkce ještě nebyla spuštěna. Prosím zkuste ji později.", "OfferCommands.run", ReplyEmbedEnum.WARNING));
+        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Nehotová funkce", "Tato funkce ještě nebyla spuštěna. Prosím zkuste ji později.", "OfferCommands.run", ReplyEmbedEnum.WARNING)).respond().join();
     }
 
     private static void list(SlashCommandInteraction interaction) {

@@ -1,11 +1,14 @@
 package Utils;
 
 import Enums.ReplyEmbedEnum;
+import Instances.ServerOptionInstance;
+import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageAuthor;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 
 import java.awt.*;
+import java.util.function.Consumer;
 
 public class DiscordUtils {
 
@@ -51,13 +54,39 @@ public class DiscordUtils {
 
     }
 
-    public static EmbedBuilder createAnnouncementEmbed(String content, String author, String author_avatar){
+    public static void sendAnnouncementEmbed(String content, String author, String author_avatar, Consumer<Boolean> callback){
 
-        return new EmbedBuilder()
+        EmbedBuilder builder = new EmbedBuilder()
                 .setTitle("Oznamovací systém :ear:")
                 .setDescription(content)
                 .setColor(Color.decode("#D1A841"))
                 .setFooter("Administrátor: " + author + " | Verze: " + Bot.getVersion(), author_avatar);
+
+        Bot.getBot().getServers().forEach(server -> {
+
+            ServerOptionInstance option = Bot.getServerOption(server.getId());
+
+            if(option == null){
+                for(ServerTextChannel channel : server.getTextChannels()){
+                    if(channel.asPrivateChannel().isPresent())
+                        continue;
+                    builder.setDescription(content + "\n\nPro administrátory serveru\nTato zpráva byla poslána do místnosti, do které mají všichni přistup, jelikož nebyla nastavena místnost pro automatické zprávy, kterou nastavíte pomocí `!sb channel <označení místnosti>`");
+                    channel.sendMessage(builder);
+                    break;
+                }
+            }
+            else {
+                long announcement_channel_id = option.getAnnouncement_channel_id();
+
+                server.getTextChannelById(announcement_channel_id).ifPresent(channel -> {
+                    builder.setDescription(content);
+                    channel.sendMessage(builder);
+                });
+            }
+
+        });
+
+        callback.accept(true);
 
     }
 

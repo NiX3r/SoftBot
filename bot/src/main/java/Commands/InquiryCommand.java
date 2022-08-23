@@ -64,7 +64,7 @@ public class InquiryCommand {
 
                     if(Bot.getBazaar().isCorrectPassword(id, password)){
                         List<MessageAttachment> attachments = msg.getAttachments();
-                        FileUtils.saveAttachments(attachments, "inquiry", id, success -> {
+                        /*FileUtils.saveAttachments(attachments, "inquiry", id, success -> {
 
                             if (success)
                                 msg.reply(DiscordUtils.createReplyEmbed("Uloženo", "Všechny soubory byli úspěšně uloženy", "InquiryCommand.file", ReplyEmbedEnum.SUCCESS));
@@ -72,7 +72,7 @@ public class InquiryCommand {
                             else
                                 msg.reply(DiscordUtils.createReplyEmbed("", "Nastala chyba aplikce, prosím kontaktujte vývojáře aplikace", "InquiryCommand.file", ReplyEmbedEnum.APP_ERROR));
 
-                        });
+                        });*/
                     }
                     else {
                         msg.reply(DiscordUtils.createReplyEmbed("Autorizace", "Uvedené ID a heslo neexistují, Prosím zkuste to později", "InquiryCommand.file", ReplyEmbedEnum.ERROR));

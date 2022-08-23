@@ -134,12 +134,10 @@ public class SlashCommandUtils {
         )).createGlobal(Bot.getBot()).join();
 
         SlashCommand.with("pending", "command for administrate pending data", Arrays.asList(
-                SlashCommandOption.createWithChoices(SlashCommandOptionType.DECIMAL, "type", "Type of pending data", true, Arrays.asList(
-                        SlashCommandOptionChoice.create("game", 1),
-                        SlashCommandOptionChoice.create("team", 2),
-                        SlashCommandOptionChoice.create("bazaar", 3),
-                        SlashCommandOptionChoice.create("shop", 4)
-                ))
+                SlashCommandOption.create(SlashCommandOptionType.SUB_COMMAND, "game", "administrate game"),
+                SlashCommandOption.create(SlashCommandOptionType.SUB_COMMAND, "team", "administrate team"),
+                SlashCommandOption.create(SlashCommandOptionType.SUB_COMMAND, "bazaar", "administrate bazaar"),
+                SlashCommandOption.create(SlashCommandOptionType.SUB_COMMAND, "shop", "administrate shop")
         )).createGlobal(Bot.getBot()).join();
 
         Utils.LogSystem.log(LogTypeEnum.INFO, "bot admin commands created", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());

@@ -1,6 +1,7 @@
 package Utils;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.javacord.api.entity.Attachment;
 import org.javacord.api.entity.message.MessageAttachment;
 
 import java.io.File;
@@ -14,40 +15,36 @@ import java.util.function.Consumer;
 
 public class FileUtils {
 
-    public static void saveAttachments(List<MessageAttachment> attachments, String objectToSave, int id, Consumer<Boolean> callback){
+    public static void saveAttachments(Attachment attachment, String objectToSave, int id, Consumer<Boolean> callback){
 
-        for (MessageAttachment attachment : attachments){
+        String key, fileName;
+        try {
 
-            String key, fileName;
-            try {
+            byte[] file = attachment.downloadAsByteArray().get();
+            fileName = attachment.getFileName();
+            key = fileName.substring(0, fileName.indexOf("."));
+            String path = "./data/attachments/" + objectToSave + "/" + id;
 
-                byte[] file = attachment.downloadAsByteArray().get();
-                fileName = attachment.getFileName();
-                key = fileName.substring(0, fileName.indexOf("."));
-                String path = "./data/attachments/" + objectToSave + "/" + id;
+            new File(path).mkdirs();
 
-                new File(path).mkdirs();
-
-                try (FileOutputStream fos = new FileOutputStream(path + "/" + fileName)) {
-                    fos.write(file);
-                    fos.flush();
-                }
-                callback.accept(true);
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-                callback.accept(false);
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-                callback.accept(false);
-            } catch (FileNotFoundException e) {
-                callback.accept(false);
-                throw new RuntimeException(e);
-            } catch (IOException e) {
-                callback.accept(false);
-                throw new RuntimeException(e);
+            try (FileOutputStream fos = new FileOutputStream(path + "/" + fileName)) {
+                fos.write(file);
+                fos.flush();
             }
+            callback.accept(true);
 
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            callback.accept(false);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            callback.accept(false);
+        } catch (FileNotFoundException e) {
+            callback.accept(false);
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            callback.accept(false);
+            throw new RuntimeException(e);
         }
 
     }
