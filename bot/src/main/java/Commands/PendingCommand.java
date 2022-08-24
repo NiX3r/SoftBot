@@ -66,16 +66,15 @@ public class PendingCommand {
         BazaarInstance bazaar = Bot.getPendingData().getBazaar().get(0);
         Bot.getPendingData().getBazaar().remove(0);
 
-        String user_ping = DiscordUtils.getNickPingById(bazaar.getCreator_id());
+        String user_ping = DiscordUtils.getNickPingById(bazaar.getUser_id());
 
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(Color.decode("#D1A841"))
-                .setTitle("Potvrzení registrace hry")
+                .setTitle("Potvrzení registrace nabídky/poptávky")
                 .addInlineField("ID", bazaar.getId() + "")
                 .addInlineField("Jméno", bazaar.getName())
-                .addInlineField("Email", bazaar.getEmail())
                 .addInlineField("IP adresa", bazaar.getIp_address())
-                .addInlineField("Majitel nabídky/poptávky id", bazaar.getCreator_id() + "")
+                .addInlineField("Majitel nabídky/poptávky id", bazaar.getUser_id() + "")
                 .addInlineField("Majitel nabídky/poptávky nick", user_ping == null ? "nenastaveno" : user_ping)
                 .addInlineField("Typ", bazaar.getType().toString())
                 .addInlineField("PSČ", bazaar.getZip() + "")
@@ -128,7 +127,6 @@ public class PendingCommand {
                 .setImage(team.getThumbnail() == null ? "" : team.getThumbnail())
                 .addInlineField("ID", team.getId() + "")
                 .addInlineField("Jméno", team.getName())
-                .addInlineField("Email", team.getEmail())
                 .addInlineField("IP adresa", team.getIp_address())
                 .addInlineField("Web", team.getWebsite())
                 .addInlineField("Typ", team.getType().replace("CQB&MS", "CQB a MilSim"))
@@ -188,7 +186,6 @@ public class PendingCommand {
                 .addInlineField("Opakování", repeat_string)
                 .addInlineField("Typ", game.getType().equals("PB") ? "Plácko bitka" : game.getType())
                 .addInlineField("IP adresa", game.getIp_address())
-                .addInlineField("Email", game.getEmail())
                 .setDescription(game.getDescription())
                 .setFooter("Verze: " + Bot.getVersion());
 

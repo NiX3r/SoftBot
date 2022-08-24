@@ -39,6 +39,9 @@ public class SlashCommandUtils {
                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "to", "Subcommand for show games to specific date", Arrays.asList(
                         SlashCommandOption.create(SlashCommandOptionType.STRING, "date", "Date since games are displayed till today", true)
                 )),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "at", "Subcommand for show games at specific date", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.STRING, "date", "Date on games are displayed", true)
+                )),
                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "show", "Subcommand for show specific game by it's ID", Arrays.asList(
                         SlashCommandOption.create(SlashCommandOptionType.LONG, "id", "ID of a specific game", true)
                 ))
@@ -91,6 +94,21 @@ public class SlashCommandUtils {
                 )),
                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "show", "Subcommand for show specific inquiry by it's ID", Arrays.asList(
                         SlashCommandOption.create(SlashCommandOptionType.LONG, "id", "ID of a specific inquiry", true)
+                ))
+        )).createGlobal(Bot.getBot()).join();
+
+        Utils.LogSystem.log(LogTypeEnum.INFO, "inquiry commands created", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+
+        SlashCommand.with("shop", "group for shop section", Arrays.asList(
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "create", "Subcommand for show shop create form"),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "list", "Subcommand for show list of shops indexed by pages 10 inquiry per page", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.LONG, "index", "Index of a page to show", false)
+                )),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "show", "Subcommand for show specific shop by it's ID", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.LONG, "id", "ID of a specific shop", true)
+                )),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "at", "Subcommand for show shops at specific ZIP", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.LONG, "zip", "ZIP where shops are located to be displayed", true)
                 ))
         )).createGlobal(Bot.getBot()).join();
 

@@ -33,10 +33,8 @@ public class BazaarUtils {
 
                     BazaarInstance bazaar = new BazaarInstance(results.getInt("ID"),
                             UTFCorrectionTranslator.translate(results.getString("Name")),
-                            results.getString("EditPassword"),
-                            results.getString("Email"),
                             results.getString("IPAddress"),
-                            DatabaseUtils.decodeDiscordId(results.getString("DiscordUserID")),
+                            0,
                             BazaarTypeEnum.valueOf(results.getString("Type")),
                             results.getInt("ZIP"),
                             results.getDouble("Price"),
@@ -83,10 +81,8 @@ public class BazaarUtils {
 
                     BazaarInstance bazaar = new BazaarInstance(results.getInt("ID"),
                             UTFCorrectionTranslator.translate(results.getString("Name")),
-                            results.getString("EditPassword"),
-                            results.getString("Email"),
                             results.getString("IPAddress"),
-                            DatabaseUtils.decodeDiscordId(results.getString("DiscordUserID")),
+                            0,
                             BazaarTypeEnum.valueOf(results.getString("Type")),
                             results.getInt("ZIP"),
                             results.getDouble("Price"),

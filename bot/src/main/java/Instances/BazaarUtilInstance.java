@@ -60,15 +60,6 @@ public class BazaarUtilInstance {
         return null;
     }
 
-    public boolean isCorrectPassword(int id, String password){
-        for(BazaarInstance bazaar : this.bazaar){
-            if(bazaar.getHashed_password().equals(PasswordUtils.getHashedPassword(password)) &&
-                    bazaar.getId() == id)
-                return true;
-        }
-        return false;
-    }
-
     public int calculateInquiryPages(){
         return (getBazaar().size() / 10) + 1;
     }

@@ -1,6 +1,8 @@
 package Listeners;
 
+import Enums.ReplyEmbedEnum;
 import SlashCommands.*;
+import Utils.DiscordUtils;
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
 import org.javacord.api.interaction.SlashCommandInteraction;
 import org.javacord.api.listener.interaction.SlashCommandCreateListener;
@@ -23,10 +25,12 @@ public class nSlashCommandCreateListener implements SlashCommandCreateListener {
                 TeamCommand.run(interaction);
                 break;
             case "offer":
-                OfferCommand.run(interaction);
+                //OfferCommand.run(interaction); // TODO - activate this
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Nehotová funkce", "Omlouvám se, ale tato funkce ještě není plně hotová. Bot se nachází v pre-beta verzi a v plné verzi tato funkce spuštěna bude. Děkuji za pochopení", "nSlashCommandCreateListener.run", ReplyEmbedEnum.WARNING)).respond().join();
                 break;
             case "inquiry":
-                InquiryCommand.run(interaction);
+                //InquiryCommand.run(interaction); // TODO - activate this
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Nehotová funkce", "Omlouvám se, ale tato funkce ještě není plně hotová. Bot se nachází v pre-beta verzi a v plné verzi tato funkce spuštěna bude. Děkuji za pochopení", "nSlashCommandCreateListener.run", ReplyEmbedEnum.WARNING)).respond().join();
                 break;
             case "reddit":
                 OtherCommand.reddit(interaction);
@@ -63,6 +67,9 @@ public class nSlashCommandCreateListener implements SlashCommandCreateListener {
                 break;
             case "pending":
                 BotAdminCommand.pending(interaction);
+                break;
+            case "shop":
+                ShopCommand.run(interaction);
                 break;
 
         }

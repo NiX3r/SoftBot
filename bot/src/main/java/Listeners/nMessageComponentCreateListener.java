@@ -2,6 +2,7 @@ package Listeners;
 
 import ComponentButtons.BazaarButton;
 import ComponentButtons.GameButton;
+import ComponentButtons.ShopButton;
 import ComponentButtons.TeamButton;
 import Database.GameUtils;
 import Enums.GameStatusEnum;
@@ -37,7 +38,10 @@ public class nMessageComponentCreateListener implements MessageComponentCreateLi
             BazaarButton.run(event);
             event.getMessageComponentInteraction().acknowledge();
         }
-
+        else if (custom_id.contains("ncodes-softbot-pending-shop-")){
+            ShopButton.run(event);
+            event.getMessageComponentInteraction().acknowledge();
+        }
     }
 
 }

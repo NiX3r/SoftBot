@@ -65,9 +65,9 @@ public class OfferCommand {
                     int id = Integer.parseInt(splitter[3]);
                     String password = splitter[4];
 
-                    if(Bot.getBazaar().isCorrectPassword(id, password)){
+                    /*if(Bot.getBazaar().isCorrectPassword(id, password)){
                         List<MessageAttachment> attachments = msg.getAttachments();
-                        /*FileUtils.saveAttachments(attachments, "offer", id, success -> {
+                        FileUtils.saveAttachments(attachments, "offer", id, success -> {
 
                             if (success)
                                 msg.reply(DiscordUtils.createReplyEmbed("Uloženo", "Všechny soubory byli úspěšně uloženy", "OfferCommand.file", ReplyEmbedEnum.SUCCESS));
@@ -75,11 +75,11 @@ public class OfferCommand {
                             else
                                 msg.reply(DiscordUtils.createReplyEmbed("", "Nastala chyba aplikce, prosím kontaktujte vývojáře aplikace", "OfferCommand.file", ReplyEmbedEnum.APP_ERROR));
 
-                        });*/
+                        });
                     }
                     else {
                         msg.reply(DiscordUtils.createReplyEmbed("Autorizace", "Uvedené ID a heslo neexistují, Prosím zkuste to později", "OfferCommand.file", ReplyEmbedEnum.ERROR));
-                    }
+                    }*/
 
                 }
                 catch (Exception ex){

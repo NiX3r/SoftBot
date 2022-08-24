@@ -52,7 +52,9 @@ public class GameButton {
             GameUtils.updateGameStatus(game.getId(), game.getStatus(), success -> {
 
                 if(success){
-                    message.reply(DiscordUtils.createReplyEmbed("Povolení", "Této hře bylo úspěšně povoleno její vytvoření", "GameButton.onApprove", ReplyEmbedEnum.SUCCESS));
+                    DiscordUtils.sendApprovedGameAnnouncementEmbed(game, send_done -> {
+                        message.reply(DiscordUtils.createReplyEmbed("Povolení", "Této hře bylo úspěšně povoleno její vytvoření a bylo rozesláno oznámení na všechny servery", "GameButton.onApprove", ReplyEmbedEnum.SUCCESS));
+                    });
                 }
                 else {
                     message.reply(DiscordUtils.createReplyEmbed("", "Této hře bylo neúspěšně povoleno její vytvoření. Zkuste to prosím později.", "GameButton.onApprove", ReplyEmbedEnum.APP_ERROR));

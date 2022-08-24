@@ -4,10 +4,7 @@ import Database.BazaarUtils;
 import Database.DatabaseUtils;
 import Enums.BazaarStatusEnum;
 import Enums.ReplyEmbedEnum;
-import Instances.BazaarInstance;
-import Instances.GameInstance;
-import Instances.ServerOptionInstance;
-import Instances.TeamInstance;
+import Instances.*;
 import Utils.Bot;
 import Utils.DiscordUtils;
 import org.javacord.api.entity.channel.ServerTextChannel;
@@ -105,7 +102,6 @@ public class BotAdminCommand {
                 .addInlineField("Opakování", repeat_string)
                 .addInlineField("Typ", game.getType().equals("PB") ? "Plácko bitka" : game.getType())
                 .addInlineField("IP adresa", game.getIp_address())
-                .addInlineField("Email", game.getEmail())
                 .setDescription(game.getDescription())
                 .setFooter("Verze: " + Bot.getVersion());
 
@@ -140,7 +136,6 @@ public class BotAdminCommand {
                 .setImage(team.getThumbnail() == null ? "" : team.getThumbnail())
                 .addInlineField("ID", team.getId() + "")
                 .addInlineField("Jméno", team.getName())
-                .addInlineField("Email", team.getEmail())
                 .addInlineField("IP adresa", team.getIp_address())
                 .addInlineField("Web", team.getWebsite())
                 .addInlineField("Typ", team.getType().replace("CQB&MS", "CQB a MilSim"))
@@ -173,16 +168,15 @@ public class BotAdminCommand {
         BazaarInstance bazaar = Bot.getPendingData().getBazaar().get(0);
         Bot.getPendingData().getBazaar().remove(0);
 
-        String user_ping = DiscordUtils.getNickPingById(bazaar.getCreator_id());
+        String user_ping = DiscordUtils.getNickPingById(bazaar.getUser_id());
 
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(Color.decode("#D1A841"))
                 .setTitle("Potvrzení registrace hry")
                 .addInlineField("ID", bazaar.getId() + "")
                 .addInlineField("Jméno", bazaar.getName())
-                .addInlineField("Email", bazaar.getEmail())
                 .addInlineField("IP adresa", bazaar.getIp_address())
-                .addInlineField("Majitel nabídky/poptávky id", bazaar.getCreator_id() + "")
+                .addInlineField("Majitel nabídky/poptávky id", bazaar.getUser_id() + "")
                 .addInlineField("Majitel nabídky/poptávky nick", user_ping == null ? "nenastaveno" : user_ping)
                 .addInlineField("Typ", bazaar.getType().toString())
                 .addInlineField("PSČ", bazaar.getZip() + "")
@@ -220,6 +214,41 @@ public class BotAdminCommand {
     }
 
     private static void shop(SlashCommandInteraction interaction){
+        if(Bot.getPendingData().getShops().size() == 0){
+            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Žádná data", "Již byla zpracována všechna data, která být zpracována měla. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", "PendingCommand.shop", ReplyEmbedEnum.WARNING)).respond().join();
+            return;
+        }
+
+        ShopInstance game = Bot.getPendingData().getShops().get(0);
+        Bot.getPendingData().getShops().remove(0);
+
+        EmbedBuilder builder = new EmbedBuilder()
+                .setColor(Color.decode("#D1A841"))
+                .setTitle("Potvrzení registrace obchodu")
+                .setImage(game.getThumbnail())
+                .addField("ID", game.getId() + "")
+                .addInlineField("Název", game.getName())
+                .addInlineField("Slevový kód", game.getVoucher().equals("") ? "nenastaven" : game.getVoucher())
+                .addInlineField("Web", game.getWebsite())
+                .addInlineField("Adresa", game.getLocation().equals("") ? "nenastavena" : game.getLocation())
+                .addInlineField("ZIP", String.valueOf(game.getZip()))
+                .addInlineField("IP adresa", game.getIp_address())
+                .setDescription(game.getDescription())
+                .setFooter("Verze: " + Bot.getVersion());
+
+        MessageBuilder msg_builder = new MessageBuilder()
+                .setEmbed(builder)
+                .addComponents(
+                        ActionRow.of(Button.success("ncodes-softbot-pending-shop-approve-" + interaction.getUser().getId(), "Povolit"),
+                                Button.danger("ncodes-softbot-pending-shop-deny-" + interaction.getUser().getId(), "Zakákat"),
+                                Button.danger("ncodes-softbot-pending-shop-remove-" + interaction.getUser().getId(), "Smazat"))
+                );
+
+        msg_builder.send(interaction.getChannel().get()).thenAccept(success -> {
+
+            Bot.getPendingData().getCheckingData().put(interaction.getUser().getId(), game);
+
+        });
         interaction.createImmediateResponder().setContent("done").respond().join();
     }
 

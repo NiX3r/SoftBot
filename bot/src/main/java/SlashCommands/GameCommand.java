@@ -1,11 +1,13 @@
 package SlashCommands;
 
+import Database.DatabaseUtils;
 import Enums.LogTypeEnum;
 import Enums.ReplyEmbedEnum;
 import Instances.CalendarGameInstance;
 import Instances.GameInstance;
 import Utils.Bot;
 import Utils.DiscordUtils;
+import Utils.GameUtils;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.interaction.SlashCommandCreateEvent;
 import org.javacord.api.interaction.SlashCommandInteraction;
@@ -14,6 +16,7 @@ import org.javacord.api.interaction.SlashCommandOption;
 
 import java.awt.*;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -32,12 +35,46 @@ public class GameCommand {
             case "to":
                 to(interaction);
                 break;
+            case "at":
+                at(interaction);
+                break;
             case "show":
                 show(interaction);
                 break;
 
         }
 
+    }
+
+    private static void at(SlashCommandInteraction interaction) {
+        try{
+            String message = "Byly nalezeny tyto hry (název akce (id)):\n\n";
+            ArrayList<CalendarGameInstance> gamesInDate = new ArrayList<CalendarGameInstance>();
+            String[] to_splitter = interaction.getArguments().get(0).getStringValue().get().replace(".", "-").split("-");
+            String to_string = to_splitter[2] + "-" + to_splitter[1] + "-" + to_splitter[0] + " 00:00:00";
+            long to_ms = DatabaseUtils.decodeDateTime(to_string);
+            final long year_ms = Long.parseLong("31557600000");
+            final long today_ms = System.currentTimeMillis();
+
+            System.out.println(to_string + " equals " + to_ms);
+
+            if(to_ms < (today_ms - year_ms) || to_ms > (today_ms + (2*year_ms))){
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Velké/Malé datum", "Zadané datum je moc velké nebo malé. Prosím zadejte datum v rozmezí jednoho roku na zpět nebo dva roky do předu.", "GameCommand.at", ReplyEmbedEnum.WARNING)).respond().join();
+                return;
+            }
+
+            message += GameUtils.getListGamesOnSpecificDate(to_ms);
+
+            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Nalezený seznam", message, "GameCommand.at", ReplyEmbedEnum.SUCCESS)).respond().join();
+            gamesInDate.clear();
+
+        }
+        catch (Exception exception){
+
+            Utils.LogSystem.log(LogTypeEnum.ERROR, "Error: " + exception.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Formát data", "Špatný formát data. Prosím napiš datum ve formátu '21.08.2002' nebo '21-08-2002'", "GameCommand.at", ReplyEmbedEnum.ERROR)).respond().join();
+
+        }
     }
 
     private static void show(SlashCommandInteraction interaction) {
@@ -84,7 +121,7 @@ public class GameCommand {
         }
         catch (Exception exception){
             Utils.LogSystem.log(LogTypeEnum.ERROR, "Error: " + exception.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Formát data", "Špatný formát data. Prosím napiš datum ve formátu '21.08.2002' nebo '21-08-2002'", "GameCommand.to", ReplyEmbedEnum.ERROR)).respond().join();
+            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Formát data", "Špatný formát data. Prosím napiš datum ve formátu '21.08.2002' nebo '21-08-2002'", "GameCommand.show", ReplyEmbedEnum.ERROR)).respond().join();
         }
     }
 
@@ -185,7 +222,7 @@ public class GameCommand {
             int max_page = Bot.getCalendar().calculateGamePages();
 
             if(page > max_page){
-                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Přečíslování stránky", "Stránka, kterou jsi zadal, je moc velká. Maximální stránka je `" + max_page + "`", "GameCommand.list", ReplyEmbedEnum.ERROR)).respond().join();
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Přečíslování stránky", "Stránka, kterou jsi zadal, je moc velká. Maximální stránka je `" + max_page + "`", "GameCommand.list", ReplyEmbedEnum.WARNING)).respond().join();
                 return;
             }
 

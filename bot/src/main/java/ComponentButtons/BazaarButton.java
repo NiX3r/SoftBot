@@ -50,7 +50,9 @@ public class BazaarButton {
             BazaarUtils.updateBazaarStatus(bazaar.getId(), bazaar.getStatus(), bazaar.getCreator_ping(), success -> {
 
                 if(success){
-                    message.reply(DiscordUtils.createReplyEmbed("Úspěšné povolení", "Této nabídce/poptávce bylo úspěšně povoleno jeho vytvoření", "BazaarButton.onApprove", ReplyEmbedEnum.SUCCESS));
+                    DiscordUtils.sendApprovedBazaarAnnouncementEmbed(bazaar, success_sent -> {
+                        message.reply(DiscordUtils.createReplyEmbed("Úspěšné povolení", "Této nabídce/poptávce bylo úspěšně povoleno jeho vytvoření a bylo zasláno oznámení na všechny servery", "BazaarButton.onApprove", ReplyEmbedEnum.SUCCESS));
+                    });
                 }
                 else {
                     message.reply(DiscordUtils.createReplyEmbed("", "Této nabídce/poptávce bylo neúspěšně povoleno jeho vytvoření. Zkuste to prosím později.", "BazaarButton.onApprove", ReplyEmbedEnum.APP_ERROR));
