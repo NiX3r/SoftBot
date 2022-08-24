@@ -9,6 +9,7 @@ public class PendingDataInstance {
     private ArrayList<BazaarInstance> bazaar;
     private ArrayList<GameInstance> games;
     private ArrayList<TeamInstance> teams;
+    private ArrayList<ShopInstance> shops;
     private HashMap<Long, Object> checkingData;
 
     public PendingDataInstance(){
@@ -16,6 +17,7 @@ public class PendingDataInstance {
         this.bazaar = new ArrayList<BazaarInstance>();
         this.games = new ArrayList<GameInstance>();
         this.teams = new ArrayList<TeamInstance>();
+        this.shops = new ArrayList<ShopInstance>();
         checkingData = new HashMap<Long, Object>();
 
     }
@@ -34,5 +36,9 @@ public class PendingDataInstance {
 
     public HashMap<Long, Object> getCheckingData() {
         return checkingData;
+    }
+
+    public ArrayList<ShopInstance> getShops() {
+        return shops;
     }
 }

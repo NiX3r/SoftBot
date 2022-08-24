@@ -22,34 +22,53 @@ public class nMessageCreateListener implements MessageCreateListener {
 
         String[] splitter = event.getMessage().getContent().split(" ");
 
-        if(splitter[0].equals("!sb") || splitter[0].equals("!sba") || splitter[0].equals("!sbp")){
+        if(splitter[0].equals("!sb") || splitter[0].equals("!sba") || splitter[0].equals("!sbp") ||
+            splitter[0].equals("t!sb") || splitter[0].equals("t!sba") || splitter[0].equals("t!sbp")){
             if(Bot.getVersion().contains("alpha")){
-                if(!event.getServer().isPresent()){
-                    event.getMessage().reply(DiscordUtils.createReplyEmbed("Verze SoftBota", "Bohužel není možné v tuto chvíli využívat služeb SoftBota v soukromych zpravach, jelikož je momentálně aktivní verze pro vývojáře a testerský tým. " +
-                            "\n" +
-                            "\nProsíme o strpení," +
-                            "\n_SoftBot tým_", ReplyEmbedEnum.WARNING));
-                    return;
-                }
-                if(!event.getServer().get().getIdAsString().equals("938754626025574420")){
-                    event.getMessage().reply(DiscordUtils.createReplyEmbed("Verze SoftBota", "Bohužel není možné v tuto chvíli využívat služeb SoftBota, jelikož je momentálně aktivní verze pro vývojáře a testerský tým. " +
-                            "\n" +
-                            "\nProsíme o strpení," +
-                            "\n_SoftBot tým_", ReplyEmbedEnum.WARNING));
-                    return;
+                if(!Bot.isIsTest()){
+                    if(!event.getServer().isPresent()){
+                        event.getMessage().reply(DiscordUtils.createReplyEmbed("Verze SoftBota", "Bohužel není možné v tuto chvíli využívat služeb SoftBota v soukromych zpravach, jelikož je momentálně aktivní verze pro vývojáře a testerský tým. " +
+                                "\n" +
+                                "\nProsíme o strpení," +
+                                "\n_SoftBot tým_", "nMessageCreateListener.onMessageCreate", ReplyEmbedEnum.WARNING));
+                        return;
+                    }
+                    if(!event.getServer().get().getIdAsString().equals("938754626025574420")){
+                        event.getMessage().reply(DiscordUtils.createReplyEmbed("Verze SoftBota", "Bohužel není možné v tuto chvíli využívat služeb SoftBota, jelikož je momentálně aktivní verze pro vývojáře a testerský tým. " +
+                                "\n" +
+                                "\nProsíme o strpení," +
+                                "\n_SoftBot tým_", "nMessageCreateListener.onMessageCreate", ReplyEmbedEnum.WARNING));
+                        return;
+                    }
                 }
             }
-
-            switch (event.getMessage().getContent().split(" ")[0]){
-                case "!sb":
-                    classicCommand(event);
-                    break;
-                case "!sba":
-                    AdminCommand.run(event);
-                    break;
-                case "!sbp":
-                    ProgrammerCommand.run(event);
-                    break;
+            if(Bot.isIsTest()){
+                switch (event.getMessage().getContent().split(" ")[0]){
+                    case "t!sb":
+                        classicCommand(event);
+                        break;
+                    case "t!sba":
+                        AdminCommand.run(event);
+                        break;
+                    case "t!sbp":
+                        ProgrammerCommand.run(event);
+                        break;
+                }
+                return;
+            }
+            else {
+                switch (event.getMessage().getContent().split(" ")[0]){
+                    case "!sb":
+                        classicCommand(event);
+                        break;
+                    case "!sba":
+                        AdminCommand.run(event);
+                        break;
+                    case "!sbp":
+                        ProgrammerCommand.run(event);
+                        break;
+                }
+                return;
             }
         }
 

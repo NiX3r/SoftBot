@@ -2,6 +2,7 @@ package Instances;
 
 import Database.BazaarUtils;
 import Enums.BazaarTypeEnum;
+import Utils.PasswordUtils;
 
 import java.util.ArrayList;
 

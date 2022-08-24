@@ -8,7 +8,6 @@ public class GameInstance {
 
     private String name;
     private String thumbnail;
-    private String email;
     private String ip_address;
     private long start_date;
     private long end_date;
@@ -25,12 +24,11 @@ public class GameInstance {
     private long last_edit_date;
     private GameStatusEnum last_edit_status;
 
-    public GameInstance(int id, String name, String thumbnail, String email, String ip_address, long start_date, long end_date, String repeat_date, String website, String location, float price, String type, String description, GameStatusEnum status, long last_edit_date, long last_edit_user_id, GameStatusEnum last_edit_status, long create_date){
+    public GameInstance(int id, String name, String thumbnail, String ip_address, long start_date, long end_date, String repeat_date, String website, String location, float price, String type, String description, GameStatusEnum status, long last_edit_date, long last_edit_user_id, GameStatusEnum last_edit_status, long create_date){
 
         this.id = id;
         this.name = name;
         this.thumbnail = thumbnail;
-        this.email = email;
         this.ip_address = ip_address;
         this.start_date = start_date;
         this.end_date = end_date;
@@ -163,10 +161,6 @@ public class GameInstance {
 
     public int getId() {
         return id;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public String getIp_address() {

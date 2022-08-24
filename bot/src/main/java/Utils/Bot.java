@@ -5,6 +5,8 @@ import Enums.LogTypeEnum;
 import Instances.*;
 import Listeners.nMessageComponentCreateListener;
 import Listeners.nMessageCreateListener;
+import Listeners.nSlashCommandCreateListener;
+import SlashCommands.SlashCommandUtils;
 import Tasks.RotateStatusTask;
 import Threads.ShutdownThread;
 import com.google.gson.GsonBuilder;
@@ -16,16 +18,17 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.sql.Connection;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Timer;
 import java.util.function.Consumer;
 
 public class Bot {
 
     private static boolean isTest = false;
-
     private static String prefix = "§ SoftBot §";
-    private static String version = "1.0.0-beta";
+    private static String version = "1.1.0-pre-beta";
     private static DiscordApi bot;
     private static DatabaseConnection connection;
     private static CalendarInstance calendar;
@@ -33,12 +36,16 @@ public class Bot {
     private static RedditInstance reddit;
     private static PunishmentInstance punishments;
     private static BazaarUtilInstance bazaar;
+    private static ShopUtilInstance shop;
     private static ArrayList<AdminInstance> admins;
     private static PendingDataInstance pendingData;
     private static ArrayList<ServerOptionInstance> serverOptions;
     private static Timer timer;
 
-    public static void initializeBot(){
+    public static void initializeBot(String argument){
+
+        if(argument.equals("test"))
+            isTest = true;
 
         Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 
@@ -55,100 +62,37 @@ public class Bot {
             punishments = new PunishmentInstance();
             bazaar = new BazaarUtilInstance();
             pendingData = new PendingDataInstance();
+            shop = new ShopUtilInstance();
             admins = new ArrayList<AdminInstance>();
             serverOptions = new ArrayList<ServerOptionInstance>();
 
-            TeamUtils.loadPendingTeamsInstance(load_pending_team_success -> {
-                if(load_pending_team_success){
-                    GameUtils.loadPendingCalendarInstance(load_pending_game_success -> {
-                        if (load_pending_game_success){
-                            BazaarUtils.loadPendingBazaarInstance(load_pending_bazaar_success -> {
-                                if (load_pending_bazaar_success){
-                                    BazaarUtils.loadBazaarInstance(load_bazaar_success -> {
+            DatabaseUtils.loadDataIntoCache(success -> {
 
-                                        if(load_bazaar_success){
-                                            ServerOptionUtils.loadServerOptionInstance(load_server_option_success -> {
+                if(success){
+                    bot = new DiscordApiBuilder().setToken(isTest ? SecretClass.getDiscordTestToken() : SecretClass.getDiscordToken()).setAllIntents().login().join();
+                    Utils.LogSystem.log(LogTypeEnum.INFO, "bot is ready on : " + bot.createBotInvite() + "515396586561", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
-                                                if(load_server_option_success){
-                                                    BanUtils.loadBansInstance(load_bans_success -> {
+                    // Bot slash commands already created
+                    //SlashCommandUtils.delete();
+                    //SlashCommandUtils.create();
 
-                                                        if(load_bans_success){
-                                                            TeamUtils.loadTeamsInstance(load_teams_success -> {
+                    bot.addSlashCommandCreateListener(new nSlashCommandCreateListener());
+                    bot.addMessageCreateListener(new nMessageCreateListener());
+                    bot.addMessageComponentCreateListener(new nMessageComponentCreateListener());
+                    initializeLogListeners();
 
-                                                                if(load_teams_success){
-                                                                    DeveloperUtils.loadAdmins(load_admins_success -> {
+                    teamUtil.recalculateMemberCount();
 
-                                                                        if(load_admins_success){
-                                                                            GameUtils.loadCalendarInstance(load_calendar_success -> {
+                    checkWeekPlan();
 
-                                                                                if(load_calendar_success){
+                    timer = new Timer("softbot-timer");
+                    timer.schedule(new RotateStatusTask(), 0, 30000);
 
-                                                                                    bot = new DiscordApiBuilder().setToken(SecretClass.getDiscordToken()).setAllIntents().login().join();
-                                                                                    Utils.LogSystem.log(LogTypeEnum.INFO, "bot is ready on : " + bot.createBotInvite() + "515396586561", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                    Utils.LogSystem.log(LogTypeEnum.INFO, "bot initialize and turned on", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
-                                                                                    bot.addMessageCreateListener(new nMessageCreateListener());
-                                                                                    bot.addMessageComponentCreateListener(new nMessageComponentCreateListener());
-                                                                                    initializeLogListeners();
-
-                                                                                    teamUtil.recalculateMemberCount();
-
-                                                                                    timer = new Timer("softbot-timer");
-                                                                                    timer.schedule(new RotateStatusTask(), 0, 30000);
-
-                                                                                    Utils.LogSystem.log(LogTypeEnum.INFO, "bot initialize and turned on", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-
-                                                                                    //saveCache(saved -> {});
-
-                                                                                }
-                                                                                else {
-                                                                                    Utils.LogSystem.log(LogTypeEnum.ERROR, "error while loading calendar. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                                                                                }
-
-                                                                            });
-                                                                        }
-                                                                        else {
-                                                                            Utils.LogSystem.log(LogTypeEnum.ERROR, "error while loading admins. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                                                                        }
-
-                                                                    });
-                                                                }
-                                                                else {
-                                                                    Utils.LogSystem.log(LogTypeEnum.ERROR, "error while loading teams. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                                                                }
-
-                                                            });
-                                                        }
-                                                        else {
-                                                            Utils.LogSystem.log(LogTypeEnum.ERROR, "error while loading bans. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                                                        }
-
-                                                    });
-                                                }
-                                                else {
-                                                    Utils.LogSystem.log(LogTypeEnum.ERROR, "error while loading server options. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                                                }
-
-                                            });
-                                        }
-                                        else {
-                                            Utils.LogSystem.log(LogTypeEnum.ERROR, "error while loading bazaar. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                                        }
-
-                                    });
-                                }
-                                else {
-                                    Utils.LogSystem.log(LogTypeEnum.ERROR, "error while loading pending bazaar. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                                }
-                            });
-                        }
-                        else {
-                            Utils.LogSystem.log(LogTypeEnum.ERROR, "error while loading pending game. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                        }
-                    });
+                    //saveCache(saved -> {});
                 }
-                else {
-                    Utils.LogSystem.log(LogTypeEnum.ERROR, "error while loading pending team. Turning app off", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                }
+
             });
 
         }
@@ -189,10 +133,26 @@ public class Bot {
     public static DatabaseConnection getDatabaseConnection() { return connection; }
     public static CalendarInstance getCalendar() { return calendar; }
 
-    public static void updateBotStatus(int memberCount){
+    private static void checkWeekPlan(){
 
-        String status = memberCount + " members";
-        bot.updateActivity(ActivityType.WATCHING, status);
+        if(LocalDate.now().getDayOfWeek().getValue() == 7){
+
+            LocalDate now = LocalDate.now();
+            long now_ms = DatabaseUtils.decodeDateTime(now.getYear() + "-" + now.getMonthValue() + "-" + now.getDayOfMonth() + " 00:00:00");
+            final long day = 86400000;
+            String[] games = new String[7];
+
+            for(int i = 1; i < 8; i++){
+                String today_games = GameUtils.getListGamesOnSpecificDate(now_ms + (i * day));
+                if(today_games == "")
+                    games[i - 1] = "žádné";
+                else
+                    games[i - 1] = today_games;
+            }
+
+            DiscordUtils.sendWeekPlanEmbed(games, now.getYear(), now.getMonthValue(), now.getDayOfMonth(), success -> {});
+
+        }
 
     }
 
@@ -276,5 +236,9 @@ public class Bot {
 
     public static PendingDataInstance getPendingData() {
         return pendingData;
+    }
+
+    public static ShopUtilInstance getShop() {
+        return shop;
     }
 }

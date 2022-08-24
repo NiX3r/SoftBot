@@ -17,7 +17,7 @@ public class AdminCommand {
         event.getServer().ifPresent(server -> {
 
             if(!Bot.isUserAdmin(event.getMessageAuthor().getId())){
-                event.getMessage().reply(DiscordUtils.createReplyEmbed("Práva", "Tyto příkazy jsou pouze pro Admin tým SoftBota", ReplyEmbedEnum.WARNING));
+                event.getMessage().reply(DiscordUtils.createReplyEmbed("Práva", "Tyto příkazy jsou pouze pro Admin tým SoftBota", "AdminCommand.run", ReplyEmbedEnum.WARNING));
                 return;
             }
 
@@ -48,7 +48,7 @@ public class AdminCommand {
                     break;
 
                 default:
-                    event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný podpříkaz sekce `" + splitter[1]  + "` .\n\nPro nápovědu\n`!sb help`", ReplyEmbedEnum.ERROR));
+                    event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný podpříkaz sekce `" + splitter[1]  + "` .\n\nPro nápovědu\n`!sb help`", "AdminCommand.run", ReplyEmbedEnum.ERROR));
                     break;
 
             }
@@ -59,7 +59,7 @@ public class AdminCommand {
 
     private static void announcement(String[] splitter, Message message) {
 
-        String content = message.getContent().replace("!sba announcement ", "").replaceAll("<n>", "\n");
+        /*String content = message.getContent().replace("!sba announcement ", "").replaceAll("<n>", "\n");
 
         Bot.getBot().getServers().forEach(server -> {
 
@@ -81,7 +81,7 @@ public class AdminCommand {
                 });
             }
 
-        });
+        });*/
 
     }
 

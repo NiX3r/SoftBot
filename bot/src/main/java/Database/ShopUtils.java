@@ -1,9 +1,9 @@
 package Database;
 
 import Enums.LogTypeEnum;
-import Enums.TeamStatusEnum;
+import Enums.ShopStatusEnum;
 import Instances.CalendarGameInstance;
-import Instances.TeamInstance;
+import Instances.ShopInstance;
 import Utils.Bot;
 import Utils.UTFCorrectionTranslator;
 
@@ -13,44 +13,46 @@ import java.sql.SQLException;
 import java.util.Comparator;
 import java.util.function.Consumer;
 
-public class TeamUtils {
+public class ShopUtils {
 
-    public static void loadTeamsInstance(Consumer<Boolean> callback){
+    public static void loadShopsInstance(Consumer<Boolean> callback){
 
         if(!Bot.getDatabaseConnection().isClosed()){
 
-            Utils.LogSystem.log(LogTypeEnum.INFO, "loading teams into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "loading shops into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             PreparedStatement statement = null;
             try {
                 statement = Bot.getConnection()
-                        .prepareStatement("SELECT * FROM Team WHERE Status='APPROVED'");
+                        .prepareStatement("SELECT * FROM Shop WHERE Status='APPROVED'");
 
                 ResultSet results = statement.executeQuery();
 
                 while(results.next()){
 
                     String last_edit_date = results.getObject("LastEditDate", String.class);
-                    TeamInstance mainInstance = new TeamInstance(results.getInt("ID"),
+                    ShopInstance mainInstance = new ShopInstance(results.getInt("ID"),
                             UTFCorrectionTranslator.translate(results.getString("Name")),
+                            results.getString("Voucher"),
                             results.getString("IPAddress"),
-                            results.getString("Thumbnail"),
+                            "-1",
                             results.getString("Website"),
-                            UTFCorrectionTranslator.translate(results.getString("Type")),
-                            DatabaseUtils.decodeDiscordId(results.getString("DiscordServerID")),
+                            results.getString("Location"),
+                            results.getInt("ZIP"),
                             UTFCorrectionTranslator.translate(results.getString("Description")),
-                            TeamStatusEnum.valueOf(results.getString("Status")),
+                            ShopStatusEnum.valueOf(results.getString("Status")),
+                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)),
                             DatabaseUtils.decodeDiscordId(results.getString("LastEditAuthor")),
                             (last_edit_date == null ? 0 : DatabaseUtils.decodeDateTime(last_edit_date)),
-                            TeamStatusEnum.valueOf(results.getString("LastEditStatus") == null ? "NULL" : results.getString("LastEditStatus")),
-                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)));
+                            ShopStatusEnum.valueOf(results.getString("LastEditStatus") == null ? "NULL" : results.getString("LastEditStatus")),
+                            results.getString("Thumbnail"));
 
-                    Bot.getTeamUtil().getTeams().add(mainInstance);
+                    Bot.getShop().getShops().add(mainInstance);
 
                 }
 
                 Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
-                Utils.LogSystem.log(LogTypeEnum.INFO, "teams successfully initialized and loaded", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                Utils.LogSystem.log(LogTypeEnum.INFO, "shops successfully initialized and loaded", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
                 callback.accept(true);
                 return;
 
@@ -62,47 +64,49 @@ public class TeamUtils {
 
         }
 
-        Utils.LogSystem.log(LogTypeEnum.ERROR, "teams not loaded. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(LogTypeEnum.ERROR, "shops not loaded. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
         callback.accept(false);
 
     }
 
-    public static void loadPendingTeamsInstance(Consumer<Boolean> callback){
+    public static void loadPendingShopsInstance(Consumer<Boolean> callback){
 
         if(!Bot.getDatabaseConnection().isClosed()){
 
-            Utils.LogSystem.log(LogTypeEnum.INFO, "loading pending teams into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "loading pending shops into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             PreparedStatement statement = null;
             try {
                 statement = Bot.getConnection()
-                        .prepareStatement("SELECT * FROM Team WHERE Status='PENDING'");
+                        .prepareStatement("SELECT * FROM Shop WHERE Status='PENDING'");
 
                 ResultSet results = statement.executeQuery();
 
                 while(results.next()){
 
                     String last_edit_date = results.getObject("LastEditDate", String.class);
-                    TeamInstance mainInstance = new TeamInstance(results.getInt("ID"),
+                    ShopInstance mainInstance = new ShopInstance(results.getInt("ID"),
                             UTFCorrectionTranslator.translate(results.getString("Name")),
+                            results.getString("Voucher"),
                             results.getString("IPAddress"),
-                            results.getString("Thumbnail"),
+                            "-1",
                             results.getString("Website"),
-                            UTFCorrectionTranslator.translate(results.getString("Type")),
-                            DatabaseUtils.decodeDiscordId(results.getString("DiscordServerID")),
+                            results.getString("Location"),
+                            results.getInt("ZIP"),
                             UTFCorrectionTranslator.translate(results.getString("Description")),
-                            TeamStatusEnum.valueOf(results.getString("Status")),
+                            ShopStatusEnum.valueOf(results.getString("Status")),
+                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)),
                             DatabaseUtils.decodeDiscordId(results.getString("LastEditAuthor")),
                             (last_edit_date == null ? 0 : DatabaseUtils.decodeDateTime(last_edit_date)),
-                            TeamStatusEnum.valueOf(results.getString("LastEditStatus") == null ? "NULL" : results.getString("LastEditStatus")),
-                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)));
+                            ShopStatusEnum.valueOf(results.getString("LastEditStatus") == null ? "NULL" : results.getString("LastEditStatus")),
+                            results.getString("Thumbnail"));
 
-                    Bot.getPendingData().getTeams().add(mainInstance);
+                    Bot.getPendingData().getShops().add(mainInstance);
 
                 }
 
                 Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
-                Utils.LogSystem.log(LogTypeEnum.INFO, "pending teams successfully initialized and loaded", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                Utils.LogSystem.log(LogTypeEnum.INFO, "pending shops successfully initialized and loaded", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
                 callback.accept(true);
                 return;
 
@@ -119,15 +123,15 @@ public class TeamUtils {
 
     }
 
-    public static void updateTeamStatus(int id, TeamStatusEnum status, Consumer<Boolean> callback){
+    public static void updateShopStatus(int id, ShopStatusEnum status, Consumer<Boolean> callback){
         if(!Bot.getDatabaseConnection().isClosed()){
 
-            Utils.LogSystem.log(LogTypeEnum.INFO, "updating team with id: " + id, new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "updating shop with id: " + id, new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             PreparedStatement statement = null;
             try {
                 statement = Bot.getConnection()
-                        .prepareStatement("UPDATE Team SET Status=? WHERE ID=?");
+                        .prepareStatement("UPDATE Shop SET Status=? WHERE ID=?");
                 statement.setString(1, status.toString());
                 statement.setInt(2, id);
 
@@ -150,7 +154,7 @@ public class TeamUtils {
 
         }
 
-        Utils.LogSystem.log(LogTypeEnum.ERROR, "team not updated. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        Utils.LogSystem.log(LogTypeEnum.ERROR, "shop not updated. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
         callback.accept(false);
 
     }

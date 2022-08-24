@@ -43,7 +43,7 @@ public class ServerCommand {
                     break;
 
                 default:
-                    event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný podpříkaz sekce `" + splitter[1]  + "` .\n\nPro nápovědu\n`!sb help`", ReplyEmbedEnum.ERROR));
+                    event.getMessage().reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný podpříkaz sekce `" + splitter[1]  + "` .\n\nPro nápovědu\n`!sb help`", "ServerCommand.run", ReplyEmbedEnum.ERROR));
                     break;
 
             }
@@ -59,23 +59,23 @@ public class ServerCommand {
         if(splitter.length == 4){
             long server_id = valueOf(splitter[3]);
             if(server_id == -1){
-                message.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát server ID. Prosím zadej správný podpříkaz sekce `" + splitter[1]  + " " + splitter[2] + "` .\n\nPro nápovědu\n`!sb help`", ReplyEmbedEnum.ERROR));
+                message.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát server ID. Prosím zadej správný podpříkaz sekce `" + splitter[1]  + " " + splitter[2] + "` .\n\nPro nápovědu\n`!sb help`", "ServerCommand.disconnect", ReplyEmbedEnum.ERROR));
                 return;
             }
             if(Bot.getBot().getServerById(server_id).isPresent()){
                 Bot.getBot().getServerById(server_id).ifPresent(server -> {
                     server.leave().thenAccept(success_leave -> {
-                        message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Úspěšně jsi odpojil SoftBota od serveru '" + server.getName() +"'", ReplyEmbedEnum.SUCCESS));
+                        message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Úspěšně jsi odpojil SoftBota od serveru '" + server.getName() +"'", "ServerCommand.disconnect", ReplyEmbedEnum.SUCCESS));
                     });
                 });
             }
             else {
-                message.reply(DiscordUtils.createReplyEmbed("Neexistující ID", "Zadal jsi neexistující ID serveru. Nebo na tom serveru není připojený SoftBot.`", ReplyEmbedEnum.ERROR));
+                message.reply(DiscordUtils.createReplyEmbed("Neexistující ID", "Zadal jsi neexistující ID serveru. Nebo na tom serveru není připojený SoftBot.`", "ServerCommand.disconnect", ReplyEmbedEnum.ERROR));
                 return;
             }
         }
         else {
-            message.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný podpříkaz sekce `" + splitter[1]  + " " + splitter[2] + "` .\n\nPro nápovědu\n`!sb help`", ReplyEmbedEnum.ERROR));
+            message.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný podpříkaz sekce `" + splitter[1]  + " " + splitter[2] + "` .\n\nPro nápovědu\n`!sb help`", "ServerCommand.disconnect", ReplyEmbedEnum.ERROR));
             return;
         }
     }
@@ -84,7 +84,7 @@ public class ServerCommand {
         if(splitter.length == 4){
             long server_id = valueOf(splitter[3]);
             if(server_id == -1){
-                message.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát server ID. Prosím zadej správný podpříkaz sekce `" + splitter[1]  + " " + splitter[2] + "` .\n\nPro nápovědu\n`!sb help`", ReplyEmbedEnum.ERROR));
+                message.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát server ID. Prosím zadej správný podpříkaz sekce `" + splitter[1]  + " " + splitter[2] + "` .\n\nPro nápovědu\n`!sb help`", "ServerCommand.link", ReplyEmbedEnum.ERROR));
                 return;
             }
             if(Bot.getBot().getServerById(server_id).isPresent()){
@@ -92,23 +92,23 @@ public class ServerCommand {
                     if(server.getSystemChannel().isPresent()){
                         server.getSystemChannel().ifPresent(channel -> {
                             channel.createInviteBuilder().create().thenAccept(finalInvite -> {
-                                message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Úspěšně jsi vytvořil invite link na server '" + server.getName() + "'\n\nOdkaz\n" + finalInvite.getUrl(), ReplyEmbedEnum.SUCCESS));
+                                message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Úspěšně jsi vytvořil invite link na server '" + server.getName() + "'\n\nOdkaz\n" + finalInvite.getUrl(), "ServerCommand.link", ReplyEmbedEnum.SUCCESS));
                             }).exceptionally(err -> {
-                                message.reply(DiscordUtils.createReplyEmbed("", "Nastala chyba aplikace. Prosím kontaktuje vývojáře.\n\nChybová hláška\n" + err.getMessage(), ReplyEmbedEnum.APP_ERROR));
+                                message.reply(DiscordUtils.createReplyEmbed("", "Nastala chyba aplikace. Prosím kontaktuje vývojáře.\n\nChybová hláška\n" + err.getMessage(), "ServerCommand.link", ReplyEmbedEnum.APP_ERROR));
                                 return null;
                             });
                         });
                     }
                     else {
                         server.getTextChannels().get(0).createInviteBuilder().create().thenAccept(finalInvite -> {
-                            message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Úspěšně jsi vytvořil invite link na server '" + server.getName() + "'\n\nOdkaz\n" + finalInvite.getUrl(), ReplyEmbedEnum.SUCCESS));
+                            message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Úspěšně jsi vytvořil invite link na server '" + server.getName() + "'\n\nOdkaz\n" + finalInvite.getUrl(), "ServerCommand.link", ReplyEmbedEnum.SUCCESS));
                         });
                         for(ServerTextChannel channel : server.getTextChannels()){
                             if(channel.canSee(server.getEveryoneRole().getUsers().iterator().next())){
                                 channel.createInviteBuilder().create().thenAccept(finalInvite -> {
-                                    message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Úspěšně jsi vytvořil invite link na server '" + server.getName() + "'\n\nOdkaz\n" + finalInvite.getUrl(), ReplyEmbedEnum.SUCCESS));
+                                    message.reply(DiscordUtils.createReplyEmbed("Úspěch", "Úspěšně jsi vytvořil invite link na server '" + server.getName() + "'\n\nOdkaz\n" + finalInvite.getUrl(), "ServerCommand.link", ReplyEmbedEnum.SUCCESS));
                                 }).exceptionally(err -> {
-                                    message.reply(DiscordUtils.createReplyEmbed("", "Nastala chyba aplikace. Prosím kontaktuje vývojáře.\n\nChybová hláška\n" + err.getMessage(), ReplyEmbedEnum.APP_ERROR));
+                                    message.reply(DiscordUtils.createReplyEmbed("", "Nastala chyba aplikace. Prosím kontaktuje vývojáře.\n\nChybová hláška\n" + err.getMessage(), "ServerCommand.link", ReplyEmbedEnum.APP_ERROR));
                                     return null;
                                 });
                             }
@@ -117,12 +117,12 @@ public class ServerCommand {
                 });
             }
             else {
-                message.reply(DiscordUtils.createReplyEmbed("Neexistující ID", "Zadal jsi neexistující ID serveru. Nebo na tom serveru není připojený SoftBot.`", ReplyEmbedEnum.ERROR));
+                message.reply(DiscordUtils.createReplyEmbed("Neexistující ID", "Zadal jsi neexistující ID serveru. Nebo na tom serveru není připojený SoftBot.`", "ServerCommand.link", ReplyEmbedEnum.ERROR));
                 return;
             }
         }
         else {
-            message.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný podpříkaz sekce `" + splitter[1]  + " " + splitter[2] + "` .\n\nPro nápovědu\n`!sb help`", ReplyEmbedEnum.ERROR));
+            message.reply(DiscordUtils.createReplyEmbed("Špatný formát", "Zadal jsi špatný formát příkazu. Prosím zadej správný podpříkaz sekce `" + splitter[1]  + " " + splitter[2] + "` .\n\nPro nápovědu\n`!sb help`", "ServerCommand.link", ReplyEmbedEnum.ERROR));
             return;
         }
     }
@@ -134,7 +134,7 @@ public class ServerCommand {
             msg += server.getName() + ", ID: " + server.getId() + ", Počet uživatelů: " + server.getMemberCount() + "\n";
         }
 
-        message.reply(DiscordUtils.createReplyEmbed("stránka x/x", msg, ReplyEmbedEnum.SUCCESS));
+        message.reply(DiscordUtils.createReplyEmbed("stránka x/x", msg, "ServerCommand.list", ReplyEmbedEnum.SUCCESS));
 
     }
 

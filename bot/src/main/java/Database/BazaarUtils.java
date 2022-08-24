@@ -3,7 +3,6 @@ package Database;
 import Enums.BazaarStatusEnum;
 import Enums.BazaarTypeEnum;
 import Enums.LogTypeEnum;
-import Enums.TeamStatusEnum;
 import Instances.BazaarInstance;
 import Instances.CalendarGameInstance;
 import Utils.Bot;
@@ -34,9 +33,8 @@ public class BazaarUtils {
 
                     BazaarInstance bazaar = new BazaarInstance(results.getInt("ID"),
                             UTFCorrectionTranslator.translate(results.getString("Name")),
-                            results.getString("Email"),
                             results.getString("IPAddress"),
-                            DatabaseUtils.decodeDiscordId(results.getString("DiscordUserID")),
+                            0,
                             BazaarTypeEnum.valueOf(results.getString("Type")),
                             results.getInt("ZIP"),
                             results.getDouble("Price"),
@@ -83,9 +81,8 @@ public class BazaarUtils {
 
                     BazaarInstance bazaar = new BazaarInstance(results.getInt("ID"),
                             UTFCorrectionTranslator.translate(results.getString("Name")),
-                            results.getString("Email"),
                             results.getString("IPAddress"),
-                            DatabaseUtils.decodeDiscordId(results.getString("DiscordUserID")),
+                            0,
                             BazaarTypeEnum.valueOf(results.getString("Type")),
                             results.getInt("ZIP"),
                             results.getDouble("Price"),

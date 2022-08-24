@@ -1,15 +1,23 @@
 package Utils;
 
+import Database.DatabaseUtils;
+import Enums.BazaarTypeEnum;
 import Enums.ReplyEmbedEnum;
+import Instances.BazaarInstance;
+import Instances.GameInstance;
+import Instances.ServerOptionInstance;
+import Instances.TeamInstance;
+import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageAuthor;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 
 import java.awt.*;
+import java.util.function.Consumer;
 
 public class DiscordUtils {
 
-    public static EmbedBuilder createReplyEmbed(String replyTopic, String replyMessage, ReplyEmbedEnum replyEmbedEnum){
+    public static EmbedBuilder createReplyEmbed(String replyTopic, String replyMessage, String source, ReplyEmbedEnum replyEmbedEnum){
 
         Color c = null;
         String replyEnum = "";
@@ -47,18 +55,90 @@ public class DiscordUtils {
                 .setTitle(replyEnum + (replyTopic == null ? "" : " - " + replyTopic))
                 .setColor(c)
                 .setDescription(replyMessage)
-                .setFooter("Verze: " + Bot.getVersion());
+                .setFooter("Zdroj: " + source + " | Verze: " + Bot.getVersion());
 
     }
 
-    public static EmbedBuilder createAnnouncementEmbed(String content, MessageAuthor author){
+    public static void sendAnnouncementEmbed(String content, String author, String author_avatar, Consumer<Boolean> callback){
 
-        return new EmbedBuilder()
+        EmbedBuilder builder = new EmbedBuilder()
                 .setTitle("Oznamovací systém :ear:")
                 .setDescription(content)
                 .setColor(Color.decode("#D1A841"))
-                .setFooter("Administrátor: " + author.getName() + " | Verze: " + Bot.getVersion(), author.getAvatar().getUrl().toString());
+                .setFooter("Administrátor: " + author + " | Verze: " + Bot.getVersion(), author_avatar);
 
+        sendEmbedOnEveryServer(builder, content, success -> {
+            callback.accept(true);
+        });
+
+    }
+
+    public static void sendApprovedBazaarAnnouncementEmbed(BazaarInstance bazaar, Consumer<Boolean> callback){
+
+        EmbedBuilder builder = new EmbedBuilder()
+                .setColor(Color.decode("#D1A841"))
+                .setTitle((bazaar.getType() == BazaarTypeEnum.INQUIRY ? "Poptávám: " : "Nabízím: ") + bazaar.getName())
+                .addInlineField("Cena", String.valueOf(bazaar.getPrice()))
+                .addInlineField("PSČ", String.valueOf(bazaar.getZip()))
+                .addInlineField("Kontakt", bazaar.getCreator_ping())
+                .setDescription(bazaar.getDescription())
+                .setFooter("Verze: " + Bot.getVersion());
+
+        sendEmbedOnEveryServer(builder, bazaar.getDescription(), success -> {
+            callback.accept(true);
+        });
+
+    }
+
+    public static void sendApprovedGameAnnouncementEmbed(GameInstance game, Consumer<Boolean> callback){
+        String repeat_string = "žádné";
+        switch (game.getRepeat_date()){
+            case "W":
+                repeat_string = "týdenní";
+                break;
+            case "M":
+                repeat_string = "měsíční";
+                break;
+            case "Y":
+                repeat_string = "roční";
+                break;
+        }
+        EmbedBuilder builder = new EmbedBuilder()
+                .setColor(Color.decode("#D1A841"))
+                .setTitle("Byla vytvořena nová hra: " + game.getName())
+                .setImage(game.getThumbnail() == null ? "" : game.getThumbnail())
+                .addField("ID", game.getId() + "")
+                .addInlineField("Začátek akce", DatabaseUtils.encodeDateTime(game.getStart_date()))
+                .addInlineField("Konec akce", DatabaseUtils.encodeDateTime(game.getEnd_date()))
+                .addInlineField("Lokace", game.getLocation())
+                .addInlineField("Vstupné", String.valueOf(game.getPrice()))
+                .addInlineField("Opakování", repeat_string)
+                .addInlineField("Typ", game.getType().equals("PB") ? "Plácko bitka" : game.getType())
+                .setDescription(game.getDescription())
+                .setFooter("Verze: " + Bot.getVersion());
+
+        sendEmbedOnEveryServer(builder, game.getDescription(), success -> {
+            callback.accept(true);
+        });
+
+    }
+
+    public static void sendWeekPlanEmbed(String[] games_on_days, int year, int month, int start_day, Consumer<Boolean> callback){
+        EmbedBuilder builder = new EmbedBuilder()
+                .setColor(Color.decode("#D1A841"))
+                .setTitle("Týdenní plán her od " + start_day + "." + month + "." + year + " do " + (start_day + 7) + "." + month + "." + year)
+                .addField("Pondělí", games_on_days[0])
+                .addField("Úterý", games_on_days[1])
+                .addField("Středa", games_on_days[2])
+                .addField("Čtvrtek", games_on_days[3])
+                .addField("Pátek", games_on_days[4])
+                .addField("Sobota", games_on_days[5])
+                .addField("Neděle", games_on_days[6])
+                .setFooter("Verze: " + Bot.getVersion());
+
+        sendEmbedOnEveryServer(builder, "", success -> {
+            callback.accept(true);
+        });
     }
 
     public static String getNickPingById(long id){
@@ -68,6 +148,36 @@ public class DiscordUtils {
             }
         }
         return null;
+    }
+
+    private static void sendEmbedOnEveryServer(EmbedBuilder builder, String description, Consumer<Boolean> callback){
+
+        Bot.getBot().getServers().forEach(server -> {
+
+            ServerOptionInstance option = Bot.getServerOption(server.getId());
+
+            if(option == null){
+                for(ServerTextChannel channel : server.getTextChannels()){
+                    if(channel.asPrivateChannel().isPresent())
+                        continue;
+                    builder.setDescription(description + "\n\nPro administrátory serveru\nTato zpráva byla poslána do místnosti, do které mají všichni přistup, jelikož nebyla nastavena místnost pro automatické zprávy, kterou nastavíte pomocí `!sb channel <označení místnosti>`");
+                    channel.sendMessage(builder);
+                    break;
+                }
+            }
+            else {
+                long announcement_channel_id = option.getAnnouncement_channel_id();
+
+                server.getTextChannelById(announcement_channel_id).ifPresent(channel -> {
+                    builder.setDescription(description);
+                    channel.sendMessage(builder);
+                });
+            }
+
+        });
+
+        callback.accept(true);
+
     }
 
 }

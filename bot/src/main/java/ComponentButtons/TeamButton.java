@@ -53,10 +53,10 @@ public class TeamButton {
             TeamUtils.updateTeamStatus(team.getId(), team.getStatus(), success -> {
 
                 if(success){
-                    message.reply(DiscordUtils.createReplyEmbed("", "Tomuto týmu bylo úspěšně povoleno jeho vytvoření", ReplyEmbedEnum.SUCCESS));
+                    message.reply(DiscordUtils.createReplyEmbed("Povolení", "Tomuto týmu bylo úspěšně povoleno jeho vytvoření", "TeamButton.onApprove", ReplyEmbedEnum.SUCCESS));
                 }
                 else {
-                    message.reply(DiscordUtils.createReplyEmbed("", "Tomuto týmnu bylo neúspěšně povoleno jeho vytvoření. Zkuste to prosím později.", ReplyEmbedEnum.ERROR));
+                    message.reply(DiscordUtils.createReplyEmbed("", "Tomuto týmnu bylo neúspěšně povoleno jeho vytvoření. Zkuste to prosím později.", "TeamButton.onApprove", ReplyEmbedEnum.ERROR));
                 }
 
             });
@@ -82,10 +82,10 @@ public class TeamButton {
             TeamUtils.updateTeamStatus(team.getId(), team.getStatus(), success -> {
 
                 if(success){
-                    message.reply(DiscordUtils.createReplyEmbed("", "Tomuto týmu bylo úspěšně zakázáno jeho vytvoření", ReplyEmbedEnum.SUCCESS));
+                    message.reply(DiscordUtils.createReplyEmbed("Zakázáno", "Tomuto týmu bylo úspěšně zakázáno jeho vytvoření", "TeamButton.onDeny", ReplyEmbedEnum.SUCCESS));
                 }
                 else {
-                    message.reply(DiscordUtils.createReplyEmbed("", "Tomuto týmnu bylo neúspěšně zakázáno jeho vytvoření. Zkuste to prosím později.", ReplyEmbedEnum.ERROR));
+                    message.reply(DiscordUtils.createReplyEmbed("", "Tomuto týmnu bylo neúspěšně zakázáno jeho vytvoření. Zkuste to prosím později.", "TeamButton.onDeny", ReplyEmbedEnum.APP_ERROR));
                 }
 
             });
@@ -111,10 +111,10 @@ public class TeamButton {
             TeamUtils.updateTeamStatus(team.getId(), team.getStatus(), success -> {
 
                 if(success){
-                    message.reply(DiscordUtils.createReplyEmbed("", "Tento tým byl úspěšně smazán", ReplyEmbedEnum.SUCCESS));
+                    message.reply(DiscordUtils.createReplyEmbed("Smazání", "Tento tým byl úspěšně smazán", "TeamButton.onRemove", ReplyEmbedEnum.SUCCESS));
                 }
                 else {
-                    message.reply(DiscordUtils.createReplyEmbed("", "Tento tým byl neúšpěšně smazán. Zkuste to prosím později.", ReplyEmbedEnum.ERROR));
+                    message.reply(DiscordUtils.createReplyEmbed("", "Tento tým byl neúšpěšně smazán. Zkuste to prosím později.", "TeamButton.onRemove", ReplyEmbedEnum.ERROR));
                 }
 
             });
