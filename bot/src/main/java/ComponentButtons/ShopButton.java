@@ -80,7 +80,7 @@ public class ShopButton {
             ShopUtils.updateShopStatus(game.getId(), game.getStatus(), success -> {
 
                 if(success){
-                    message.reply(DiscordUtils.createReplyEmbed("Zakázání", "Tomuto obchodu bylo úspěšně zakázáno jeho vytvoření", "GameButton.onDeny", ReplyEmbedEnum.SUCCESS));
+                    message.reply(DiscordUtils.createReplyEmbed("Zakázání", "Tomuto obchodu bylo úspěšně zakázáno jeho vytvoření.", "GameButton.onDeny", ReplyEmbedEnum.SUCCESS));
                 }
                 else {
                     message.reply(DiscordUtils.createReplyEmbed("", "Tomuto obchodu bylo neúspěšně zakázáno jeho vytvoření. Zkuste to prosím později.", "GameButton.onDeny", ReplyEmbedEnum.APP_ERROR));
@@ -109,7 +109,7 @@ public class ShopButton {
             ShopUtils.updateShopStatus(game.getId(), game.getStatus(), success -> {
 
                 if(success){
-                    message.reply(DiscordUtils.createReplyEmbed("Smazáni", "Tento obchod byl úspěšně smazána", "GameButton.onRemove", ReplyEmbedEnum.SUCCESS));
+                    message.reply(DiscordUtils.createReplyEmbed("Smazáni", "Tento obchod byl úspěšně smazána.", "GameButton.onRemove", ReplyEmbedEnum.SUCCESS));
                 }
                 else {
                     message.reply(DiscordUtils.createReplyEmbed("", "Tento obchod se nepodařilo smazat. Zkuste to prosím později.", "GameButton.onRemove", ReplyEmbedEnum.APP_ERROR));

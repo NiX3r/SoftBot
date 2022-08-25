@@ -40,7 +40,7 @@ public class LogSystem {
         logs.add(line);
         System.out.println(line);
 
-        if(logs.size() == 50)
+        if(logs.size() == 5)
             saveLogs();
 
     }

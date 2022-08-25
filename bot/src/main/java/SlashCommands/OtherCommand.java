@@ -90,7 +90,7 @@ public class OtherCommand {
                             interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit oznamovací kanál.", "OtherCommand.channel", ReplyEmbedEnum.SUCCESS)).respond().join();
                         }
                         else{
-                            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Chyba", "Nastala chyba, prosím kontaktujte správce SoftBota", "OtherCommand.channel", ReplyEmbedEnum.APP_ERROR)).respond().join();
+                            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Chyba", "Nastala chyba, prosím kontaktujte správce SoftBota", "OtherCommand.channel", ReplyEmbedEnum.ERROR)).respond().join();
                         }
 
                     });

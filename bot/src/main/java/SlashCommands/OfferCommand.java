@@ -60,7 +60,7 @@ public class OfferCommand {
                 .setFooter("Zdroj: OfferCommand.show | Verze: " + Bot.getVersion());
 
         messageBuilder.setEmbed(builder);
-        FileUtils.loadFiles(offer.getId(), "offer", files -> {
+        FileUtils.loadAttachments(offer.getId(), "offer", files -> {
 
             for(File file : files){
                 messageBuilder.addAttachment(file);

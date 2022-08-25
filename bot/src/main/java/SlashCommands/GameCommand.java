@@ -72,7 +72,7 @@ public class GameCommand {
         catch (Exception exception){
 
             Utils.LogSystem.log(LogTypeEnum.ERROR, "Error: " + exception.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Formát data", "Špatný formát data. Prosím napiš datum ve formátu '21.08.2002' nebo '21-08-2002'", "GameCommand.at", ReplyEmbedEnum.ERROR)).respond().join();
+            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Formát data", "Špatný formát data. Prosím napiš datum ve formátu `21.08.2002` nebo `21-08-2002`", "GameCommand.at", ReplyEmbedEnum.ERROR)).respond().join();
 
         }
     }

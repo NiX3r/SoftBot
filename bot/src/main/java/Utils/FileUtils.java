@@ -49,7 +49,7 @@ public class FileUtils {
 
     }
 
-    public static void loadFiles(int id, String objectToLoad, Consumer<ArrayList<File>> callback){
+    public static void loadAttachments(int id, String objectToLoad, Consumer<ArrayList<File>> callback){
 
         String path = "./data/attachments/" + objectToLoad + "/" + id;
         File dir = new File(path);
