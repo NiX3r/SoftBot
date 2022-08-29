@@ -42,17 +42,15 @@
         <form method="post" action="insert.php">
             <label for="name">Název akce*</label>
             <input type="text" id="name" name="name" required><br>
-            <label class="hoverText" title="Slouží k udelění zablokování editace záznamu komukoliv" for="name">Heslo pro editaci*</label>
-            <input type="password" id="password" name="password" required><br>
-            <label class="hoverText" title="Email slouží pro případnou komunikaci s administrátory SoftBota, který se nezobrazuje veřejně" for="email">Email*</label>
+            <label for="email">Email*</label>
             <input type="email" id="email" name="email" class="input" required><br>
-            <label class="hoverText" title="Slouží pro zobrazení úvodního obrázku na Discord. Vložte permanentní link, aby nedocházelo k zbytečných výpadkům." for="thumbnail">URL na úvodní fotku</label>
+            <label for="thumbnail">URL na úvodní fotku</label>
             <input type="url" id="thumbnail" name="thumbnail"><br>
             <label for="start-date">Začátek akce*</label>
             <input type="datetime-local" id="start-date" name="start-date" required><br>
             <label for="end-date">Konec akce*</label>
             <input type="datetime-local" id="end-date" name="end-date" required><br>
-            <label class="hoverText" title="Slouží k opakování akce. Akce bude zobrazována s daty, kterými vložíte zde jako 'Začátek akce' a 'Konec akce', ale v kalendáři bude podle zde vybraného opakování" for="repeat">Opakování akce*</label>
+            <label for="repeat">Opakování akce*</label>
             <select name="repeat" id="repeat" class="input" required>
             <option value="" disabled selected>Vybrat...</option>
               <option value="N">žádné</option>
@@ -65,7 +63,7 @@
             <input type="url" id="website" name="website"><br>
             <label for="location">Adresa akce*</label>
             <input type="text" id="location" name="location" required><br>
-            <label class="hoverText" title="Zadané vstupné pište v českých korunách. Do budoucna přibude rozšíření o nastavení měny." for="price">Vstupné*</label>
+            <label for="price">Vstupné*</label>
             <input type="number" id="price" name="price" required><br>
             <label for="type-action">Typ akce*</label>
             <select name="type-action" id="type-action" class="input" required>

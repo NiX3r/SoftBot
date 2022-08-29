@@ -27,12 +27,12 @@
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
     <link rel="manifest" href="assets/site.webmanifest">
 
-    <title>Formulář pro vytvoření týmu</title>
+    <title>Formulář pro vytvoření obchodu</title>
 </head>
 <body>
     <div class="uvodcon">
         <img class="image" src="assets/topic.jpg">
-        <div class="topic">Formulář pro vytvoření týmu</div>
+        <div class="topic">Formulář pro vytvoření obchodu</div>
     </div>
     <div class="container defFont" style="margin-top: 10px;">
         <hr>
@@ -40,25 +40,20 @@
 
         <div class="form">
         <form method="post" action="insert.php">
-            <label for="name">Název týmu*</label>
+            <label for="name">Název obchodu*</label>
             <input type="text" id="name" name="name" required><br>
+            <label for="voucher">Slevový kód</label>
+            <input type="text" id="voucher" name="voucher"><br>
             <label class="hoverText" title="Slouží pro zobrazení úvodního obrázku na Discord. Vložte permanentní link, aby nedocházelo k zbytečných výpadkům." for="thumbnail">URL na úvodní fotku/logo</label>
             <input type="url" id="thumbnail" name="thumbnail"><br>
-            <label for="website">Webová stránka</label>
-            <input type="url" id="website" name="website"><br>
-            <label for="type-action">Typ týmu*</label>
-            <select name="type-action" id="type-action" class="input" required>
-              <option value="" disabled selected>Vybrat...</option>
-              <option value="MilSim">MilSim</option>
-              <option value="CQB">CQB</option>
-              <option value="CQB&MS">CQB i Milsim</option>
-              <option value="None">žádný</option>
-            </select>
-            <br>
-            <label class="hoverText" title="V případě nejasností se obraťte na WIKI (www.softbot.ncodes.eu/wiki)" for="dis-server-id">Discord server ID</label>
-            <input type="text" id="dis-server-id" name="dis-server-id"><br>
-            <label for="description" style="margin-top: 5px;">Popis týmu*</label><br>
-            <textarea class="description" name="description" id="description" cols="30" rows="10" required></textarea><br>
+            <label for="website">Webová stránka*</label>
+            <input type="url" id="website" name="website" require><br>
+            <label for="address">Adresa</label>
+            <input type="text" id="address" name="address"><br>
+            <label for="zip">Poštovní směrovací číslo</label>
+            <input type="number" id="zip" name="zip"><br>
+            <label for="description" style="margin-top: 5px;">Popis obchodu</label><br>
+            <textarea class="description" name="description" id="description" cols="30" rows="10"></textarea><br>
 			
 			<div class="g-recaptcha" data-sitekey="<?php echo(GOOGLE_RECAPTCHA_SITE_KEY) ?>" data-theme="dark"></div>
 			

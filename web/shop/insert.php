@@ -23,22 +23,22 @@ if(isset($_POST['submit']))
 		
 		$currentDate = date('Y-m-d H:i:s');
      	$name = save_replace($_POST['name']);
+		$voucher = $_POST['voucher'];
 		$password = hash('sha256', 'soft' + $_POST['password'] + 'bot');
-		$email = $_POST['email'];
+		$email = save_replace($_POST['email']);
 		$thumbnail = $_POST['thumbnail'];
 		$website = $_POST['website'];
-		$type = $_POST['type-action'];
+		$zip = $_POST['zip'];
+		$address = save_replace($_POST['address']);
 		$description = save_replace($_POST['description']);
 		$ip = $_SERVER['REMOTE_ADDR'];
-		$discord_server = $_POST['dis-server-id'];
-		$discord_user = $_POST['dis-user-id'];
 
-		$sql = "INSERT INTO Team(
-				Name,IPAddress,Thumbnail,Website,Type,DiscordServerId,Description,Status,CreateDate)
-		 		VALUES ('$name','$ip','$thumbnail','$website','$type','$discord_server', '$description', 'PENDING', '$currentDate')";
+		$sql = "INSERT INTO Shop(
+				Name, Voucher,IPAddress,Thumbnail,Website,Location,ZIP,Description,Status,CreateDate)
+		 		VALUES ('$name', '$voucher','$ip','$thumbnail','$website','$location',$zip, '$description', 'PENDING', '$currentDate')";
 		
 		if (mysqli_query($conn, $sql)) {
-			echo "Úspěšně jste vytvořil/a novou akci !";
+			echo "Úspěšně jste vytvořil/a nový záznam obchodu !";
 		} else {
 			echo "Error: " . $sql . ":-" . mysqli_error($conn);
 		}

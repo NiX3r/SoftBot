@@ -10,7 +10,7 @@
 
     --secondary: #826928;
 
-
+    --hover_text: #d6ccb2;
 
 }
 
@@ -27,6 +27,12 @@
     align-items: center;
 
     justify-content: center;
+
+}
+
+.hoverText{
+
+    color: var(--hover_text);
 
 }
 
@@ -49,8 +55,6 @@
 .image{
 
 	width: 100%;
-
-	margin: -400px 0px -600px 0px;
 
 	display: block;
 

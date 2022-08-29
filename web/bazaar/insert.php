@@ -23,22 +23,18 @@ if(isset($_POST['submit']))
 		
 		$currentDate = date('Y-m-d H:i:s');
      	$name = save_replace($_POST['name']);
-		$password = hash('sha256', 'soft' + $_POST['password'] + 'bot');
-		$email = $_POST['email'];
-		$thumbnail = $_POST['thumbnail'];
-		$website = $_POST['website'];
-		$type = $_POST['type-action'];
+		$type = $_POST['type'];
+		$zip = $_POST['zip'];
+		$price = $_POST['price'];
 		$description = save_replace($_POST['description']);
 		$ip = $_SERVER['REMOTE_ADDR'];
-		$discord_server = $_POST['dis-server-id'];
-		$discord_user = $_POST['dis-user-id'];
 
-		$sql = "INSERT INTO Team(
-				Name,IPAddress,Thumbnail,Website,Type,DiscordServerId,Description,Status,CreateDate)
-		 		VALUES ('$name','$ip','$thumbnail','$website','$type','$discord_server', '$description', 'PENDING', '$currentDate')";
+		$sql = "INSERT INTO Bazaar(
+				Name,IPAddress,Type,ZIP,Price,Description,Status,CreateDate)
+		 		VALUES ('$name', '$ip','$type',$zip, $price, '$description', 'PENDING', '$currentDate')";
 		
 		if (mysqli_query($conn, $sql)) {
-			echo "Úspěšně jste vytvořil/a novou akci !";
+			echo "Úspěšně jste vytvořil/a nový záznam obchodu !";
 		} else {
 			echo "Error: " . $sql . ":-" . mysqli_error($conn);
 		}

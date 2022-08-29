@@ -23,21 +23,20 @@ if(isset($_POST['submit']))
 		
 		$currentDate = date('Y-m-d H:i:s');
      	$name = str_replace("č", "◄cc►",str_replace("ď", "◄cd►", $_POST['name']));
-		 $email = $_POST['email'];
-		 $thumbnail = $_POST['thumbnail'];
-		 $start_date = $_POST['start-date'];
-		 $end_date = $_POST['end-date'];
-		 $repeat_date = $_POST['repeat'];
-		 $website = $_POST['website'];
-		 $location = str_replace("č", "◄cc►",str_replace("ď", "◄cd►", $_POST['location']));
-		 $price = $_POST['price'];
-		 $type = $_POST['type-action'];
-		 $description = str_replace("č", "◄cc►",str_replace("ď", "◄cd►", $_POST['description']));
-		 $ip = $_SERVER['REMOTE_ADDR'];
+		$thumbnail = $_POST['thumbnail'];
+		$start_date = $_POST['start-date'];
+		$end_date = $_POST['end-date'];
+		$repeat_date = $_POST['repeat'];
+		$website = $_POST['website'];
+		$location = save_replace($_POST['location']);
+		$price = $_POST['price'];
+		$type = $_POST['type-action'];
+		$description = save_replace($_POST['description']);
+		$ip = $_SERVER['REMOTE_ADDR'];
 
 		$sql = "INSERT INTO Game(
-				Name,Email,IPAddress,Thumbnail,StartDate,EndDate,RepeatDate,Website,Location,Price,Type,Description,Status,CreateDate)
-		 		VALUES ('$name','$email', '$ip','$thumbnail','$start_date','$end_date','$repeat_date','$website','$location',$price,'$type','$description', 'PENDING', '$currentDate')";
+				Name,IPAddress,Thumbnail,StartDate,EndDate,RepeatDate,Website,Location,Price,Type,Description,Status,CreateDate)
+		 		VALUES ('$name','$ip','$thumbnail','$start_date','$end_date','$repeat_date','$website','$location',$price,'$type','$description', 'PENDING', '$currentDate')";
 		
 		if (mysqli_query($conn, $sql)) {
 			echo "Úspěšně jste vytvořil/a novou akci !";
@@ -52,4 +51,9 @@ if(isset($_POST['submit']))
 		
 	}
 }
+
+function save_replace($fvalue) {
+	return str_replace("č", "◄cc►",str_replace("ď", "◄cd►", str_replace("'", "◄co►", $fvalue)));
+}
+
 ?>

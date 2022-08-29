@@ -27,12 +27,12 @@
     <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
     <link rel="manifest" href="assets/site.webmanifest">
 
-    <title>Formulář pro vytvoření týmu</title>
+    <title>Formulář pro vytvoření nabídky/poptávky</title>
 </head>
 <body>
     <div class="uvodcon">
         <img class="image" src="assets/topic.jpg">
-        <div class="topic">Formulář pro vytvoření týmu</div>
+        <div class="topic">Formulář pro vytvoření nabídky/poptávky</div>
     </div>
     <div class="container defFont" style="margin-top: 10px;">
         <hr>
@@ -40,25 +40,21 @@
 
         <div class="form">
         <form method="post" action="insert.php">
-            <label for="name">Název týmu*</label>
-            <input type="text" id="name" name="name" required><br>
-            <label class="hoverText" title="Slouží pro zobrazení úvodního obrázku na Discord. Vložte permanentní link, aby nedocházelo k zbytečných výpadkům." for="thumbnail">URL na úvodní fotku/logo</label>
-            <input type="url" id="thumbnail" name="thumbnail"><br>
-            <label for="website">Webová stránka</label>
-            <input type="url" id="website" name="website"><br>
-            <label for="type-action">Typ týmu*</label>
-            <select name="type-action" id="type-action" class="input" required>
-              <option value="" disabled selected>Vybrat...</option>
-              <option value="MilSim">MilSim</option>
-              <option value="CQB">CQB</option>
-              <option value="CQB&MS">CQB i Milsim</option>
-              <option value="None">žádný</option>
+            <label for="name">Název nabídky/poptávky*</label>
+            <input type="text" id="name" name="name" require><br>
+            <label for="type">Typ*</label>
+            <select name="type" id="type" class="input" require>
+            <option value="" disabled selected>Vybrat...</option>
+              <option value="OFFER">nabídka</option>
+              <option value="INQUIRY">poptávka</option>
             </select>
             <br>
-            <label class="hoverText" title="V případě nejasností se obraťte na WIKI (www.softbot.ncodes.eu/wiki)" for="dis-server-id">Discord server ID</label>
-            <input type="text" id="dis-server-id" name="dis-server-id"><br>
-            <label for="description" style="margin-top: 5px;">Popis týmu*</label><br>
-            <textarea class="description" name="description" id="description" cols="30" rows="10" required></textarea><br>
+            <label for="zip">Poštovní směrovací číslo*</label>
+            <input type="number" id="zip" name="zip" require><br>
+            <label class="hoverText" title="V případě, že je cena 'dohodou' napište 0" for="price">Cena*</label>
+            <input type="number" id="price" name="price" require><br>
+            <label for="description" style="margin-top: 5px;">Popis nabídky/zakázky*</label><br>
+            <textarea class="description" name="description" id="description" cols="30" rows="10" require></textarea><br>
 			
 			<div class="g-recaptcha" data-sitekey="<?php echo(GOOGLE_RECAPTCHA_SITE_KEY) ?>" data-theme="dark"></div>
 			

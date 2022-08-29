@@ -42,10 +42,6 @@
         <form method="post" action="insert.php">
             <label for="name">Název akce*</label>
             <input type="text" id="name" name="name" required><br>
-            <label class="hoverText" title="Slouží k udelění zablokování editace záznamu komukoliv" for="name">Heslo pro editaci*</label>
-            <input type="password" id="password" name="password" required><br>
-            <label class="hoverText" title="Email slouží pro případnou komunikaci s administrátory SoftBota, který se nezobrazuje veřejně" for="email">Email*</label>
-            <input type="email" id="email" name="email" class="input" required><br>
             <label class="hoverText" title="Slouží pro zobrazení úvodního obrázku na Discord. Vložte permanentní link, aby nedocházelo k zbytečných výpadkům." for="thumbnail">URL na úvodní fotku</label>
             <input type="url" id="thumbnail" name="thumbnail"><br>
             <label for="start-date">Začátek akce*</label>
