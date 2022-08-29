@@ -1,0 +1,407 @@
+@import url('https://fonts.googleapis.com/css?family=Kanit&display=swap');
+
+
+
+:root{
+
+
+
+    --primary: #D1A841;
+
+    --secondary: #826928;
+
+    --hover_text: #d6ccb2;
+
+}
+
+
+
+.container{
+
+
+
+    margin: auto;
+
+    width: 35%;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+.hoverText{
+
+    color: var(--hover_text);
+
+}
+
+
+
+.uvodcon{
+
+    position: relative;
+
+    width: 100%;
+
+    height: 150px;
+
+    overflow: hidden;
+
+}
+
+
+
+.image{
+
+	width: 100%;
+
+	display: block;
+
+	object-fit: cover;
+
+	opacity: 0.2; 
+
+}
+
+
+
+.topic{
+
+    text-align: center;
+
+    text-shadow: 0px 0px 10px black;
+
+    position: absolute;
+
+    top: 50%;
+
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+}
+
+
+
+.form{
+
+    text-align: center;
+
+}
+
+
+
+.topic{
+
+    font-size: 3rem;
+
+}
+
+
+
+.submit{
+
+    border-color: var(--primary);
+
+	cursor: pointer;
+
+    border-width: 5px;
+
+    height: 40px;
+
+    width: 100%;
+
+    display: block;
+
+    margin: 0px 0px 0px 0px;
+
+    font-size: 17px;
+
+}
+
+.radio{
+
+    height: 13px;
+
+}
+
+
+
+.description{
+
+    background-color: #444444;
+
+    color: #f0f0f0;
+
+    border-color: #f0f0f0;
+
+    border-radius: 10px;
+
+    width: 100%;
+
+    resize: vertical;
+
+    float: right;
+
+    clear: right;
+
+    margin-top: 0px;
+
+}
+
+
+
+body{
+
+    background-color: #2c2c2c;
+
+    color: #f0f0f0;
+
+    font-family: 'Kanit', sans-serif;
+
+
+
+}
+
+.text-red {
+  --tw-text-opacity: 1;
+  color: rgb(209 22 25 / var(--tw-text-opacity));
+}
+.mt-5 {
+  margin-top: 1.25rem;
+}
+
+.back{
+	position: absolute;
+	vertical-align: middle;
+	top: 160px;
+	left: 15px;
+}
+a:link, a:visited, a:active {
+  color: white;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--primary);
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+
+hr{
+
+    width: 50%;
+
+    border: 3px solid var(--primary);
+
+    border-radius: 5px;
+
+    background-color: var(--primary);
+
+
+
+}
+
+
+
+input{
+
+
+
+    background-color: #444444;
+
+    border-color: #f0f0f0;
+
+    color: #f0f0f0;
+
+    border-radius: 10px;
+
+    width: 60%;
+
+    height: 20px;
+
+    float: right;
+
+    clear: right;
+
+    margin-top: 2px;
+
+    margin-bottom: 2px;
+
+
+
+}
+
+.submit:hover{
+	background-color: var(--secondary);
+
+}
+
+
+select{
+
+
+
+    background-color: #444444;
+
+    border-color: #f0f0f0;
+
+    color: #f0f0f0;
+
+    border-radius: 9px;
+
+    width: 61%;
+
+    height: 25px;
+
+    float: right;
+
+    clear: right;
+
+    margin-top: 2px;
+
+    margin-bottom: 2px;
+
+
+
+}
+
+
+
+label{
+
+    float: left;
+
+    clear: left;
+
+    margin-bottom: 10px;
+
+    border-width: 300%;
+
+    
+
+}
+
+
+
+::placeholder {
+
+	color:#cecbd5;
+
+}
+
+
+
+@media screen and (max-width: 1366px) and (min-width: 500px) {
+
+	.uvodcon{
+
+		position: relative;
+
+		width: 100%;
+
+		height: 300px;
+
+		overflow: hidden;
+
+	}
+
+	.topic{
+
+		font-size: 2.6em;
+
+	}
+
+	.image{
+
+		margin: -0px 0px -0px 0px;
+
+	}
+
+	.container{
+
+		width: 85%;
+
+	}
+
+	hr{
+
+		width: 80%;
+
+	}
+
+}
+
+
+
+.g-recaptcha{
+   margin: 15px auto !important;
+	display: inline-block;
+   width: auto !important;
+   height: auto !important;
+   text-align: -webkit-center;
+   text-align: -moz-center;
+   text-align: -o-center;
+   text-align: -ms-center;
+}
+
+@media screen and (max-width: 499px) and (min-width: 10px) {
+
+	.container{
+		width: 95%;
+	}
+	
+	.topic{
+		font-size: 1.8em;
+	}
+
+	.image{
+		margin: -0px 0px -0px 0px;
+	}
+
+	input{
+		width: 100%;
+		height: 20px;
+		float: none;
+		clear: none;
+		margin-top: 1px;
+		margin-bottom: 2px;
+	}
+
+	select{
+		width: 99%;
+		height: 25px;
+	}
+
+	label{
+		float: left;
+		clear: left;
+		margin-top: 15px;
+		margin-bottom: 5px;
+		border-width: 300%;
+	}
+}
+
+.g-recaptcha{
+
+   margin: 15px auto !important;
+	display: inline-block;
+   width: auto !important;
+   height: auto !important;
+   text-align: -webkit-center;
+   text-align: -moz-center;
+   text-align: -o-center;
+   text-align: -ms-center;
+}
+
+.rcorners1 {
+  border-radius: 25px;
+border-color: var(--primary);
+  background-color: #444444;
+  padding: 20px; 
+  width: 200px;
+  height: 150px;  
+}
