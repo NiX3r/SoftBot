@@ -71,7 +71,6 @@ public class SlashCommandUtils {
                 )),
                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "file", "Subcommand for set files for a specific offer", Arrays.asList(
                         SlashCommandOption.create(SlashCommandOptionType.LONG, "id", "ID of a specific offer", true),
-                        SlashCommandOption.create(SlashCommandOptionType.STRING, "password", "Password for edit offer", true),
                         SlashCommandOption.create(SlashCommandOptionType.ATTACHMENT, "attachment", "Attachment that will replace old attachment", true)
                 )),
                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "show", "Subcommand for show specific offer by it's ID", Arrays.asList(
@@ -89,7 +88,6 @@ public class SlashCommandUtils {
                 )),
                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "file", "Subcommand for set files for a specific inquiry", Arrays.asList(
                         SlashCommandOption.create(SlashCommandOptionType.LONG, "id", "ID of a specific inquiry", true),
-                        SlashCommandOption.create(SlashCommandOptionType.STRING, "password", "Password for edit inquiry", true),
                         SlashCommandOption.create(SlashCommandOptionType.ATTACHMENT, "attachment", "Attachment that will replace old attachment", true)
                 )),
                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "show", "Subcommand for show specific inquiry by it's ID", Arrays.asList(

@@ -187,29 +187,17 @@ public class BotAdminCommand {
         MessageBuilder msg_builder = new MessageBuilder()
                 .setEmbed(builder);
 
-        if(user_ping == null){
-            msg_builder.send(interaction.getChannel().get()).thenAccept(success -> {
+        msg_builder.addComponents(
+                ActionRow.of(org.javacord.api.entity.message.component.Button.success("ncodes-softbot-pending-bazaar-approve-" + interaction.getUser().getId(), "Povolit"),
+                        org.javacord.api.entity.message.component.Button.danger("ncodes-softbot-pending-bazaar-deny-" + interaction.getUser().getId(), "Zakákat"),
+                        Button.danger("ncodes-softbot-pending-bazaar-remove-" + interaction.getUser().getId(), "Smazat"))
+        );
+        msg_builder.send(interaction.getChannel().get()).thenAccept(success -> {
 
-                BazaarUtils.updateBazaarStatus(bazaar.getId(), BazaarStatusEnum.DENIED, null, denied_success -> {
-                    success.reply(DiscordUtils.createReplyEmbed("Špatné nastavení", "Uživatel zadal špatné Discord ID. Automaticky zamítám tuto nabídku/poptávku. Prosím napiš příkaz znovu", "BotAdminCommand.bazaar", ReplyEmbedEnum.WARNING));
-                });
-
-            });
-        }
-        else {
-            msg_builder.addComponents(
-                    ActionRow.of(org.javacord.api.entity.message.component.Button.success("ncodes-softbot-pending-bazaar-approve-" + interaction.getUser().getId(), "Povolit"),
-                            org.javacord.api.entity.message.component.Button.danger("ncodes-softbot-pending-bazaar-deny-" + interaction.getUser().getId(), "Zakákat"),
-                            Button.danger("ncodes-softbot-pending-bazaar-remove-" + interaction.getUser().getId(), "Smazat"))
-            );
-            msg_builder.send(interaction.getChannel().get()).thenAccept(success -> {
-
-                bazaar.setCreator_ping(user_ping);
-                Bot.getPendingData().getCheckingData().put(interaction.getUser().getId(), bazaar);
+            Bot.getPendingData().getCheckingData().put(interaction.getUser().getId(), bazaar);
 
 
-            });
-        }
+        });
         interaction.createImmediateResponder().setContent("done").respond().join();
     }
 

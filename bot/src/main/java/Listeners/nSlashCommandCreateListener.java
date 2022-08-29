@@ -25,12 +25,10 @@ public class nSlashCommandCreateListener implements SlashCommandCreateListener {
                 TeamCommand.run(interaction);
                 break;
             case "offer":
-                //OfferCommand.run(interaction); // TODO - activate this
-                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Nehotová funkce", "Omlouvám se, ale tato funkce ještě není plně hotová. Bot se nachází v pre-beta verzi a v plné verzi tato funkce spuštěna bude. Děkuji za pochopení", "nSlashCommandCreateListener.run", ReplyEmbedEnum.WARNING)).respond().join();
+                OfferCommand.run(interaction);
                 break;
             case "inquiry":
-                //InquiryCommand.run(interaction); // TODO - activate this
-                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Nehotová funkce", "Omlouvám se, ale tato funkce ještě není plně hotová. Bot se nachází v pre-beta verzi a v plné verzi tato funkce spuštěna bude. Děkuji za pochopení", "nSlashCommandCreateListener.run", ReplyEmbedEnum.WARNING)).respond().join();
+                InquiryCommand.run(interaction);
                 break;
             case "reddit":
                 OtherCommand.reddit(interaction);

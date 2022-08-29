@@ -5,6 +5,7 @@ import Enums.LogTypeEnum;
 import Instances.*;
 import Listeners.nMessageComponentCreateListener;
 import Listeners.nSlashCommandCreateListener;
+import SlashCommands.SlashCommandUtils;
 import Tasks.RotateStatusTask;
 import Threads.ShutdownThread;
 import com.google.gson.GsonBuilder;
@@ -24,7 +25,7 @@ public class Bot {
 
     private static boolean isTest = false;
     private static String prefix = "§ SoftBot §";
-    private static String version = "1.1.0-pre-beta";
+    private static String version = "1.1.0-beta";
     private static DiscordApi bot;
     private static DatabaseConnection connection;
     private static CalendarInstance calendar;

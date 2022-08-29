@@ -80,7 +80,7 @@ public class DiscordUtils {
                 .setTitle((bazaar.getType() == BazaarTypeEnum.INQUIRY ? "Poptávám: " : "Nabízím: ") + bazaar.getName())
                 .addInlineField("Cena", String.valueOf(bazaar.getPrice()))
                 .addInlineField("PSČ", String.valueOf(bazaar.getZip()))
-                .addInlineField("Kontakt", bazaar.getCreator_ping())
+                .addInlineField("Kontakt", getNickPingById(bazaar.getUser_id()))
                 .setDescription(bazaar.getDescription())
                 .setFooter("Verze: " + Bot.getVersion());
 

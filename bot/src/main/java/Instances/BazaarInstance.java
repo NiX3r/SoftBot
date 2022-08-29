@@ -21,9 +21,7 @@ public class BazaarInstance {
     private long last_edit_date;
     private BazaarStatusEnum last_edit_status;
 
-    private String creator_ping;
-
-    public BazaarInstance(int id, String name, String ip_address, long user_id, BazaarTypeEnum type, int zip, double price, String images_dir, String description, BazaarStatusEnum status, long create_date, long last_edit_user_id, long last_edit_date, BazaarStatusEnum last_edit_status, String creator_ping) {
+    public BazaarInstance(int id, String name, String ip_address, long user_id, BazaarTypeEnum type, int zip, double price, String images_dir, String description, BazaarStatusEnum status, long create_date, long last_edit_user_id, long last_edit_date, BazaarStatusEnum last_edit_status) {
         this.id = id;
         this.name = name;
         this.ip_address = ip_address;
@@ -38,7 +36,6 @@ public class BazaarInstance {
         this.last_edit_user_id = last_edit_user_id;
         this.last_edit_date = last_edit_date;
         this.last_edit_status = last_edit_status;
-        this.creator_ping = creator_ping;
     }
 
     public int getId() {
@@ -127,14 +124,6 @@ public class BazaarInstance {
 
     public void setLast_edit_status(BazaarStatusEnum last_edit_status) {
         this.last_edit_status = last_edit_status;
-    }
-
-    public String getCreator_ping() {
-        return creator_ping;
-    }
-
-    public void setCreator_ping(String creator_ping){
-        this.creator_ping = creator_ping;
     }
 
     public String getIp_address() {

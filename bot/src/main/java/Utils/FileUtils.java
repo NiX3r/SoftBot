@@ -17,17 +17,16 @@ public class FileUtils {
 
     public static void saveAttachments(Attachment attachment, String objectToSave, int id, Consumer<Boolean> callback){
 
-        String key, fileName;
+        String key;
         try {
 
             byte[] file = attachment.downloadAsByteArray().get();
-            fileName = attachment.getFileName();
-            key = fileName.substring(0, fileName.indexOf("."));
+            key = attachment.getFileName().substring(attachment.getFileName().indexOf("."));
             String path = "./data/attachments/" + objectToSave + "/" + id;
 
             new File(path).mkdirs();
 
-            try (FileOutputStream fos = new FileOutputStream(path + "/" + fileName)) {
+            try (FileOutputStream fos = new FileOutputStream(path + "/file" + key)) {
                 fos.write(file);
                 fos.flush();
             }

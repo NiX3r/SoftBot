@@ -6,6 +6,7 @@ import Instances.BazaarInstance;
 import Utils.Bot;
 import Utils.DiscordUtils;
 import Utils.FileUtils;
+import org.javacord.api.entity.Attachment;
 import org.javacord.api.entity.message.MessageAttachment;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
@@ -47,15 +48,13 @@ public class OfferCommand {
             return;
         }
 
-        System.out.println(offer.getId() + " | " + offer.getPrice() + " | " + offer.getZip() + " | " + offer.getCreator_ping() + " | " + offer.getDescription());
-
         MessageBuilder messageBuilder = new MessageBuilder();
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(Color.decode("#D1A841"))
                 .setTitle("Nabízím: " + offer.getName())
                 .addInlineField("Cena", String.valueOf(offer.getPrice()))
                 .addInlineField("PSČ", String.valueOf(offer.getZip()))
-                .addInlineField("Kontakt", offer.getCreator_ping().equals("") ? "nenastaven" : offer.getCreator_ping())
+                .addInlineField("Kontakt", DiscordUtils.getNickPingById(offer.getUser_id()))
                 .setDescription(offer.getDescription())
                 .setFooter("Zdroj: OfferCommand.show | Verze: " + Bot.getVersion());
 
@@ -65,15 +64,45 @@ public class OfferCommand {
             for(File file : files){
                 messageBuilder.addAttachment(file);
             }
-            messageBuilder.send(interaction.getChannel().get());
+            messageBuilder.send(interaction.getChannel().get()).join();
 
         });
+
+        interaction.createImmediateResponder().setContent("zobrazeno").respond().join();
 
         return;
     }
 
     private static void file(SlashCommandInteraction interaction) {
-        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Nehotová funkce", "Tato funkce ještě nebyla spuštěna. Prosím zkuste ji později.", "OfferCommands.run", ReplyEmbedEnum.WARNING)).respond().join();
+        int id = Integer.parseInt(interaction.getArguments().get(0).getLongValue().get().toString());
+        BazaarInstance instance = Bot.getBazaar().getOfferById(id);
+
+        if(instance == null){
+            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Neexistující nabídka", "Nabídka s tímto ID neexistuje. Prosím zadejte správné ID.", "OfferCommand.file", ReplyEmbedEnum.WARNING)).respond().join();
+            return;
+        }
+
+        if(instance.getUser_id() == interaction.getUser().getId()){
+            Attachment attachment = interaction.getArguments().get(1).getAttachmentValue().get();
+
+            if(attachment.getSize() >= 5000000){
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Veliký soubor", "Soubor je moc velký. Prosím pošlete v maximální velikosti do 5MB.", "OfferCommand.file", ReplyEmbedEnum.WARNING)).respond().join();
+                return;
+            }
+
+            FileUtils.saveAttachments(attachment, "offer", id, success -> {
+
+                if (success)
+                    interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Uloženo", "Všechny soubory byli úspěšně uloženy", "OfferCommand.file", ReplyEmbedEnum.SUCCESS)).respond().join();
+
+                else
+                    interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("", "Nastala chyba aplikce, prosím kontaktujte vývojáře aplikace", "OfferCommand.file", ReplyEmbedEnum.APP_ERROR)).respond().join();
+
+            });
+        }
+        else {
+            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Autorizace", "Nejste autorem dané nabídky. Pokud si přejete vytvořit vlastní napište příkaz `/offer create`", "OfferCommand.file", ReplyEmbedEnum.ERROR)).respond().join();
+        }
     }
 
     private static void list(SlashCommandInteraction interaction) {
