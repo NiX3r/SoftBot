@@ -4,15 +4,12 @@ import Database.*;
 import Enums.LogTypeEnum;
 import Instances.*;
 import Listeners.nMessageComponentCreateListener;
-import Listeners.nMessageCreateListener;
 import Listeners.nSlashCommandCreateListener;
-import SlashCommands.SlashCommandUtils;
 import Tasks.RotateStatusTask;
 import Threads.ShutdownThread;
 import com.google.gson.GsonBuilder;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
-import org.javacord.api.entity.activity.ActivityType;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,7 +17,6 @@ import java.io.FileWriter;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Timer;
 import java.util.function.Consumer;
 
@@ -77,7 +73,6 @@ public class Bot {
                     //SlashCommandUtils.create();
 
                     bot.addSlashCommandCreateListener(new nSlashCommandCreateListener());
-                    bot.addMessageCreateListener(new nMessageCreateListener());
                     bot.addMessageComponentCreateListener(new nMessageComponentCreateListener());
                     initializeLogListeners();
 
