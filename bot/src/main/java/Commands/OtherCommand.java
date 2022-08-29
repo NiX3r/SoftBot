@@ -12,6 +12,8 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OtherCommand {
 
@@ -216,13 +218,30 @@ public class OtherCommand {
     // TODO - Add automatically generated list of BuyMeACoffee sponsors
     private static void sponsors(String[] splitter, Message msg){
 
+        List<String> sponsors = new ArrayList<>();
+        String sponsorss = "";
+
+        System.out.println("here");
+
+        Bot.getBot().getServerById("611985124023730185").ifPresent(server -> {
+            System.out.println("Server found");
+            server.getRoleById("1005966989644271746").ifPresent(role -> {
+                System.out.println("Adding " + role.getUsers().size() + " members");
+                role.getUsers().forEach(u -> sponsors.add(u.getName()));
+            });
+        });
+
+        for(String sponsor : sponsors){
+            sponsorss += sponsor + "\n";
+        }
+
         msg.reply(DiscordUtils.createReplyEmbed("Sponzoři projektu",
                 "**Hlavní sponzoři projektu, díky kterým se mohl SoftBot spustit :heart: **\n" +
                         "Ravenbie (Ravenbie#8833) - 250 Kč\n" +
                         "KiJudo (KiJudo#3946) - 50 Kč\n" +
                         "\n" +
                         "**Sponzoři přes BuyMeACoffee**\n" +
-                        ""
+                        sponsorss
                         ,"OtherCommand.sponsors",
                         ReplyEmbedEnum.EASTER_EGG));
 

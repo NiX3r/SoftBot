@@ -11,6 +11,8 @@ import org.javacord.api.event.interaction.SlashCommandCreateEvent;
 import org.javacord.api.interaction.SlashCommandInteraction;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OtherCommand {
 
@@ -59,15 +61,24 @@ public class OtherCommand {
                 "OtherCommand.credits",
                 ReplyEmbedEnum.EASTER_EGG)).respond().join();
     }
-    // TODO - add auto generated sponsors
     public static void sponsors(SlashCommandInteraction interaction){
+        List<String> sponsors = new ArrayList<>();
+        String sponsorss = "";
+        Bot.getBot().getServerById("611985124023730185").ifPresent(server -> {
+            server.getRoleById("1005966989644271746").ifPresent(role -> {
+                role.getUsers().forEach(u -> sponsors.add(u.getName()));
+            });
+        });
+        for(String sponsor : sponsors){
+            sponsorss += sponsor + "\n";
+        }
         interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Sponzoři projektu",
                 "**Hlavní sponzoři projektu, díky kterým se mohl SoftBot spustit :heart: **\n" +
                         "Ravenbie (Ravenbie#8833) - 250 Kč\n" +
                         "KiJudo (KiJudo#3946) - 50 Kč\n" +
                         "\n" +
                         "**Sponzoři přes BuyMeACoffee**\n" +
-                        ""
+                        sponsorss
                 ,"OtherCommand.sponsors",
                 ReplyEmbedEnum.EASTER_EGG)).respond().join();
     }
