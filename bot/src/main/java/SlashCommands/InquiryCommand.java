@@ -105,8 +105,14 @@ public class InquiryCommand {
     private static void list(SlashCommandInteraction interaction) {
         try {
 
+            final int max_page = Bot.getBazaar().calculateInquiryPages();
+
+            if(interaction.getArguments().size() == 0){
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Počet stránek", "Maxímální počet stránek pro listování poptávek je " + max_page, "InquiryCommand.list", ReplyEmbedEnum.SUCCESS)).respond().join();
+                return;
+            }
+
             int page = Integer.parseInt(interaction.getArguments().get(0).getLongValue().get().toString());
-            int max_page = Bot.getBazaar().calculateInquiryPages();
 
             if(page > max_page){
                 interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Přečíslování stránky", "Stránka, kterou jsi zadal, je moc velká. Maximální stránka je `" + max_page + "`", "InquiryCommand.list", ReplyEmbedEnum.ERROR)).respond().join();

@@ -218,8 +218,15 @@ public class GameCommand {
     private static void list(SlashCommandInteraction interaction) {
 
         try {
+
+            final int max_page = Bot.getCalendar().calculateGamePages();
+
+            if(interaction.getArguments().size() == 0){
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Počet stránek", "Maxímální počet stránek pro listování her je " + max_page, "GameCommand.list", ReplyEmbedEnum.SUCCESS)).respond().join();
+                return;
+            }
+
             int page = Integer.parseInt(interaction.getArguments().get(0).getLongValue().get().toString());
-            int max_page = Bot.getCalendar().calculateGamePages();
 
             if(page > max_page){
                 interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Přečíslování stránky", "Stránka, kterou jsi zadal, je moc velká. Maximální stránka je `" + max_page + "`", "GameCommand.list", ReplyEmbedEnum.WARNING)).respond().join();

@@ -67,7 +67,7 @@ public class SlashCommandUtils {
         SlashCommand.with("offer", "group for offer section", Arrays.asList(
                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "create", "Subcommand for show offer create form"),
                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "list", "Subcommand for show list of offers indexed by pages 10 offer per page", Arrays.asList(
-                        SlashCommandOption.create(SlashCommandOptionType.LONG, "index", "Index of a page to show", true)
+                        SlashCommandOption.create(SlashCommandOptionType.LONG, "index", "Index of a page to show", false)
                 )),
                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "file", "Subcommand for set files for a specific offer", Arrays.asList(
                         SlashCommandOption.create(SlashCommandOptionType.LONG, "id", "ID of a specific offer", true),
