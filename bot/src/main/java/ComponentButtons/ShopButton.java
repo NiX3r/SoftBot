@@ -11,6 +11,7 @@ import Instances.ShopInstance;
 import Utils.Bot;
 import Utils.DiscordUtils;
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.user.User;
 import org.javacord.api.event.interaction.MessageComponentCreateEvent;
 import org.javacord.api.interaction.MessageComponentInteraction;
 
@@ -45,6 +46,7 @@ public class ShopButton {
         if(Bot.getPendingData().getCheckingData().get(user_id) instanceof ShopInstance){
 
             ShopInstance game = ((ShopInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            User user = DiscordUtils.getUserById(game.getCreator());
             game.setStatus(ShopStatusEnum.APPROVED);
 
             Bot.getPendingData().getCheckingData().remove(user_id);
@@ -52,6 +54,8 @@ public class ShopButton {
 
             ShopUtils.updateShopStatus(game.getId(), game.getStatus(), success -> {
                 if(success){
+                    if(user != null)
+                        user.sendMessage("Tvůj obchod s id `" + game.getId() + "` a jménem `" + game.getName() + "` byl povolena").join();
                     message.reply(DiscordUtils.createReplyEmbed("Povolení", "Tomuto obchodu bylo úspěšně povoleno její vytvoření a bylo rozesláno oznámení na všechny servery", "GameButton.onApprove", ReplyEmbedEnum.SUCCESS));
                 }
                 else {
@@ -73,6 +77,7 @@ public class ShopButton {
         if(Bot.getPendingData().getCheckingData().get(user_id) instanceof ShopInstance){
 
             ShopInstance game = ((ShopInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            User user = DiscordUtils.getUserById(game.getCreator());
             game.setStatus(ShopStatusEnum.DENIED);
 
             Bot.getPendingData().getCheckingData().remove(user_id);
@@ -80,6 +85,8 @@ public class ShopButton {
             ShopUtils.updateShopStatus(game.getId(), game.getStatus(), success -> {
 
                 if(success){
+                    if(user != null)
+                        user.sendMessage("Tvůj obchod s id `" + game.getId() + "` a jménem `" + game.getName() + "` byl zakázán").join();
                     message.reply(DiscordUtils.createReplyEmbed("Zakázání", "Tomuto obchodu bylo úspěšně zakázáno jeho vytvoření.", "GameButton.onDeny", ReplyEmbedEnum.SUCCESS));
                 }
                 else {
@@ -102,6 +109,7 @@ public class ShopButton {
         if(Bot.getPendingData().getCheckingData().get(user_id) instanceof ShopInstance){
 
             ShopInstance game = ((ShopInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            User user = DiscordUtils.getUserById(game.getCreator());
             game.setStatus(ShopStatusEnum.REMOVED);
 
             Bot.getPendingData().getCheckingData().remove(user_id);
@@ -109,6 +117,8 @@ public class ShopButton {
             ShopUtils.updateShopStatus(game.getId(), game.getStatus(), success -> {
 
                 if(success){
+                    if(user != null)
+                        user.sendMessage("Tvůj obchod s id `" + game.getId() + "` a jménem `" + game.getName() + "` byl smazán").join();
                     message.reply(DiscordUtils.createReplyEmbed("Smazáni", "Tento obchod byl úspěšně smazána.", "GameButton.onRemove", ReplyEmbedEnum.SUCCESS));
                 }
                 else {

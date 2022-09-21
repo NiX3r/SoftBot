@@ -132,7 +132,7 @@ public class BotAdminCommand {
 
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(Color.decode("#D1A841"))
-                .setTitle("Potvrzení registrace hry")
+                .setTitle("Potvrzení registrace týmu")
                 .setImage(team.getThumbnail() == null ? "" : team.getThumbnail())
                 .addInlineField("ID", team.getId() + "")
                 .addInlineField("Jméno", team.getName())
@@ -172,7 +172,7 @@ public class BotAdminCommand {
 
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(Color.decode("#D1A841"))
-                .setTitle("Potvrzení registrace hry")
+                .setTitle("Potvrzení registrace bazaru")
                 .addInlineField("ID", bazaar.getId() + "")
                 .addInlineField("Jméno", bazaar.getName())
                 .addInlineField("IP adresa", bazaar.getIp_address())

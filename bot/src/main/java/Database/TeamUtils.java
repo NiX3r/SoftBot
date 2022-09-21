@@ -43,7 +43,8 @@ public class TeamUtils {
                             DatabaseUtils.decodeDiscordId(results.getString("LastEditAuthor")),
                             (last_edit_date == null ? 0 : DatabaseUtils.decodeDateTime(last_edit_date)),
                             TeamStatusEnum.valueOf(results.getString("LastEditStatus") == null ? "NULL" : results.getString("LastEditStatus")),
-                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)));
+                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)),
+                            DatabaseUtils.decodeDiscordId(results.getObject("DiscordUserID", String.class)));
 
                     Bot.getTeamUtil().getTeams().add(mainInstance);
 
@@ -95,7 +96,8 @@ public class TeamUtils {
                             DatabaseUtils.decodeDiscordId(results.getString("LastEditAuthor")),
                             (last_edit_date == null ? 0 : DatabaseUtils.decodeDateTime(last_edit_date)),
                             TeamStatusEnum.valueOf(results.getString("LastEditStatus") == null ? "NULL" : results.getString("LastEditStatus")),
-                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)));
+                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)),
+                            DatabaseUtils.decodeDiscordId(results.getObject("DiscordUserID", String.class)));
 
                     Bot.getPendingData().getTeams().add(mainInstance);
 

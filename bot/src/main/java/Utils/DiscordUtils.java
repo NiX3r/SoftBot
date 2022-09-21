@@ -11,6 +11,7 @@ import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageAuthor;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
+import org.javacord.api.entity.user.User;
 
 import java.awt.*;
 import java.util.function.Consumer;
@@ -145,6 +146,15 @@ public class DiscordUtils {
         for(Server server : Bot.getBot().getServers()){
             if(server.getMemberById(id).isPresent()){
                 return server.getMemberById(id).get().getMentionTag();
+            }
+        }
+        return null;
+    }
+
+    public static User getUserById(long id){
+        for(Server server : Bot.getBot().getServers()){
+            if(server.getMemberById(id).isPresent()){
+                return server.getMemberById(id).get();
             }
         }
         return null;

@@ -47,7 +47,8 @@ public class GameUtils {
                             DatabaseUtils.decodeDiscordId(results.getString("LastEditAuthor")),
                             (last_edit_date == null ? 0 : DatabaseUtils.decodeDateTime(last_edit_date)),
                             GameStatusEnum.valueOf(results.getString("LastEditStatus") == null ? "NULL" : results.getString("LastEditStatus")),
-                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)));
+                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)),
+                            DatabaseUtils.decodeDiscordId(results.getObject("DiscordUserID", String.class)));
 
                     Bot.getCalendar().getGames().add(mainInstance);
                     Bot.getCalendar().addCalendarGame(mainInstance);
@@ -103,7 +104,8 @@ public class GameUtils {
                             DatabaseUtils.decodeDiscordId(results.getString("LastEditAuthor")),
                             (last_edit_date == null ? 0 : DatabaseUtils.decodeDateTime(last_edit_date)),
                             GameStatusEnum.valueOf(results.getString("LastEditStatus") == null ? "NULL" : results.getString("LastEditStatus")),
-                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)));
+                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)),
+                            DatabaseUtils.decodeDiscordId(results.getObject("DiscordUserID", String.class)));
 
                     Bot.getPendingData().getGames().add(mainInstance);
 

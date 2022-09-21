@@ -20,7 +20,9 @@ public class ShopInstance {
     private long last_edit_user_id;
     private long last_edit_date;
 
-    public ShopInstance(int id, String name, String voucher, String ip_address, String user_id, String website, String location, int zip, String description, ShopStatusEnum status, long create_date, long last_edit_user_id, long last_edit_date, ShopStatusEnum last_edit_status, String thumbnail) {
+    private long creator;
+
+    public ShopInstance(int id, String name, String voucher, String ip_address, String user_id, String website, String location, int zip, String description, ShopStatusEnum status, long create_date, long last_edit_user_id, long last_edit_date, ShopStatusEnum last_edit_status, String thumbnail, long creator) {
         this.id = id;
         this.name = name;
         this.voucher = voucher;
@@ -35,6 +37,7 @@ public class ShopInstance {
         this.last_edit_user_id = last_edit_user_id;
         this.last_edit_date = last_edit_date;
         this.thumbnail = thumbnail;
+        this.creator = creator;
     }
 
     public int getId() {
@@ -139,5 +142,9 @@ public class ShopInstance {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public long getCreator() {
+        return creator;
     }
 }

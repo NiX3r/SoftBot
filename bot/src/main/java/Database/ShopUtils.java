@@ -45,7 +45,8 @@ public class ShopUtils {
                             DatabaseUtils.decodeDiscordId(results.getString("LastEditAuthor")),
                             (last_edit_date == null ? 0 : DatabaseUtils.decodeDateTime(last_edit_date)),
                             ShopStatusEnum.valueOf(results.getString("LastEditStatus") == null ? "NULL" : results.getString("LastEditStatus")),
-                            results.getString("Thumbnail"));
+                            results.getString("Thumbnail"),
+                            DatabaseUtils.decodeDiscordId(results.getObject("DiscordUserID", String.class)));
 
                     Bot.getShop().getShops().add(mainInstance);
 
@@ -99,7 +100,8 @@ public class ShopUtils {
                             DatabaseUtils.decodeDiscordId(results.getString("LastEditAuthor")),
                             (last_edit_date == null ? 0 : DatabaseUtils.decodeDateTime(last_edit_date)),
                             ShopStatusEnum.valueOf(results.getString("LastEditStatus") == null ? "NULL" : results.getString("LastEditStatus")),
-                            results.getString("Thumbnail"));
+                            results.getString("Thumbnail"),
+                            DatabaseUtils.decodeDiscordId(results.getObject("DiscordUserID", String.class)));
 
                     Bot.getPendingData().getShops().add(mainInstance);
 

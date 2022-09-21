@@ -10,6 +10,7 @@ import Instances.TeamInstance;
 import Utils.Bot;
 import Utils.DiscordUtils;
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.user.User;
 import org.javacord.api.event.interaction.MessageComponentCreateEvent;
 import org.javacord.api.interaction.MessageComponentInteraction;
 
@@ -42,6 +43,7 @@ public class BazaarButton {
         if(Bot.getPendingData().getCheckingData().get(user_id) instanceof BazaarInstance){
 
             BazaarInstance bazaar = ((BazaarInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            User user = DiscordUtils.getUserById(bazaar.getCreator());
             bazaar.setStatus(BazaarStatusEnum.APPROVED);
 
             Bot.getPendingData().getCheckingData().remove(user_id);
@@ -51,6 +53,8 @@ public class BazaarButton {
 
                 if(success){
                     DiscordUtils.sendApprovedBazaarAnnouncementEmbed(bazaar, success_sent -> {
+                        if(user != null)
+                            user.sendMessage("Tvoje nabídka/poptávka s id `" + bazaar.getId() + "` a jménem `" + bazaar.getName() + "` byla povolena").join();
                         message.reply(DiscordUtils.createReplyEmbed("Úspěšné povolení", "Této nabídce/poptávce bylo úspěšně povoleno jeho vytvoření a bylo zasláno oznámení na všechny servery", "BazaarButton.onApprove", ReplyEmbedEnum.SUCCESS));
                     });
                 }
@@ -74,6 +78,7 @@ public class BazaarButton {
         if(Bot.getPendingData().getCheckingData().get(user_id) instanceof BazaarInstance){
 
             BazaarInstance bazaar = ((BazaarInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            User user = DiscordUtils.getUserById(bazaar.getCreator());
             bazaar.setStatus(BazaarStatusEnum.DENIED);
 
             Bot.getPendingData().getCheckingData().remove(user_id);
@@ -81,6 +86,8 @@ public class BazaarButton {
             BazaarUtils.updateBazaarStatus(bazaar.getId(), bazaar.getStatus(), success -> {
 
                 if(success){
+                    if(user != null)
+                        user.sendMessage("Tvoje nabídka/poptávka s id `" + bazaar.getId() + "` a jménem `" + bazaar.getName() + "` byla zakázána").join();
                     message.reply(DiscordUtils.createReplyEmbed("Úspěšné zakázání", "Této nabídce/poptávce bylo úspěšně zakázáno jeho vytvoření", "BazaarButton.onDeny", ReplyEmbedEnum.SUCCESS));
                 }
                 else {
@@ -103,6 +110,7 @@ public class BazaarButton {
         if(Bot.getPendingData().getCheckingData().get(user_id) instanceof BazaarInstance){
 
             BazaarInstance bazaar = ((BazaarInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            User user = DiscordUtils.getUserById(bazaar.getCreator());
             bazaar.setStatus(BazaarStatusEnum.REMOVED);
 
             Bot.getPendingData().getCheckingData().remove(user_id);
@@ -110,6 +118,8 @@ public class BazaarButton {
             BazaarUtils.updateBazaarStatus(bazaar.getId(), bazaar.getStatus(), success -> {
 
                 if(success){
+                    if(user != null)
+                        user.sendMessage("Tvoje nabídka/poptávka s id `" + bazaar.getId() + "` a jménem `" + bazaar.getName() + "` byla smazána").join();
                     message.reply(DiscordUtils.createReplyEmbed("Úspěšné smazání", "Tato poptávka/nabídka byla úspěšně smazán", "BazaarButton.onRemove", ReplyEmbedEnum.SUCCESS));
                 }
                 else {

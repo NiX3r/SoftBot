@@ -44,7 +44,8 @@ public class BazaarUtils {
                             DatabaseUtils.decodeDateTime("CreateDate"),
                             DatabaseUtils.decodeDiscordId("LastEditAuthor"),
                             DatabaseUtils.decodeDateTime("LastEditDate"),
-                            results.getString("LastEditStatus") == null ? BazaarStatusEnum.NULL : BazaarStatusEnum.valueOf("LastEditAuthor"));
+                            results.getString("LastEditStatus") == null ? BazaarStatusEnum.NULL : BazaarStatusEnum.valueOf("LastEditAuthor"),
+                            DatabaseUtils.decodeDiscordId(results.getObject("DiscordUserID", String.class)));
 
                     Bot.getBazaar().getBazaar().add(bazaar);
 
@@ -91,7 +92,8 @@ public class BazaarUtils {
                             DatabaseUtils.decodeDateTime("CreateDate"),
                             DatabaseUtils.decodeDiscordId("LastEditAuthor"),
                             DatabaseUtils.decodeDateTime("LastEditDate"),
-                            results.getString("LastEditStatus") == null ? BazaarStatusEnum.NULL : BazaarStatusEnum.valueOf("LastEditAuthor"));
+                            results.getString("LastEditStatus") == null ? BazaarStatusEnum.NULL : BazaarStatusEnum.valueOf("LastEditAuthor"),
+                            DatabaseUtils.decodeDiscordId(results.getObject("DiscordUserID", String.class)));
 
                     Bot.getPendingData().getBazaar().add(bazaar);
 
