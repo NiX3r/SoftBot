@@ -143,7 +143,7 @@ public class TeamCommand {
     }
 
     private static void create(SlashCommandInteraction interaction) {
-        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Web", "Vytvořit tým lze na stránkách\n https://softbot.ncodes.eu/team/", "TeamCommand.create", ReplyEmbedEnum.SUCCESS)).respond().join();
+        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Web", "Vytvořit tým lze na stránkách\n https://softbot.ncodes.eu", "TeamCommand.create", ReplyEmbedEnum.SUCCESS)).respond().join();
     }
 
 }

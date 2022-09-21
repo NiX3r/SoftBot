@@ -269,7 +269,7 @@ public class GameCommand {
     }
 
     private static void create(SlashCommandInteraction interaction) {
-        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Web", "Vytvořit hru lze na stránkách\n https://softbot.ncodes.eu/game/", "GameCommand.create", ReplyEmbedEnum.SUCCESS)).respond().join();
+        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Web", "Vytvořit hru lze na stránkách\n https://softbot.ncodes.eu", "GameCommand.create", ReplyEmbedEnum.SUCCESS)).respond().join();
     }
 
     private static String getDate(long milliSeconds) {

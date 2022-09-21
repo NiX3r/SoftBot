@@ -170,7 +170,7 @@ public class InquiryCommand {
     }
 
     private static void create(SlashCommandInteraction interaction) {
-        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Web", "Vytvořit poptávku lze na stránkách\n https://softbot.ncodes.eu/bazaar/", "InquiryCommand.create", ReplyEmbedEnum.SUCCESS)).respond().join();
+        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Web", "Vytvořit poptávku lze na stránkách\n https://softbot.ncodes.eu", "InquiryCommand.create", ReplyEmbedEnum.SUCCESS)).respond().join();
     }
 
 }

@@ -123,7 +123,7 @@ public class ShopCommand {
     }
 
     private static void create(SlashCommandInteraction interaction) {
-        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Web", "Vytvořit obchod lze na stránkách\n https://softbot.ncodes.eu/shop/", "ShopCommand.create", ReplyEmbedEnum.SUCCESS)).respond().join();
+        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Web", "Vytvořit obchod lze na stránkách\n https://softbot.ncodes.eu", "ShopCommand.create", ReplyEmbedEnum.SUCCESS)).respond().join();
     }
 
 }

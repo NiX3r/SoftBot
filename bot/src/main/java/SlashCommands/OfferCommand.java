@@ -173,7 +173,7 @@ public class OfferCommand {
     }
 
     private static void create(SlashCommandInteraction interaction) {
-        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Web", "Vytvořit nabídku lze na stránkách\n https://softbot.ncodes.eu/bazaar/", "OfferCommand.create", ReplyEmbedEnum.SUCCESS)).respond().join();
+        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Web", "Vytvořit nabídku lze na stránkách\n https://softbot.ncodes.eu", "OfferCommand.create", ReplyEmbedEnum.SUCCESS)).respond().join();
     }
 
 }
