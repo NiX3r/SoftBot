@@ -75,6 +75,9 @@ public class SlashCommandUtils {
                 )),
                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "show", "Subcommand for show specific offer by it's ID", Arrays.asList(
                         SlashCommandOption.create(SlashCommandOptionType.LONG, "id", "ID of a specific offer", true)
+                )),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "sold", "Subcommand for mark offer as sold", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.LONG, "id", "ID of a specific offer", true)
                 ))
         )).createGlobal(Bot.getBot()).join();
 
@@ -92,6 +95,9 @@ public class SlashCommandUtils {
                 )),
                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "show", "Subcommand for show specific inquiry by it's ID", Arrays.asList(
                         SlashCommandOption.create(SlashCommandOptionType.LONG, "id", "ID of a specific inquiry", true)
+                )),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "sold", "Subcommand for mark inquiry as sold", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.LONG, "id", "ID of a specific offer", true)
                 ))
         )).createGlobal(Bot.getBot()).join();
 

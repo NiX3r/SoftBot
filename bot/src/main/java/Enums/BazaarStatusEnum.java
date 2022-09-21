@@ -5,5 +5,6 @@ public enum BazaarStatusEnum {
     APPROVED,
     DENIED,
     REMOVED,
+    SOLD,
     NULL
 }

@@ -1,5 +1,7 @@
 package SlashCommands;
 
+import Database.BazaarUtils;
+import Enums.BazaarStatusEnum;
 import Enums.LogTypeEnum;
 import Enums.ReplyEmbedEnum;
 import Instances.BazaarInstance;
@@ -35,8 +37,36 @@ public class OfferCommand {
             case "show":
                 show(interaction);
                 break;
+            case "sold":
+                sold(interaction);
+                break;
 
         }
+
+    }
+
+    private static void sold(SlashCommandInteraction interaction) {
+
+        BazaarInstance offer = Bot.getBazaar().getOfferById(Integer.parseInt(interaction.getArguments().get(0).getLongValue().get().toString()));
+
+        if(offer == null){
+            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Neexistující nabídka", "Nabídka s tímto ID neexistuje. Prosím vyplňte skutečné ID.", "OfferCommand.sold", ReplyEmbedEnum.ERROR)).respond().join();
+            return;
+        }
+        if(offer.getCreator() != interaction.getUser().getId()){
+            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Nedostatečná práva", "Bohužel nejsi majitelem této poptávky. Můžeš si vytvořit vlastní na adrese\n https://softbot.ncodes.eu", "OfferCommand.sold", ReplyEmbedEnum.ERROR)).respond().join();
+            return;
+        }
+
+        offer.setStatus(BazaarStatusEnum.SOLD);
+        BazaarUtils.updateBazaarStatus(offer.getId(), BazaarStatusEnum.SOLD, success -> {
+            if(success){
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Prodáno", "Úspěšně jsi nastavil nabídku jako prodanou.", "OfferCommand.sold", ReplyEmbedEnum.SUCCESS)).respond().join();
+            }
+            else {
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("", "Nastala chyba při ukládání do databáze. Zkuste to prosím později", "OfferCommand.sold", ReplyEmbedEnum.APP_ERROR)).respond().join();
+            }
+        });
 
     }
 
