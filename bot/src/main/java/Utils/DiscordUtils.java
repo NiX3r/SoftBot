@@ -14,6 +14,7 @@ import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 
 import java.awt.*;
+import java.util.Calendar;
 import java.util.function.Consumer;
 
 public class DiscordUtils {
@@ -125,9 +126,20 @@ public class DiscordUtils {
     }
 
     public static void sendWeekPlanEmbed(String[] games_on_days, int year, int month, int start_day, Consumer<Boolean> callback){
+
+        int to_day = start_day + 7;
+        final int max_days = Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        if(to_day > max_days){
+            to_day -= max_days;
+            month++;
+            if(month == 13)
+                month = 1;
+        }
+
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(Color.decode("#D1A841"))
-                .setTitle("Týdenní plán her od " + start_day + "." + month + "." + year + " do " + (start_day + 7) + "." + month + "." + year)
+                .setTitle("Týdenní plán her od " + start_day + "." + month + "." + year + " do " + to_day + "." + month + "." + year)
                 .addField("Pondělí", games_on_days[0])
                 .addField("Úterý", games_on_days[1])
                 .addField("Středa", games_on_days[2])
