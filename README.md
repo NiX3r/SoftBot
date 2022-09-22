@@ -144,6 +144,6 @@ Discord bot for Czech airsoft communites
 
 ## Versions
 
-| Version | Release date | Link |
-|:-------:| ------------ | ---- |
-| 1.0.0   | NONE         | NONE |
+| Version | Release date | Link to changelog                                   |
+|:-------:| ------------ | --------------------------------------------------- |
+| 1.2.0   | 22.09.2022   | https://github.com/NiX3r/SoftBot/releases/tag/1.2.0 |
