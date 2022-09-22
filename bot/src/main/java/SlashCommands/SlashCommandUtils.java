@@ -23,7 +23,18 @@ public class SlashCommandUtils {
         SlashCommand.with("credits", "command for show every member who helped in developing SoftBot").createGlobal(Bot.getBot()).join();
         SlashCommand.with("sponsors", "command for show every SoftBot's sponsors").createGlobal(Bot.getBot()).join();
         SlashCommand.with("channel", "command for set up announcement channel", Arrays.asList(
-                SlashCommandOption.create(SlashCommandOptionType.CHANNEL, "channel", "channel ping for a announcement channel", true)
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "system", "Subcommand for set up bot's announcement system channel", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.CHANNEL, "channel-tag", "channel ping for a announcement channel", true)
+                )),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "game", "Subcommand for set up game's announcement system channel", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.CHANNEL, "channel-tag", "channel ping for a announcement channel", true)
+                )),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "bazaar", "Subcommand for set up bazaar's announcement system channel", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.CHANNEL, "channel-tag", "channel ping for a announcement channel", true)
+                )),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "team", "Subcommand for set up team's announcement system channel", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.CHANNEL, "channel-tag", "channel ping for a announcement channel", true)
+                ))
         )).setDefaultEnabledForPermissions(PermissionType.ADMINISTRATOR).createGlobal(Bot.getBot()).join();
         SlashCommand.with("team-role", "command for set up team role", Arrays.asList(
                 SlashCommandOption.create(SlashCommandOptionType.ROLE, "role", "role ping for a team role", true)

@@ -1,12 +1,9 @@
 package Database;
 
 import Enums.LogTypeEnum;
-import Enums.TeamStatusEnum;
 import Instances.CalendarGameInstance;
 import Instances.ServerOptionInstance;
-import Instances.TeamInstance;
 import Utils.Bot;
-import Utils.UTFCorrectionTranslator;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,6 +30,9 @@ public class ServerOptionUtils {
 
                     ServerOptionInstance serverOption = new ServerOptionInstance(DatabaseUtils.decodeDiscordId(results.getString("DiscordServerID")),
                             DatabaseUtils.decodeDiscordId(results.getString("DiscordAnnouncementChannelID")),
+                            DatabaseUtils.decodeDiscordId(results.getString("DiscordGameAnnouncementChannelID")),
+                            DatabaseUtils.decodeDiscordId(results.getString("DiscordBazaarAnnouncementChannelID")),
+                            DatabaseUtils.decodeDiscordId(results.getString("DiscordTeamAnnouncementChannelID")),
                             DatabaseUtils.decodeDiscordId(results.getString("DiscordTeamMemberRoleID")));
 
                     Bot.getServerOptions().add(serverOption);
@@ -57,7 +57,7 @@ public class ServerOptionUtils {
 
     }
 
-    public static void addServerOption(long server_id, long channel_id, long member_role_id, Consumer<Boolean> callback){
+    public static void addServerOption(long server_id, long channel_id, long game_id, long bazaar_id, long team_id, long member_role_id, Consumer<Boolean> callback){
         if(!Bot.getDatabaseConnection().isClosed()){
 
             Utils.LogSystem.log(LogTypeEnum.INFO, "adding new instance of server option '" + server_id + "'", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
@@ -65,10 +65,13 @@ public class ServerOptionUtils {
             PreparedStatement statement = null;
             try {
                 statement = Bot.getConnection()
-                        .prepareStatement("INSERT INTO ServerOption(DiscordServerID,DiscordAnnouncementChannelID,DiscordTeamMemberRoleID) VALUES(?,?,?)");
+                        .prepareStatement("INSERT INTO ServerOption(DiscordServerID,DiscordAnnouncementChannelID,DiscordGameAnnouncementChannelID,DiscordBazaarAnnouncementChannelID,DiscordTeamAnnouncementChannelID,DiscordTeamMemberRoleID) VALUES(?,?,?,?,?,?)");
                 statement.setString(1, DatabaseUtils.encodeDiscordId(server_id));
                 statement.setString(2, DatabaseUtils.encodeDiscordId(channel_id));
-                statement.setString(3, DatabaseUtils.encodeDiscordId(member_role_id));
+                statement.setString(3, DatabaseUtils.encodeDiscordId(game_id));
+                statement.setString(4, DatabaseUtils.encodeDiscordId(bazaar_id));
+                statement.setString(5, DatabaseUtils.encodeDiscordId(team_id));
+                statement.setString(6, DatabaseUtils.encodeDiscordId(member_role_id));
 
                 boolean success = !statement.execute();
 
@@ -96,7 +99,7 @@ public class ServerOptionUtils {
 
     }
 
-    public static void editChannel(long server_id, long channel_id, Consumer<Boolean> callback){
+    public static void editChannel(long server_id, long channel_id, String type, Consumer<Boolean> callback){
 
         if(!Bot.getDatabaseConnection().isClosed()){
 
@@ -105,7 +108,7 @@ public class ServerOptionUtils {
             PreparedStatement statement = null;
             try {
                 statement = Bot.getConnection()
-                        .prepareStatement("UPDATE ServerOption SET DiscordAnnouncementChannelID=? WHERE DiscordServerID=?");
+                        .prepareStatement("UPDATE ServerOption SET Discord" + type + "AnnouncementChannelID=? WHERE DiscordServerID=?");
                 statement.setString(1, DatabaseUtils.encodeDiscordId(channel_id));
                 statement.setString(2, DatabaseUtils.encodeDiscordId(server_id));
 
