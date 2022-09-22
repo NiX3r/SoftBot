@@ -187,7 +187,7 @@ public class DiscordUtils {
                     break;
                 }
             }
-            if(option.getAnnouncement_channel_id() == -1){
+            else if(option.getAnnouncement_channel_id() == -1){
                 for(ServerTextChannel channel : server.getTextChannels()){
                     if(channel.asPrivateChannel().isPresent())
                         continue;
@@ -304,7 +304,7 @@ public class DiscordUtils {
                     break;
                 }
             }
-            if(option.getAnnouncement_channel_id() == -1 && option.getTeam_announcement_channel_id() == -1){
+            else if(option.getAnnouncement_channel_id() == -1 && option.getTeam_announcement_channel_id() == -1){
                 for(ServerTextChannel channel : server.getTextChannels()){
                     if(channel.asPrivateChannel().isPresent())
                         continue;
