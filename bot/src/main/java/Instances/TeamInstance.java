@@ -18,10 +18,11 @@ public class TeamInstance {
     private long last_edit_date;
     private TeamStatusEnum last_status;
     private long create_date;
+    private long creator;
 
     private int member_count;
 
-    public TeamInstance(int id, String name, String ip_address, String thumbnail, String website, String type, long discord_server_id, String description, TeamStatusEnum status, long last_edit_author, long last_edit_date, TeamStatusEnum last_status, long create_date){
+    public TeamInstance(int id, String name, String ip_address, String thumbnail, String website, String type, long discord_server_id, String description, TeamStatusEnum status, long last_edit_author, long last_edit_date, TeamStatusEnum last_status, long create_date, long creator){
 
         this.id = id;
         this.name = name;
@@ -36,6 +37,7 @@ public class TeamInstance {
         this.last_edit_date = last_edit_date;
         this.last_status = last_status;
         this.create_date = create_date;
+        this.creator = creator;
 
         this.member_count = -1;
 
@@ -161,5 +163,9 @@ public class TeamInstance {
 
     public String getIp_address() {
         return ip_address;
+    }
+
+    public long getCreator() {
+        return creator;
     }
 }

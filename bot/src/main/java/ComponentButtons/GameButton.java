@@ -8,6 +8,7 @@ import Instances.GameInstance;
 import Utils.Bot;
 import Utils.DiscordUtils;
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.entity.user.User;
 import org.javacord.api.event.interaction.MessageComponentCreateEvent;
 import org.javacord.api.interaction.MessageComponentInteraction;
 
@@ -39,12 +40,13 @@ public class GameButton {
         if(!String.valueOf(user_id).equals(original_user_id))
             return;
 
-        if(Bot.getPendingData().getCheckingData().get(user_id) instanceof GameInstance){
+        if(Bot.getCheckingData().get(user_id) instanceof GameInstance){
 
-            GameInstance game = ((GameInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            GameInstance game = ((GameInstance) Bot.getCheckingData().get(user_id));
+            User user = DiscordUtils.getUserById(game.getCreator());
             game.setStatus(GameStatusEnum.APPROVED);
 
-            Bot.getPendingData().getCheckingData().remove(user_id);
+            Bot.getCheckingData().remove(user_id);
             Bot.getCalendar().getGames().add(game);
             Bot.getCalendar().addCalendarGame(game);
             Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
@@ -53,6 +55,8 @@ public class GameButton {
 
                 if(success){
                     DiscordUtils.sendApprovedGameAnnouncementEmbed(game, send_done -> {
+                        if(user != null)
+                            user.sendMessage("Tvoje hra s id `" + game.getId() + "` a jménem `" + game.getName() + "` byla povolena").join();
                         message.reply(DiscordUtils.createReplyEmbed("Povolení", "Této hře bylo úspěšně povoleno její vytvoření a bylo rozesláno oznámení na všechny servery", "GameButton.onApprove", ReplyEmbedEnum.SUCCESS));
                     });
                 }
@@ -73,16 +77,19 @@ public class GameButton {
         if(!String.valueOf(user_id).equals(original_user_id))
             return;
 
-        if(Bot.getPendingData().getCheckingData().get(user_id) instanceof GameInstance){
+        if(Bot.getCheckingData().get(user_id) instanceof GameInstance){
 
-            GameInstance game = ((GameInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            GameInstance game = ((GameInstance) Bot.getCheckingData().get(user_id));
+            User user = DiscordUtils.getUserById(game.getCreator());
             game.setStatus(GameStatusEnum.DENIED);
 
-            Bot.getPendingData().getCheckingData().remove(user_id);
+            Bot.getCheckingData().remove(user_id);
 
             GameUtils.updateGameStatus(game.getId(), game.getStatus(), success -> {
 
                 if(success){
+                    if(user != null)
+                        user.sendMessage("Tvoje hra s id `" + game.getId() + "` a jménem `" + game.getName() + "` byla zakázána").join();
                     message.reply(DiscordUtils.createReplyEmbed("Zakázání", "Této hře bylo úspěšně zakázáno její vytvoření", "GameButton.onDeny", ReplyEmbedEnum.SUCCESS));
                 }
                 else {
@@ -102,16 +109,19 @@ public class GameButton {
         if(!String.valueOf(user_id).equals(original_user_id))
             return;
 
-        if(Bot.getPendingData().getCheckingData().get(user_id) instanceof GameInstance){
+        if(Bot.getCheckingData().get(user_id) instanceof GameInstance){
 
-            GameInstance game = ((GameInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            GameInstance game = ((GameInstance) Bot.getCheckingData().get(user_id));
+            User user = DiscordUtils.getUserById(game.getCreator());
             game.setStatus(GameStatusEnum.REMOVED);
 
-            Bot.getPendingData().getCheckingData().remove(user_id);
+            Bot.getCheckingData().remove(user_id);
 
             GameUtils.updateGameStatus(game.getId(), game.getStatus(), success -> {
 
                 if(success){
+                    if(user != null)
+                        user.sendMessage("Tvoje hra s id `" + game.getId() + "` a jménem `" + game.getName() + "` byla smazána").join();
                     message.reply(DiscordUtils.createReplyEmbed("Smazáni", "Tato hra byla úspěšně smazána", "GameButton.onRemove", ReplyEmbedEnum.SUCCESS));
                 }
                 else {

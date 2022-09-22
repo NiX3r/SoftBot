@@ -43,7 +43,8 @@ public class TeamUtils {
                             DatabaseUtils.decodeDiscordId(results.getString("LastEditAuthor")),
                             (last_edit_date == null ? 0 : DatabaseUtils.decodeDateTime(last_edit_date)),
                             TeamStatusEnum.valueOf(results.getString("LastEditStatus") == null ? "NULL" : results.getString("LastEditStatus")),
-                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)));
+                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)),
+                            DatabaseUtils.decodeDiscordId(results.getObject("DiscordUserID", String.class)));
 
                     Bot.getTeamUtil().getTeams().add(mainInstance);
 
@@ -67,23 +68,21 @@ public class TeamUtils {
 
     }
 
-    public static void loadPendingTeamsInstance(Consumer<Boolean> callback){
-
+    public static void getLastestPendingTeam(Consumer<TeamInstance> callback){
         if(!Bot.getDatabaseConnection().isClosed()){
 
-            Utils.LogSystem.log(LogTypeEnum.INFO, "loading pending teams into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "trying to get lastest pending team", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             PreparedStatement statement = null;
             try {
                 statement = Bot.getConnection()
-                        .prepareStatement("SELECT * FROM Team WHERE Status='PENDING'");
+                        .prepareStatement("SELECT * FROM Team WHERE Status='PENDING' ORDER BY CreateDate ASC LIMIT 1");
 
                 ResultSet results = statement.executeQuery();
-
-                while(results.next()){
-
+                TeamInstance mainInstance = null;
+                if(results.next()){
                     String last_edit_date = results.getObject("LastEditDate", String.class);
-                    TeamInstance mainInstance = new TeamInstance(results.getInt("ID"),
+                    mainInstance = new TeamInstance(results.getInt("ID"),
                             UTFCorrectionTranslator.translate(results.getString("Name")),
                             results.getString("IPAddress"),
                             results.getString("Thumbnail"),
@@ -95,28 +94,25 @@ public class TeamUtils {
                             DatabaseUtils.decodeDiscordId(results.getString("LastEditAuthor")),
                             (last_edit_date == null ? 0 : DatabaseUtils.decodeDateTime(last_edit_date)),
                             TeamStatusEnum.valueOf(results.getString("LastEditStatus") == null ? "NULL" : results.getString("LastEditStatus")),
-                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)));
-
-                    Bot.getPendingData().getTeams().add(mainInstance);
-
+                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)),
+                            DatabaseUtils.decodeDiscordId(results.getObject("DiscordUserID", String.class)));
                 }
 
                 Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
-                Utils.LogSystem.log(LogTypeEnum.INFO, "pending teams successfully initialized and loaded", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                callback.accept(true);
+                Utils.LogSystem.log(LogTypeEnum.INFO, "successfully get latest pending team", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                callback.accept(mainInstance);
                 return;
 
             }catch (SQLException e) {
                 Utils.LogSystem.log(LogTypeEnum.ERROR, "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                callback.accept(false);
+                callback.accept(null);
                 return;
             }
 
         }
 
-        Utils.LogSystem.log(LogTypeEnum.ERROR, "pending teams not loaded. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-        callback.accept(false);
-
+        Utils.LogSystem.log(LogTypeEnum.ERROR, "can't get team. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        callback.accept(null);
     }
 
     public static void updateTeamStatus(int id, TeamStatusEnum status, Consumer<Boolean> callback){

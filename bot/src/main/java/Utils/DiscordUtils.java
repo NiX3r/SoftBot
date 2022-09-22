@@ -11,8 +11,10 @@ import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.MessageAuthor;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
+import org.javacord.api.entity.user.User;
 
 import java.awt.*;
+import java.util.Calendar;
 import java.util.function.Consumer;
 
 public class DiscordUtils {
@@ -67,7 +69,7 @@ public class DiscordUtils {
                 .setColor(Color.decode("#D1A841"))
                 .setFooter("Administrátor: " + author + " | Verze: " + Bot.getVersion(), author_avatar);
 
-        sendEmbedOnEveryServer(builder, content, success -> {
+        sendEmbedOnEveryServerSystem(builder, content, success -> {
             callback.accept(true);
         });
 
@@ -84,7 +86,7 @@ public class DiscordUtils {
                 .setDescription(bazaar.getDescription())
                 .setFooter("Verze: " + Bot.getVersion());
 
-        sendEmbedOnEveryServer(builder, bazaar.getDescription(), success -> {
+        sendEmbedOnEveryServerBazaar(builder, bazaar.getDescription(), success -> {
             callback.accept(true);
         });
 
@@ -117,16 +119,27 @@ public class DiscordUtils {
                 .setDescription(game.getDescription())
                 .setFooter("Verze: " + Bot.getVersion());
 
-        sendEmbedOnEveryServer(builder, game.getDescription(), success -> {
+        sendEmbedOnEveryServerGame(builder, game.getDescription(), success -> {
             callback.accept(true);
         });
 
     }
 
     public static void sendWeekPlanEmbed(String[] games_on_days, int year, int month, int start_day, Consumer<Boolean> callback){
+
+        int to_day = start_day + 7;
+        final int max_days = Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        if(to_day > max_days){
+            to_day -= max_days;
+            month++;
+            if(month == 13)
+                month = 1;
+        }
+
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(Color.decode("#D1A841"))
-                .setTitle("Týdenní plán her od " + start_day + "." + month + "." + year + " do " + (start_day + 7) + "." + month + "." + year)
+                .setTitle("Týdenní plán her od " + start_day + "." + month + "." + year + " do " + to_day + "." + month + "." + year)
                 .addField("Pondělí", games_on_days[0])
                 .addField("Úterý", games_on_days[1])
                 .addField("Středa", games_on_days[2])
@@ -136,7 +149,7 @@ public class DiscordUtils {
                 .addField("Neděle", games_on_days[6])
                 .setFooter("Verze: " + Bot.getVersion());
 
-        sendEmbedOnEveryServer(builder, "", success -> {
+        sendEmbedOnEveryServerGame(builder, "", success -> {
             callback.accept(true);
         });
     }
@@ -150,7 +163,16 @@ public class DiscordUtils {
         return null;
     }
 
-    private static void sendEmbedOnEveryServer(EmbedBuilder builder, String description, Consumer<Boolean> callback){
+    public static User getUserById(long id){
+        for(Server server : Bot.getBot().getServers()){
+            if(server.getMemberById(id).isPresent()){
+                return server.getMemberById(id).get();
+            }
+        }
+        return null;
+    }
+
+    private static void sendEmbedOnEveryServerSystem(EmbedBuilder builder, String description, Consumer<Boolean> callback){
 
         Bot.getBot().getServers().forEach(server -> {
 
@@ -160,13 +182,139 @@ public class DiscordUtils {
                 for(ServerTextChannel channel : server.getTextChannels()){
                     if(channel.asPrivateChannel().isPresent())
                         continue;
-                    builder.setDescription(description + "\n\nPro administrátory serveru\nTato zpráva byla poslána do místnosti, do které mají všichni přistup, jelikož nebyla nastavena místnost pro automatické zprávy, kterou nastavíte pomocí `!sb channel <označení místnosti>`");
+                    builder.setDescription(description + "\n\nPro administrátory serveru\nTato zpráva byla poslána do místnosti, do které mají všichni přistup, jelikož nebyla nastavena místnost pro automatické zprávy, kterou nastavíte pomocí `/channel system <označení místnosti>`");
+                    channel.sendMessage(builder);
+                    break;
+                }
+            }
+            if(option.getAnnouncement_channel_id() == -1){
+                for(ServerTextChannel channel : server.getTextChannels()){
+                    if(channel.asPrivateChannel().isPresent())
+                        continue;
+                    builder.setDescription(description + "\n\nPro administrátory serveru\nTato zpráva byla poslána do místnosti, do které mají všichni přistup, jelikož nebyla nastavena místnost pro automatické zprávy, kterou nastavíte pomocí `/channel system <označení místnosti>`");
                     channel.sendMessage(builder);
                     break;
                 }
             }
             else {
                 long announcement_channel_id = option.getAnnouncement_channel_id();
+
+                server.getTextChannelById(announcement_channel_id).ifPresent(channel -> {
+                    builder.setDescription(description);
+                    channel.sendMessage(builder);
+                });
+            }
+
+        });
+
+        callback.accept(true);
+
+    }
+
+    private static void sendEmbedOnEveryServerGame(EmbedBuilder builder, String description, Consumer<Boolean> callback){
+
+        Bot.getBot().getServers().forEach(server -> {
+
+            ServerOptionInstance option = Bot.getServerOption(server.getId());
+
+            if(option == null){
+                for(ServerTextChannel channel : server.getTextChannels()){
+                    if(channel.asPrivateChannel().isPresent())
+                        continue;
+                    builder.setDescription(description + "\n\nPro administrátory serveru\nTato zpráva byla poslána do místnosti, do které mají všichni přistup, jelikož nebyla nastavena místnost pro automatické zprávy, kterou nastavíte pomocí `/channel game <označení místnosti>`");
+                    channel.sendMessage(builder);
+                    break;
+                }
+            }
+            else if(option.getAnnouncement_channel_id() == -1 && option.getGame_announcement_channel_id() == -1){
+                for(ServerTextChannel channel : server.getTextChannels()){
+                    if(channel.asPrivateChannel().isPresent())
+                        continue;
+                    builder.setDescription(description + "\n\nPro administrátory serveru\nTato zpráva byla poslána do místnosti, do které mají všichni přistup, jelikož nebyla nastavena místnost pro automatické zprávy, kterou nastavíte pomocí `/channel game <označení místnosti>`");
+                    channel.sendMessage(builder);
+                    break;
+                }
+            }
+            else {
+                long announcement_channel_id = option.getGame_announcement_channel_id() == -1 ? option.getAnnouncement_channel_id() : option.getGame_announcement_channel_id();
+
+                server.getTextChannelById(announcement_channel_id).ifPresent(channel -> {
+                    builder.setDescription(description);
+                    channel.sendMessage(builder);
+                });
+            }
+
+        });
+
+        callback.accept(true);
+
+    }
+
+    private static void sendEmbedOnEveryServerBazaar(EmbedBuilder builder, String description, Consumer<Boolean> callback){
+
+        Bot.getBot().getServers().forEach(server -> {
+
+            ServerOptionInstance option = Bot.getServerOption(server.getId());
+
+            if(option == null){
+                for(ServerTextChannel channel : server.getTextChannels()){
+                    if(channel.asPrivateChannel().isPresent())
+                        continue;
+                    builder.setDescription(description + "\n\nPro administrátory serveru\nTato zpráva byla poslána do místnosti, do které mají všichni přistup, jelikož nebyla nastavena místnost pro automatické zprávy, kterou nastavíte pomocí `/channel bazaar <označení místnosti>`");
+                    channel.sendMessage(builder);
+                    break;
+                }
+            }
+            else if(option.getAnnouncement_channel_id() == -1 && option.getBazaar_announcement_channel_id() == -1){
+                for(ServerTextChannel channel : server.getTextChannels()){
+                    if(channel.asPrivateChannel().isPresent())
+                        continue;
+                    builder.setDescription(description + "\n\nPro administrátory serveru\nTato zpráva byla poslána do místnosti, do které mají všichni přistup, jelikož nebyla nastavena místnost pro automatické zprávy, kterou nastavíte pomocí `/channel bazaar <označení místnosti>`");
+                    channel.sendMessage(builder);
+                    break;
+                }
+            }
+            else {
+                long announcement_channel_id = option.getBazaar_announcement_channel_id() == -1 ? option.getAnnouncement_channel_id() : option.getBazaar_announcement_channel_id();
+
+                server.getTextChannelById(announcement_channel_id).ifPresent(channel -> {
+                    builder.setDescription(description);
+                    channel.sendMessage(builder);
+                });
+            }
+
+        });
+
+        callback.accept(true);
+
+    }
+
+    private static void sendEmbedOnEveryServerTeam(EmbedBuilder builder, String description, Consumer<Boolean> callback){
+
+        Bot.getBot().getServers().forEach(server -> {
+
+            ServerOptionInstance option = Bot.getServerOption(server.getId());
+
+            if(option == null){
+                for(ServerTextChannel channel : server.getTextChannels()){
+                    if(channel.asPrivateChannel().isPresent())
+                        continue;
+                    builder.setDescription(description + "\n\nPro administrátory serveru\nTato zpráva byla poslána do místnosti, do které mají všichni přistup, jelikož nebyla nastavena místnost pro automatické zprávy, kterou nastavíte pomocí `/channel bazaar <označení místnosti>`");
+                    channel.sendMessage(builder);
+                    break;
+                }
+            }
+            if(option.getAnnouncement_channel_id() == -1 && option.getTeam_announcement_channel_id() == -1){
+                for(ServerTextChannel channel : server.getTextChannels()){
+                    if(channel.asPrivateChannel().isPresent())
+                        continue;
+                    builder.setDescription(description + "\n\nPro administrátory serveru\nTato zpráva byla poslána do místnosti, do které mají všichni přistup, jelikož nebyla nastavena místnost pro automatické zprávy, kterou nastavíte pomocí `/channel bazaar <označení místnosti>`");
+                    channel.sendMessage(builder);
+                    break;
+                }
+            }
+            else {
+                long announcement_channel_id = option.getTeam_announcement_channel_id() == -1 ? option.getAnnouncement_channel_id() : option.getTeam_announcement_channel_id();
 
                 server.getTextChannelById(announcement_channel_id).ifPresent(channel -> {
                     builder.setDescription(description);

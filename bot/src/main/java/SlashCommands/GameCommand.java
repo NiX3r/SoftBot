@@ -218,8 +218,15 @@ public class GameCommand {
     private static void list(SlashCommandInteraction interaction) {
 
         try {
+
+            final int max_page = Bot.getCalendar().calculateGamePages();
+
+            if(interaction.getArguments().size() == 0){
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Počet stránek", "Maxímální počet stránek pro listování her je " + max_page, "GameCommand.list", ReplyEmbedEnum.SUCCESS)).respond().join();
+                return;
+            }
+
             int page = Integer.parseInt(interaction.getArguments().get(0).getLongValue().get().toString());
-            int max_page = Bot.getCalendar().calculateGamePages();
 
             if(page > max_page){
                 interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Přečíslování stránky", "Stránka, kterou jsi zadal, je moc velká. Maximální stránka je `" + max_page + "`", "GameCommand.list", ReplyEmbedEnum.WARNING)).respond().join();
@@ -262,7 +269,7 @@ public class GameCommand {
     }
 
     private static void create(SlashCommandInteraction interaction) {
-        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Web", "Vytvořit hru lze na stránkách\n https://softbot.ncodes.eu/game/", "GameCommand.create", ReplyEmbedEnum.SUCCESS)).respond().join();
+        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Web", "Vytvořit hru lze na stránkách\n https://softbot.ncodes.eu", "GameCommand.create", ReplyEmbedEnum.SUCCESS)).respond().join();
     }
 
     private static String getDate(long milliSeconds) {

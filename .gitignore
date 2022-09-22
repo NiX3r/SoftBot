@@ -29,3 +29,6 @@ SecretClass.java
 
 db.php
 bot/data
+
+.idea
+out

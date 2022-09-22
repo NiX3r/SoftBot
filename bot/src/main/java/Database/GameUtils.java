@@ -47,7 +47,8 @@ public class GameUtils {
                             DatabaseUtils.decodeDiscordId(results.getString("LastEditAuthor")),
                             (last_edit_date == null ? 0 : DatabaseUtils.decodeDateTime(last_edit_date)),
                             GameStatusEnum.valueOf(results.getString("LastEditStatus") == null ? "NULL" : results.getString("LastEditStatus")),
-                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)));
+                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)),
+                            DatabaseUtils.decodeDiscordId(results.getObject("DiscordUserID", String.class)));
 
                     Bot.getCalendar().getGames().add(mainInstance);
                     Bot.getCalendar().addCalendarGame(mainInstance);
@@ -71,23 +72,19 @@ public class GameUtils {
 
     }
 
-    public static void loadPendingCalendarInstance(Consumer<Boolean> callback){
-
+    public static void getLastestPendingGame(Consumer<GameInstance> callback){
         if(!Bot.getDatabaseConnection().isClosed()){
-
-            Utils.LogSystem.log(LogTypeEnum.INFO, "loading pending calendar into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-
+            Utils.LogSystem.log(LogTypeEnum.INFO, "trying to get lastest pending game", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
             PreparedStatement statement = null;
             try {
                 statement = Bot.getConnection()
-                        .prepareStatement("SELECT * FROM Game WHERE Status='PENDING'");
+                        .prepareStatement("SELECT * FROM Game WHERE Status='PENDING' ORDER BY CreateDate ASC LIMIT 1");
 
                 ResultSet results = statement.executeQuery();
-
-                while(results.next()){
-
+                GameInstance mainInstance = null;
+                if(results.next()){
                     String last_edit_date = results.getObject("LastEditDate", String.class);
-                    GameInstance mainInstance = new GameInstance(results.getInt("ID"),
+                     mainInstance = new GameInstance(results.getInt("ID"),
                             UTFCorrectionTranslator.translate(results.getString("Name")),
                             results.getString("Thumbnail"),
                             results.getString("IPAddress"),
@@ -103,28 +100,23 @@ public class GameUtils {
                             DatabaseUtils.decodeDiscordId(results.getString("LastEditAuthor")),
                             (last_edit_date == null ? 0 : DatabaseUtils.decodeDateTime(last_edit_date)),
                             GameStatusEnum.valueOf(results.getString("LastEditStatus") == null ? "NULL" : results.getString("LastEditStatus")),
-                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)));
-
-                    Bot.getPendingData().getGames().add(mainInstance);
-
+                            DatabaseUtils.decodeDateTime(results.getObject("CreateDate", String.class)),
+                            DatabaseUtils.decodeDiscordId(results.getObject("DiscordUserID", String.class)));
                 }
 
                 Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
-                Utils.LogSystem.log(LogTypeEnum.INFO, "pending calendar successfully initialized, loaded and sorted", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                callback.accept(true);
+                Utils.LogSystem.log(LogTypeEnum.INFO, "successfully get latest pending calendar", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                callback.accept(mainInstance);
                 return;
 
             }catch (SQLException e) {
                 Utils.LogSystem.log(LogTypeEnum.ERROR, "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                callback.accept(false);
+                callback.accept(null);
                 return;
             }
-
         }
-
-        Utils.LogSystem.log(LogTypeEnum.ERROR, "pending calendar not loaded. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-        callback.accept(false);
-
+        Utils.LogSystem.log(LogTypeEnum.ERROR, "can't get game. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        callback.accept(null);
     }
 
     public static void updateGameStatus(int id, GameStatusEnum status, Consumer<Boolean> callback){

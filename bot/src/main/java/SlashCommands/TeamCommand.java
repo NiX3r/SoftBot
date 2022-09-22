@@ -90,8 +90,14 @@ public class TeamCommand {
     private static void list(SlashCommandInteraction interaction) {
         try {
 
+            final int max_page = Bot.getTeamUtil().calculateTeamPages();
+
+            if(interaction.getArguments().size() == 0){
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Počet stránek", "Maxímální počet stránek pro listování týmů je " + max_page, "TeamCommand.list", ReplyEmbedEnum.SUCCESS)).respond().join();
+                return;
+            }
+
             int page = Integer.parseInt(interaction.getArguments().get(0).getLongValue().get().toString());
-            int max_page = Bot.getTeamUtil().calculateTeamPages();
 
             if(page > max_page){
                 interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Přečíslování stránky", "Stránka, kterou jsi zadal, je moc velká. Maximální stránka je `" + max_page + "`", "TeamCommand.list", ReplyEmbedEnum.ERROR)).respond().join();
@@ -137,7 +143,7 @@ public class TeamCommand {
     }
 
     private static void create(SlashCommandInteraction interaction) {
-        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Web", "Vytvořit tým lze na stránkách\n https://softbot.ncodes.eu/team/", "TeamCommand.create", ReplyEmbedEnum.SUCCESS)).respond().join();
+        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Web", "Vytvořit tým lze na stránkách\n https://softbot.ncodes.eu", "TeamCommand.create", ReplyEmbedEnum.SUCCESS)).respond().join();
     }
 
 }

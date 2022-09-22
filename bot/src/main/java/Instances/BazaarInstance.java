@@ -20,8 +20,9 @@ public class BazaarInstance {
     private long last_edit_user_id;
     private long last_edit_date;
     private BazaarStatusEnum last_edit_status;
+    private long creator;
 
-    public BazaarInstance(int id, String name, String ip_address, long user_id, BazaarTypeEnum type, int zip, double price, String images_dir, String description, BazaarStatusEnum status, long create_date, long last_edit_user_id, long last_edit_date, BazaarStatusEnum last_edit_status) {
+    public BazaarInstance(int id, String name, String ip_address, long user_id, BazaarTypeEnum type, int zip, double price, String images_dir, String description, BazaarStatusEnum status, long create_date, long last_edit_user_id, long last_edit_date, BazaarStatusEnum last_edit_status, long creator) {
         this.id = id;
         this.name = name;
         this.ip_address = ip_address;
@@ -36,6 +37,7 @@ public class BazaarInstance {
         this.last_edit_user_id = last_edit_user_id;
         this.last_edit_date = last_edit_date;
         this.last_edit_status = last_edit_status;
+        this.creator = creator;
     }
 
     public int getId() {
@@ -128,5 +130,9 @@ public class BazaarInstance {
 
     public String getIp_address() {
         return ip_address;
+    }
+
+    public long getCreator() {
+        return creator;
     }
 }

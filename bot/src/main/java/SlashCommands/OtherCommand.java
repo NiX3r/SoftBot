@@ -7,7 +7,6 @@ import Instances.ServerOptionInstance;
 import Utils.Bot;
 import Utils.DiscordUtils;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.event.interaction.SlashCommandCreateEvent;
 import org.javacord.api.interaction.SlashCommandInteraction;
 
 import java.awt.*;
@@ -61,6 +60,7 @@ public class OtherCommand {
                 "OtherCommand.credits",
                 ReplyEmbedEnum.EASTER_EGG)).respond().join();
     }
+
     public static void sponsors(SlashCommandInteraction interaction){
         List<String> sponsors = new ArrayList<>();
         String sponsorss = "";
@@ -92,31 +92,19 @@ public class OtherCommand {
                 
                 long channel_id = channel.getId();
 
-                if(Bot.isServerOptionInList(server_id)){
-
-                    Bot.getServerOption(server_id).setAnnouncement_channel_id(channel_id);
-                    ServerOptionUtils.editChannel(server_id, channel_id, edit_success -> {
-
-                        if(edit_success){
-                            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit oznamovací kanál.", "OtherCommand.channel", ReplyEmbedEnum.SUCCESS)).respond().join();
-                        }
-                        else{
-                            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Chyba", "Nastala chyba, prosím kontaktujte správce SoftBota", "OtherCommand.channel", ReplyEmbedEnum.ERROR)).respond().join();
-                        }
-
-                    });
-
-                }
-                else {
-
-                    ServerOptionInstance serverOption = new ServerOptionInstance(server_id, channel_id, -1);
-                    Bot.getServerOptions().add(serverOption);
-                    ServerOptionUtils.addServerOption(server_id, channel_id, -1, add_success -> {
-
-                        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit oznamovací kanál.", "OtherCommand.channel", ReplyEmbedEnum.SUCCESS)).respond().join();
-
-                    });
-
+                switch (interaction.getOptions().get(0).getName()){
+                    case "system":
+                        announcementChannel(server_id, channel_id, interaction);
+                        break;
+                    case "game":
+                        gameChannel(server_id, channel_id, interaction);
+                        break;
+                    case "bazaar":
+                        bazaarChannel(server_id, channel_id, interaction);
+                        break;
+                    case "team":
+                        teamChannel(server_id, channel_id, interaction);
+                        break;
                 }
                 
             }
@@ -147,9 +135,9 @@ public class OtherCommand {
             }
             else {
 
-                ServerOptionInstance serverOption = new ServerOptionInstance(server_id, -1, role.getId());
+                ServerOptionInstance serverOption = new ServerOptionInstance(server_id, -1, -1, -1, -1, role.getId());
                 Bot.getServerOptions().add(serverOption);
-                ServerOptionUtils.addServerOption(server_id, -1, role.getId(), add_success -> {
+                ServerOptionUtils.addServerOption(server_id, -1, -1, -1, -1, role.getId(), add_success -> {
                     Bot.getTeamUtil().getTeamByDiscordId(server_id).recalculateMemberCount();
                     interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit týmovou roli.", "OtherCommand.teamRole", ReplyEmbedEnum.SUCCESS)).respond().join();
 
@@ -157,6 +145,122 @@ public class OtherCommand {
 
             }
         });
+    }
+
+    private static void announcementChannel(long server_id, long channel_id, SlashCommandInteraction interaction){
+        if(Bot.isServerOptionInList(server_id)){
+
+            Bot.getServerOption(server_id).setAnnouncement_channel_id(channel_id);
+            ServerOptionUtils.editChannel(server_id, channel_id, "", edit_success -> {
+
+                if(edit_success){
+                    interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit oznamovací kanál.", "OtherCommand.announcementChannel", ReplyEmbedEnum.SUCCESS)).respond().join();
+                }
+                else{
+                    interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Chyba", "Nastala chyba, prosím kontaktujte správce SoftBota", "OtherCommand.announcementChannel", ReplyEmbedEnum.ERROR)).respond().join();
+                }
+
+            });
+
+        }
+        else {
+
+            ServerOptionInstance serverOption = new ServerOptionInstance(server_id, channel_id, -1, -1, -1, -1);
+            Bot.getServerOptions().add(serverOption);
+            ServerOptionUtils.addServerOption(server_id, channel_id, -1, -1, -1, -1, add_success -> {
+
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit oznamovací kanál.", "OtherCommand.announcementChannel", ReplyEmbedEnum.SUCCESS)).respond().join();
+
+            });
+
+        }
+    }
+
+    private static void gameChannel(long server_id, long channel_id, SlashCommandInteraction interaction){
+        if(Bot.isServerOptionInList(server_id)){
+
+            Bot.getServerOption(server_id).setGame_announcement_channel_id(channel_id);
+            ServerOptionUtils.editChannel(server_id, channel_id, "Game", edit_success -> {
+
+                if(edit_success){
+                    interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit oznamovací kanál pro hry.", "OtherCommand.gameChannel", ReplyEmbedEnum.SUCCESS)).respond().join();
+                }
+                else{
+                    interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Chyba", "Nastala chyba, prosím kontaktujte správce SoftBota", "OtherCommand.gameChannel", ReplyEmbedEnum.ERROR)).respond().join();
+                }
+
+            });
+
+        }
+        else {
+
+            ServerOptionInstance serverOption = new ServerOptionInstance(server_id, -1, channel_id, -1, -1, -1);
+            Bot.getServerOptions().add(serverOption);
+            ServerOptionUtils.addServerOption(server_id, -1, channel_id, -1, -1, -1, add_success -> {
+
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit oznamovací kanál pro hry.", "OtherCommand.gameChannel", ReplyEmbedEnum.SUCCESS)).respond().join();
+
+            });
+
+        }
+    }
+
+    private static void bazaarChannel(long server_id, long channel_id, SlashCommandInteraction interaction){
+        if(Bot.isServerOptionInList(server_id)){
+
+            Bot.getServerOption(server_id).setBazaar_announcement_channel_id(channel_id);
+            ServerOptionUtils.editChannel(server_id, channel_id, "Bazaar", edit_success -> {
+
+                if(edit_success){
+                    interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit oznamovací kanál pro bazar.", "OtherCommand.bazaarChannel", ReplyEmbedEnum.SUCCESS)).respond().join();
+                }
+                else{
+                    interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Chyba", "Nastala chyba, prosím kontaktujte správce SoftBota", "OtherCommand.bazaarChannel", ReplyEmbedEnum.ERROR)).respond().join();
+                }
+
+            });
+
+        }
+        else {
+
+            ServerOptionInstance serverOption = new ServerOptionInstance(server_id, -1, -1,  channel_id, -1, -1);
+            Bot.getServerOptions().add(serverOption);
+            ServerOptionUtils.addServerOption(server_id, -1, -1, channel_id, -1, -1, add_success -> {
+
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit oznamovací kanál pro bazar.", "OtherCommand.bazaarChannel", ReplyEmbedEnum.SUCCESS)).respond().join();
+
+            });
+
+        }
+    }
+
+    private static void teamChannel(long server_id, long channel_id, SlashCommandInteraction interaction){
+        if(Bot.isServerOptionInList(server_id)){
+
+            Bot.getServerOption(server_id).setTeam_announcement_channel_id(channel_id);
+            ServerOptionUtils.editChannel(server_id, channel_id, "Team", edit_success -> {
+
+                if(edit_success){
+                    interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit oznamovací kanál pro tým.", "OtherCommand.teamChannel", ReplyEmbedEnum.SUCCESS)).respond().join();
+                }
+                else{
+                    interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Chyba", "Nastala chyba, prosím kontaktujte správce SoftBota", "OtherCommand.teamChannel", ReplyEmbedEnum.ERROR)).respond().join();
+                }
+
+            });
+
+        }
+        else {
+
+            ServerOptionInstance serverOption = new ServerOptionInstance(server_id, -1, -1, -1, channel_id, -1);
+            Bot.getServerOptions().add(serverOption);
+            ServerOptionUtils.addServerOption(server_id, -1, -1, -1, channel_id, -1, add_success -> {
+
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Úspěch", "Podařilo se upravit oznamovací kanál pro tým.", "OtherCommand.teamChannel", ReplyEmbedEnum.SUCCESS)).respond().join();
+
+            });
+
+        }
     }
 
 }

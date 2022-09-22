@@ -23,7 +23,18 @@ public class SlashCommandUtils {
         SlashCommand.with("credits", "command for show every member who helped in developing SoftBot").createGlobal(Bot.getBot()).join();
         SlashCommand.with("sponsors", "command for show every SoftBot's sponsors").createGlobal(Bot.getBot()).join();
         SlashCommand.with("channel", "command for set up announcement channel", Arrays.asList(
-                SlashCommandOption.create(SlashCommandOptionType.CHANNEL, "channel", "channel ping for a announcement channel", true)
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "system", "Subcommand for set up bot's announcement system channel", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.CHANNEL, "channel-tag", "channel ping for a announcement channel", true)
+                )),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "game", "Subcommand for set up game's announcement system channel", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.CHANNEL, "channel-tag", "channel ping for a announcement channel", true)
+                )),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "bazaar", "Subcommand for set up bazaar's announcement system channel", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.CHANNEL, "channel-tag", "channel ping for a announcement channel", true)
+                )),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "team", "Subcommand for set up team's announcement system channel", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.CHANNEL, "channel-tag", "channel ping for a announcement channel", true)
+                ))
         )).setDefaultEnabledForPermissions(PermissionType.ADMINISTRATOR).createGlobal(Bot.getBot()).join();
         SlashCommand.with("team-role", "command for set up team role", Arrays.asList(
                 SlashCommandOption.create(SlashCommandOptionType.ROLE, "role", "role ping for a team role", true)
@@ -67,13 +78,16 @@ public class SlashCommandUtils {
         SlashCommand.with("offer", "group for offer section", Arrays.asList(
                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "create", "Subcommand for show offer create form"),
                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "list", "Subcommand for show list of offers indexed by pages 10 offer per page", Arrays.asList(
-                        SlashCommandOption.create(SlashCommandOptionType.LONG, "index", "Index of a page to show", true)
+                        SlashCommandOption.create(SlashCommandOptionType.LONG, "index", "Index of a page to show", false)
                 )),
                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "file", "Subcommand for set files for a specific offer", Arrays.asList(
                         SlashCommandOption.create(SlashCommandOptionType.LONG, "id", "ID of a specific offer", true),
                         SlashCommandOption.create(SlashCommandOptionType.ATTACHMENT, "attachment", "Attachment that will replace old attachment", true)
                 )),
                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "show", "Subcommand for show specific offer by it's ID", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.LONG, "id", "ID of a specific offer", true)
+                )),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "sold", "Subcommand for mark offer as sold", Arrays.asList(
                         SlashCommandOption.create(SlashCommandOptionType.LONG, "id", "ID of a specific offer", true)
                 ))
         )).createGlobal(Bot.getBot()).join();
@@ -92,6 +106,9 @@ public class SlashCommandUtils {
                 )),
                 SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "show", "Subcommand for show specific inquiry by it's ID", Arrays.asList(
                         SlashCommandOption.create(SlashCommandOptionType.LONG, "id", "ID of a specific inquiry", true)
+                )),
+                SlashCommandOption.createWithOptions(SlashCommandOptionType.SUB_COMMAND, "sold", "Subcommand for mark inquiry as sold", Arrays.asList(
+                        SlashCommandOption.create(SlashCommandOptionType.LONG, "id", "ID of a specific offer", true)
                 ))
         )).createGlobal(Bot.getBot()).join();
 

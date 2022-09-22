@@ -18,6 +18,7 @@ import java.io.FileWriter;
 import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Timer;
 import java.util.function.Consumer;
 
@@ -35,8 +36,8 @@ public class Bot {
     private static BazaarUtilInstance bazaar;
     private static ShopUtilInstance shop;
     private static ArrayList<AdminInstance> admins;
-    private static PendingDataInstance pendingData;
     private static ArrayList<ServerOptionInstance> serverOptions;
+    private static HashMap<Long, Object> checkingData; // Data being checked by admins
     private static Timer timer;
 
     public static void initializeBot(String argument){
@@ -58,10 +59,10 @@ public class Bot {
             reddit = new RedditInstance();
             punishments = new PunishmentInstance();
             bazaar = new BazaarUtilInstance();
-            pendingData = new PendingDataInstance();
             shop = new ShopUtilInstance();
             admins = new ArrayList<AdminInstance>();
             serverOptions = new ArrayList<ServerOptionInstance>();
+            checkingData = new HashMap<Long, Object>();
 
             DatabaseUtils.loadDataIntoCache(success -> {
 
@@ -230,11 +231,11 @@ public class Bot {
         return bazaar;
     }
 
-    public static PendingDataInstance getPendingData() {
-        return pendingData;
-    }
-
     public static ShopUtilInstance getShop() {
         return shop;
+    }
+
+    public static HashMap<Long, Object> getCheckingData() {
+        return checkingData;
     }
 }

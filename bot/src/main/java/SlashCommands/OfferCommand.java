@@ -1,5 +1,7 @@
 package SlashCommands;
 
+import Database.BazaarUtils;
+import Enums.BazaarStatusEnum;
 import Enums.LogTypeEnum;
 import Enums.ReplyEmbedEnum;
 import Instances.BazaarInstance;
@@ -35,8 +37,36 @@ public class OfferCommand {
             case "show":
                 show(interaction);
                 break;
+            case "sold":
+                sold(interaction);
+                break;
 
         }
+
+    }
+
+    private static void sold(SlashCommandInteraction interaction) {
+
+        BazaarInstance offer = Bot.getBazaar().getOfferById(Integer.parseInt(interaction.getArguments().get(0).getLongValue().get().toString()));
+
+        if(offer == null){
+            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Neexistující nabídka", "Nabídka s tímto ID neexistuje. Prosím vyplňte skutečné ID.", "OfferCommand.sold", ReplyEmbedEnum.ERROR)).respond().join();
+            return;
+        }
+        if(offer.getCreator() != interaction.getUser().getId()){
+            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Nedostatečná práva", "Bohužel nejsi majitelem této poptávky. Můžeš si vytvořit vlastní na adrese\n https://softbot.ncodes.eu", "OfferCommand.sold", ReplyEmbedEnum.ERROR)).respond().join();
+            return;
+        }
+
+        offer.setStatus(BazaarStatusEnum.SOLD);
+        BazaarUtils.updateBazaarStatus(offer.getId(), BazaarStatusEnum.SOLD, success -> {
+            if(success){
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Prodáno", "Úspěšně jsi nastavil nabídku jako prodanou.", "OfferCommand.sold", ReplyEmbedEnum.SUCCESS)).respond().join();
+            }
+            else {
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("", "Nastala chyba při ukládání do databáze. Zkuste to prosím později", "OfferCommand.sold", ReplyEmbedEnum.APP_ERROR)).respond().join();
+            }
+        });
 
     }
 
@@ -108,8 +138,14 @@ public class OfferCommand {
     private static void list(SlashCommandInteraction interaction) {
         try {
 
+            final int max_page = Bot.getBazaar().calculateOfferPages();
+
+            if(interaction.getArguments().size() == 0){
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Počet stránek", "Maxímální počet stránek pro listování nabídek je " + max_page, "OfferCommand.list", ReplyEmbedEnum.SUCCESS)).respond().join();
+                return;
+            }
+
             int page = Integer.parseInt(interaction.getArguments().get(0).getLongValue().get().toString());
-            int max_page = Bot.getBazaar().calculateOfferPages();
 
             if(page > max_page){
                 interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Přečíslování stránky", "Stránka, kterou jsi zadal, je moc velká. Maximální stránka je `" + max_page + "`", "OfferCommand.list", ReplyEmbedEnum.ERROR)).respond().join();
@@ -137,7 +173,7 @@ public class OfferCommand {
     }
 
     private static void create(SlashCommandInteraction interaction) {
-        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Web", "Vytvořit nabídku lze na stránkách\n https://softbot.ncodes.eu/bazaar/", "OfferCommand.create", ReplyEmbedEnum.SUCCESS)).respond().join();
+        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Web", "Vytvořit nabídku lze na stránkách\n https://softbot.ncodes.eu", "OfferCommand.create", ReplyEmbedEnum.SUCCESS)).respond().join();
     }
 
 }

@@ -24,7 +24,9 @@ public class GameInstance {
     private long last_edit_date;
     private GameStatusEnum last_edit_status;
 
-    public GameInstance(int id, String name, String thumbnail, String ip_address, long start_date, long end_date, String repeat_date, String website, String location, float price, String type, String description, GameStatusEnum status, long last_edit_date, long last_edit_user_id, GameStatusEnum last_edit_status, long create_date){
+    private long creator;
+
+    public GameInstance(int id, String name, String thumbnail, String ip_address, long start_date, long end_date, String repeat_date, String website, String location, float price, String type, String description, GameStatusEnum status, long last_edit_date, long last_edit_user_id, GameStatusEnum last_edit_status, long create_date, long creator){
 
         this.id = id;
         this.name = name;
@@ -43,8 +45,7 @@ public class GameInstance {
         this.last_edit_user_id = last_edit_user_id;
         this.last_edit_date = last_edit_date;
         this.last_edit_status = last_edit_status;
-
-
+        this.creator = creator;
     }
 
     public String getDescription() {
@@ -165,5 +166,9 @@ public class GameInstance {
 
     public String getIp_address() {
         return ip_address;
+    }
+
+    public long getCreator() {
+        return creator;
     }
 }
