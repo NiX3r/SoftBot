@@ -26,7 +26,7 @@ public class Bot {
 
     private static boolean isTest = false;
     private static String prefix = "§ SoftBot §";
-    private static String version = "1.2.0-alpha";
+    private static String version = "1.2.0-beta";
     private static DiscordApi bot;
     private static DatabaseConnection connection;
     private static CalendarInstance calendar;
