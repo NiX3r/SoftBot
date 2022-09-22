@@ -64,22 +64,20 @@ public class BazaarUtils {
 
     }
 
-    public static void loadPendingBazaarInstance(Consumer<Boolean> callback){
-
+    public static void getLastestPendingBazaar(Consumer<BazaarInstance> callback){
         if(!Bot.getDatabaseConnection().isClosed()){
 
-            Utils.LogSystem.log(LogTypeEnum.INFO, "loading pending bazaar into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "loading bazaar into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             PreparedStatement statement = null;
             try {
                 statement = Bot.getConnection()
-                        .prepareStatement("SELECT * FROM Bazaar WHERE Status='PENDING'");
+                        .prepareStatement("SELECT * FROM Bazaar WHERE Status='PENDING' ORDER BY CreateDate ASC LIMIT 1");
 
                 ResultSet results = statement.executeQuery();
-
-                while(results.next()){
-
-                    BazaarInstance bazaar = new BazaarInstance(results.getInt("ID"),
+                BazaarInstance bazaar = null;
+                if(results.next()){
+                     bazaar = new BazaarInstance(results.getInt("ID"),
                             UTFCorrectionTranslator.translate(results.getString("Name")),
                             results.getString("IPAddress"),
                             DatabaseUtils.decodeDiscordId(results.getString("DiscordUserID")),
@@ -94,28 +92,19 @@ public class BazaarUtils {
                             DatabaseUtils.decodeDateTime("LastEditDate"),
                             results.getString("LastEditStatus") == null ? BazaarStatusEnum.NULL : BazaarStatusEnum.valueOf("LastEditAuthor"),
                             DatabaseUtils.decodeDiscordId(results.getObject("DiscordUserID", String.class)));
-
-                    Bot.getPendingData().getBazaar().add(bazaar);
-
                 }
-
-                Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
-                Utils.LogSystem.log(LogTypeEnum.INFO, "pending bazaar successfully initialized and loaded", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                callback.accept(true);
+                Utils.LogSystem.log(LogTypeEnum.INFO, "successfully get latest pending calendar", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                callback.accept(bazaar);
                 return;
 
             }catch (SQLException e) {
                 Utils.LogSystem.log(LogTypeEnum.ERROR, "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                callback.accept(false);
+                callback.accept(null);
                 return;
             }
-
-
         }
-
-        Utils.LogSystem.log(LogTypeEnum.ERROR, "pending bazaar not loaded. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-        callback.accept(false);
-
+        Utils.LogSystem.log(LogTypeEnum.INFO, "can't get bazaar. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        callback.accept(null);
     }
 
     public static void updateBazaarStatus(int id, BazaarStatusEnum status, Consumer<Boolean> callback){

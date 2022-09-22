@@ -43,13 +43,13 @@ public class ShopButton {
         if(!String.valueOf(user_id).equals(original_user_id))
             return;
 
-        if(Bot.getPendingData().getCheckingData().get(user_id) instanceof ShopInstance){
+        if(Bot.getCheckingData().get(user_id) instanceof ShopInstance){
 
-            ShopInstance game = ((ShopInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            ShopInstance game = ((ShopInstance) Bot.getCheckingData().get(user_id));
             User user = DiscordUtils.getUserById(game.getCreator());
             game.setStatus(ShopStatusEnum.APPROVED);
 
-            Bot.getPendingData().getCheckingData().remove(user_id);
+            Bot.getCheckingData().remove(user_id);
             Bot.getShop().getShops().add(game);
 
             ShopUtils.updateShopStatus(game.getId(), game.getStatus(), success -> {
@@ -74,13 +74,13 @@ public class ShopButton {
         if(!String.valueOf(user_id).equals(original_user_id))
             return;
 
-        if(Bot.getPendingData().getCheckingData().get(user_id) instanceof ShopInstance){
+        if(Bot.getCheckingData().get(user_id) instanceof ShopInstance){
 
-            ShopInstance game = ((ShopInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            ShopInstance game = ((ShopInstance) Bot.getCheckingData().get(user_id));
             User user = DiscordUtils.getUserById(game.getCreator());
             game.setStatus(ShopStatusEnum.DENIED);
 
-            Bot.getPendingData().getCheckingData().remove(user_id);
+            Bot.getCheckingData().remove(user_id);
 
             ShopUtils.updateShopStatus(game.getId(), game.getStatus(), success -> {
 
@@ -106,13 +106,13 @@ public class ShopButton {
         if(!String.valueOf(user_id).equals(original_user_id))
             return;
 
-        if(Bot.getPendingData().getCheckingData().get(user_id) instanceof ShopInstance){
+        if(Bot.getCheckingData().get(user_id) instanceof ShopInstance){
 
-            ShopInstance game = ((ShopInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            ShopInstance game = ((ShopInstance) Bot.getCheckingData().get(user_id));
             User user = DiscordUtils.getUserById(game.getCreator());
             game.setStatus(ShopStatusEnum.REMOVED);
 
-            Bot.getPendingData().getCheckingData().remove(user_id);
+            Bot.getCheckingData().remove(user_id);
 
             ShopUtils.updateShopStatus(game.getId(), game.getStatus(), success -> {
 

@@ -40,13 +40,13 @@ public class GameButton {
         if(!String.valueOf(user_id).equals(original_user_id))
             return;
 
-        if(Bot.getPendingData().getCheckingData().get(user_id) instanceof GameInstance){
+        if(Bot.getCheckingData().get(user_id) instanceof GameInstance){
 
-            GameInstance game = ((GameInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            GameInstance game = ((GameInstance) Bot.getCheckingData().get(user_id));
             User user = DiscordUtils.getUserById(game.getCreator());
             game.setStatus(GameStatusEnum.APPROVED);
 
-            Bot.getPendingData().getCheckingData().remove(user_id);
+            Bot.getCheckingData().remove(user_id);
             Bot.getCalendar().getGames().add(game);
             Bot.getCalendar().addCalendarGame(game);
             Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
@@ -77,13 +77,13 @@ public class GameButton {
         if(!String.valueOf(user_id).equals(original_user_id))
             return;
 
-        if(Bot.getPendingData().getCheckingData().get(user_id) instanceof GameInstance){
+        if(Bot.getCheckingData().get(user_id) instanceof GameInstance){
 
-            GameInstance game = ((GameInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            GameInstance game = ((GameInstance) Bot.getCheckingData().get(user_id));
             User user = DiscordUtils.getUserById(game.getCreator());
             game.setStatus(GameStatusEnum.DENIED);
 
-            Bot.getPendingData().getCheckingData().remove(user_id);
+            Bot.getCheckingData().remove(user_id);
 
             GameUtils.updateGameStatus(game.getId(), game.getStatus(), success -> {
 
@@ -109,13 +109,13 @@ public class GameButton {
         if(!String.valueOf(user_id).equals(original_user_id))
             return;
 
-        if(Bot.getPendingData().getCheckingData().get(user_id) instanceof GameInstance){
+        if(Bot.getCheckingData().get(user_id) instanceof GameInstance){
 
-            GameInstance game = ((GameInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            GameInstance game = ((GameInstance) Bot.getCheckingData().get(user_id));
             User user = DiscordUtils.getUserById(game.getCreator());
             game.setStatus(GameStatusEnum.REMOVED);
 
-            Bot.getPendingData().getCheckingData().remove(user_id);
+            Bot.getCheckingData().remove(user_id);
 
             GameUtils.updateGameStatus(game.getId(), game.getStatus(), success -> {
 

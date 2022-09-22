@@ -70,23 +70,21 @@ public class ShopUtils {
 
     }
 
-    public static void loadPendingShopsInstance(Consumer<Boolean> callback){
-
+    public static void getLatestPendingShop(Consumer<ShopInstance> callback){
         if(!Bot.getDatabaseConnection().isClosed()){
 
-            Utils.LogSystem.log(LogTypeEnum.INFO, "loading pending shops into cache", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+            Utils.LogSystem.log(LogTypeEnum.INFO, "trying to get latest pending shop", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
 
             PreparedStatement statement = null;
             try {
                 statement = Bot.getConnection()
-                        .prepareStatement("SELECT * FROM Shop WHERE Status='PENDING'");
+                        .prepareStatement("SELECT * FROM Shop WHERE Status='PENDING' ORDER BY CreateDate ASC LIMIT 1");
 
                 ResultSet results = statement.executeQuery();
-
-                while(results.next()){
-
+                ShopInstance mainInstance = null;
+                if(results.next()){
                     String last_edit_date = results.getObject("LastEditDate", String.class);
-                    ShopInstance mainInstance = new ShopInstance(results.getInt("ID"),
+                     mainInstance = new ShopInstance(results.getInt("ID"),
                             UTFCorrectionTranslator.translate(results.getString("Name")),
                             results.getString("Voucher"),
                             results.getString("IPAddress"),
@@ -102,27 +100,20 @@ public class ShopUtils {
                             ShopStatusEnum.valueOf(results.getString("LastEditStatus") == null ? "NULL" : results.getString("LastEditStatus")),
                             results.getString("Thumbnail"),
                             DatabaseUtils.decodeDiscordId(results.getObject("DiscordUserID", String.class)));
-
-                    Bot.getPendingData().getShops().add(mainInstance);
-
                 }
-
-                Bot.getCalendar().getCalendar().sort(Comparator.comparingLong(CalendarGameInstance::getStart_date));
-                Utils.LogSystem.log(LogTypeEnum.INFO, "pending shops successfully initialized and loaded", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                callback.accept(true);
+                Utils.LogSystem.log(LogTypeEnum.INFO, "successfully get latest pending shop", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+                callback.accept(mainInstance);
                 return;
 
             }catch (SQLException e) {
                 Utils.LogSystem.log(LogTypeEnum.ERROR, "error while sql communication. Message: " + e.getMessage(), new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-                callback.accept(false);
+                callback.accept(null);
                 return;
             }
 
         }
-
-        Utils.LogSystem.log(LogTypeEnum.ERROR, "pending teams not loaded. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
-        callback.accept(false);
-
+        Utils.LogSystem.log(LogTypeEnum.ERROR, "can't get shop. Database not connected", new Throwable().getStackTrace()[0].getLineNumber(), new Throwable().getStackTrace()[0].getFileName(), new Throwable().getStackTrace()[0].getMethodName());
+        callback.accept(null);
     }
 
     public static void updateShopStatus(int id, ShopStatusEnum status, Consumer<Boolean> callback){

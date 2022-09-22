@@ -1,7 +1,6 @@
 package SlashCommands;
 
-import Database.BazaarUtils;
-import Database.DatabaseUtils;
+import Database.*;
 import Enums.BazaarStatusEnum;
 import Enums.ReplyEmbedEnum;
 import Instances.*;
@@ -67,177 +66,218 @@ public class BotAdminCommand {
     }
 
     private static void game(SlashCommandInteraction interaction){
-        if(Bot.getPendingData().getGames().size() == 0){
-            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Žádná data", "Již byla zpracována všechna data, která být zpracována měla. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", "PendingCommand.game", ReplyEmbedEnum.WARNING)).respond().join();
-            return;
-        }
 
-        GameInstance game = Bot.getPendingData().getGames().get(0);
-        Bot.getPendingData().getGames().remove(0);
+        GameUtils.getLastestPendingGame(game -> {
 
-        String repeat_string = "žádné";
+            if(game == null){
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Žádná data", "Již byla zpracována všechna data, která být zpracována měla. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", "PendingCommand.game", ReplyEmbedEnum.WARNING)).respond().join();
+                return;
+            }
 
-        switch (game.getRepeat_date()){
-            case "W":
-                repeat_string = "týdenní";
-                break;
-            case "M":
-                repeat_string = "měsíční";
-                break;
-            case "Y":
-                repeat_string = "roční";
-                break;
-        }
+            for(Object o : Bot.getCheckingData().values()){
+                if(o instanceof GameInstance){
+                    if(((GameInstance)o).getId() == game.getId()){
+                        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Hra již v kontrole", "Již se zpracovává poslední hra. Zkus zpracovat jiná data nebo počkej, než bude hra zpracována. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", "PendingCommand.team", ReplyEmbedEnum.WARNING)).respond().join();
+                        return;
+                    }
+                }
+            }
 
-        EmbedBuilder builder = new EmbedBuilder()
-                .setColor(Color.decode("#D1A841"))
-                .setTitle("Potvrzení registrace hry")
-                .setImage(game.getThumbnail() == null ? "" : game.getThumbnail())
-                .addField("ID", game.getId() + "")
-                .addInlineField("Jméno", game.getName())
-                .addInlineField("Začátek akce", DatabaseUtils.encodeDateTime(game.getStart_date()))
-                .addInlineField("Konec akce", DatabaseUtils.encodeDateTime(game.getEnd_date()))
-                .addInlineField("Lokace", game.getLocation())
-                .addInlineField("Vstupné", String.valueOf(game.getPrice()))
-                .addInlineField("Opakování", repeat_string)
-                .addInlineField("Typ", game.getType().equals("PB") ? "Plácko bitka" : game.getType())
-                .addInlineField("IP adresa", game.getIp_address())
-                .setDescription(game.getDescription())
-                .setFooter("Verze: " + Bot.getVersion());
+            String repeat_string = "žádné";
 
-        MessageBuilder msg_builder = new MessageBuilder()
-                .setEmbed(builder)
-                .addComponents(
-                        ActionRow.of(Button.success("ncodes-softbot-pending-game-approve-" + interaction.getUser().getId(), "Povolit"),
-                                Button.danger("ncodes-softbot-pending-game-deny-" + interaction.getUser().getId(), "Zakákat"),
-                                Button.danger("ncodes-softbot-pending-game-remove-" + interaction.getUser().getId(), "Smazat"))
-                );
+            switch (game.getRepeat_date()){
+                case "W":
+                    repeat_string = "týdenní";
+                    break;
+                case "M":
+                    repeat_string = "měsíční";
+                    break;
+                case "Y":
+                    repeat_string = "roční";
+                    break;
+            }
 
-        msg_builder.send(interaction.getChannel().get()).thenAccept(success -> {
+            EmbedBuilder builder = new EmbedBuilder()
+                    .setColor(Color.decode("#D1A841"))
+                    .setTitle("Potvrzení registrace hry")
+                    .setImage(game.getThumbnail() == null ? "" : game.getThumbnail())
+                    .addField("ID", game.getId() + "")
+                    .addInlineField("Jméno", game.getName())
+                    .addInlineField("Začátek akce", DatabaseUtils.encodeDateTime(game.getStart_date()))
+                    .addInlineField("Konec akce", DatabaseUtils.encodeDateTime(game.getEnd_date()))
+                    .addInlineField("Lokace", game.getLocation())
+                    .addInlineField("Vstupné", String.valueOf(game.getPrice()))
+                    .addInlineField("Opakování", repeat_string)
+                    .addInlineField("Typ", game.getType().equals("PB") ? "Plácko bitka" : game.getType())
+                    .addInlineField("IP adresa", game.getIp_address())
+                    .setDescription(game.getDescription())
+                    .setFooter("Verze: " + Bot.getVersion());
 
-            Bot.getPendingData().getCheckingData().put(interaction.getUser().getId(), game);
+            MessageBuilder msg_builder = new MessageBuilder()
+                    .setEmbed(builder)
+                    .addComponents(
+                            ActionRow.of(Button.success("ncodes-softbot-pending-game-approve-" + interaction.getUser().getId(), "Povolit"),
+                                    Button.danger("ncodes-softbot-pending-game-deny-" + interaction.getUser().getId(), "Zakákat"),
+                                    Button.danger("ncodes-softbot-pending-game-remove-" + interaction.getUser().getId(), "Smazat"))
+                    );
+
+            msg_builder.send(interaction.getChannel().get()).thenAccept(success -> {
+
+                Bot.getCheckingData().put(interaction.getUser().getId(), game);
+
+            });
+            interaction.createImmediateResponder().setContent("hotovo").respond().join();
 
         });
-        interaction.createImmediateResponder().setContent("done").respond().join();
     }
 
     private static void team(SlashCommandInteraction interaction){
-        if(Bot.getPendingData().getTeams().size() == 0){
-            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Žádná data", "Již byla zpracována všechna data, která být zpracována měla. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", "PendingCommand.team", ReplyEmbedEnum.WARNING)).respond().join();
-            return;
-        }
 
-        TeamInstance team = Bot.getPendingData().getTeams().get(0);
-        Bot.getPendingData().getTeams().remove(0);
+        TeamUtils.getLastestPendingTeam(team -> {
 
-        EmbedBuilder builder = new EmbedBuilder()
-                .setColor(Color.decode("#D1A841"))
-                .setTitle("Potvrzení registrace týmu")
-                .setImage(team.getThumbnail() == null ? "" : team.getThumbnail())
-                .addInlineField("ID", team.getId() + "")
-                .addInlineField("Jméno", team.getName())
-                .addInlineField("IP adresa", team.getIp_address())
-                .addInlineField("Web", team.getWebsite())
-                .addInlineField("Typ", team.getType().replace("CQB&MS", "CQB a MilSim"))
-                .addInlineField("Discord Server ID", team.getDiscord_server_id() + "")
-                .setDescription(team.getDescription())
-                .setFooter("Verze: " + Bot.getVersion());
+            if(team == null){
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Žádná data", "Již byla zpracována všechna data, která být zpracována měla. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", "PendingCommand.team", ReplyEmbedEnum.WARNING)).respond().join();
+                return;
+            }
 
-        MessageBuilder msg_builder = new MessageBuilder()
-                .setEmbed(builder)
-                .addComponents(
-                        ActionRow.of(Button.success("ncodes-softbot-pending-team-approve-" + interaction.getUser().getId(), "Povolit"),
-                                Button.danger("ncodes-softbot-pending-team-deny-" + interaction.getUser().getId(), "Zakákat"),
-                                Button.danger("ncodes-softbot-pending-team-remove-" + interaction.getUser().getId(), "Smazat"))
-                );
+            for(Object o : Bot.getCheckingData().values()){
+                if(o instanceof TeamInstance){
+                    if(((TeamInstance)o).getId() == team.getId()){
+                        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Tým již v kontrole", "Již se zpracovává poslední tým. Zkus zpracovat jiná data nebo počkej, než bude tým zpracován. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", "PendingCommand.team", ReplyEmbedEnum.WARNING)).respond().join();
+                        return;
+                    }
+                }
+            }
 
-        msg_builder.send(interaction.getChannel().get()).thenAccept(success -> {
+            EmbedBuilder builder = new EmbedBuilder()
+                    .setColor(Color.decode("#D1A841"))
+                    .setTitle("Potvrzení registrace týmu")
+                    .setImage(team.getThumbnail() == null ? "" : team.getThumbnail())
+                    .addInlineField("ID", team.getId() + "")
+                    .addInlineField("Jméno", team.getName())
+                    .addInlineField("IP adresa", team.getIp_address())
+                    .addInlineField("Web", team.getWebsite())
+                    .addInlineField("Typ", team.getType().replace("CQB&MS", "CQB a MilSim"))
+                    .addInlineField("Discord Server ID", team.getDiscord_server_id() + "")
+                    .setDescription(team.getDescription())
+                    .setFooter("Verze: " + Bot.getVersion());
 
-            Bot.getPendingData().getCheckingData().put(interaction.getUser().getId(), team);
+            MessageBuilder msg_builder = new MessageBuilder()
+                    .setEmbed(builder)
+                    .addComponents(
+                            ActionRow.of(Button.success("ncodes-softbot-pending-team-approve-" + interaction.getUser().getId(), "Povolit"),
+                                    Button.danger("ncodes-softbot-pending-team-deny-" + interaction.getUser().getId(), "Zakákat"),
+                                    Button.danger("ncodes-softbot-pending-team-remove-" + interaction.getUser().getId(), "Smazat"))
+                    );
+
+            msg_builder.send(interaction.getChannel().get()).thenAccept(success -> {
+
+                Bot.getCheckingData().put(interaction.getUser().getId(), team);
+
+            });
+            interaction.createImmediateResponder().setContent("hotovo").respond().join();
 
         });
-        interaction.createImmediateResponder().setContent("done").respond().join();
     }
 
     private static void bazaar(SlashCommandInteraction interaction){
-        if(Bot.getPendingData().getBazaar().size() == 0){
-            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Žádná data", "Již byla zpracována všechna data, která být zpracována měla. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", "PendingCommand.bazaar", ReplyEmbedEnum.WARNING)).respond().join();
-            return;
-        }
 
-        BazaarInstance bazaar = Bot.getPendingData().getBazaar().get(0);
-        Bot.getPendingData().getBazaar().remove(0);
+        BazaarUtils.getLastestPendingBazaar(bazaar -> {
 
-        String user_ping = DiscordUtils.getNickPingById(bazaar.getUser_id());
+            if(bazaar == null){
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Žádná data", "Již byla zpracována všechna data, která být zpracována měla. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", "PendingCommand.bazaar", ReplyEmbedEnum.WARNING)).respond().join();
+                return;
+            }
+            for(Object o : Bot.getCheckingData().values()){
+                if(o instanceof BazaarInstance){
+                    if(((BazaarInstance)o).getId() == bazaar.getId()){
+                        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Bazar již v kontrole", "Již se zpracovává poslední bazar. Zkus zpracovat jiná data nebo počkej, než bude bazar zpracován. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", "PendingCommand.team", ReplyEmbedEnum.WARNING)).respond().join();
+                        return;
+                    }
+                }
+            }
+            String user_ping = DiscordUtils.getNickPingById(bazaar.getUser_id());
 
-        EmbedBuilder builder = new EmbedBuilder()
-                .setColor(Color.decode("#D1A841"))
-                .setTitle("Potvrzení registrace bazaru")
-                .addInlineField("ID", bazaar.getId() + "")
-                .addInlineField("Jméno", bazaar.getName())
-                .addInlineField("IP adresa", bazaar.getIp_address())
-                .addInlineField("Majitel nabídky/poptávky id", bazaar.getUser_id() + "")
-                .addInlineField("Majitel nabídky/poptávky nick", user_ping == null ? "nenastaveno" : user_ping)
-                .addInlineField("Typ", bazaar.getType().toString())
-                .addInlineField("PSČ", bazaar.getZip() + "")
-                .addInlineField("Cena", bazaar.getPrice() + "")
-                .setDescription(bazaar.getDescription())
-                .setFooter("Verze: " + Bot.getVersion());
+            EmbedBuilder builder = new EmbedBuilder()
+                    .setColor(Color.decode("#D1A841"))
+                    .setTitle("Potvrzení registrace bazaru")
+                    .addInlineField("ID", bazaar.getId() + "")
+                    .addInlineField("Jméno", bazaar.getName())
+                    .addInlineField("IP adresa", bazaar.getIp_address())
+                    .addInlineField("Majitel nabídky/poptávky id", bazaar.getUser_id() + "")
+                    .addInlineField("Majitel nabídky/poptávky nick", user_ping == null ? "nenastaveno" : user_ping)
+                    .addInlineField("Typ", bazaar.getType().toString())
+                    .addInlineField("PSČ", bazaar.getZip() + "")
+                    .addInlineField("Cena", bazaar.getPrice() + "")
+                    .setDescription(bazaar.getDescription())
+                    .setFooter("Verze: " + Bot.getVersion());
 
-        MessageBuilder msg_builder = new MessageBuilder()
-                .setEmbed(builder);
+            MessageBuilder msg_builder = new MessageBuilder()
+                    .setEmbed(builder);
 
-        msg_builder.addComponents(
-                ActionRow.of(org.javacord.api.entity.message.component.Button.success("ncodes-softbot-pending-bazaar-approve-" + interaction.getUser().getId(), "Povolit"),
-                        org.javacord.api.entity.message.component.Button.danger("ncodes-softbot-pending-bazaar-deny-" + interaction.getUser().getId(), "Zakákat"),
-                        Button.danger("ncodes-softbot-pending-bazaar-remove-" + interaction.getUser().getId(), "Smazat"))
-        );
-        msg_builder.send(interaction.getChannel().get()).thenAccept(success -> {
+            msg_builder.addComponents(
+                    ActionRow.of(org.javacord.api.entity.message.component.Button.success("ncodes-softbot-pending-bazaar-approve-" + interaction.getUser().getId(), "Povolit"),
+                            org.javacord.api.entity.message.component.Button.danger("ncodes-softbot-pending-bazaar-deny-" + interaction.getUser().getId(), "Zakákat"),
+                            Button.danger("ncodes-softbot-pending-bazaar-remove-" + interaction.getUser().getId(), "Smazat"))
+            );
+            msg_builder.send(interaction.getChannel().get()).thenAccept(success -> {
 
-            Bot.getPendingData().getCheckingData().put(interaction.getUser().getId(), bazaar);
+                Bot.getCheckingData().put(interaction.getUser().getId(), bazaar);
 
+            });
+            interaction.createImmediateResponder().setContent("hotovo").respond().join();
 
         });
-        interaction.createImmediateResponder().setContent("done").respond().join();
+
     }
 
     private static void shop(SlashCommandInteraction interaction){
-        if(Bot.getPendingData().getShops().size() == 0){
-            interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Žádná data", "Již byla zpracována všechna data, která být zpracována měla. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", "PendingCommand.shop", ReplyEmbedEnum.WARNING)).respond().join();
-            return;
-        }
 
-        ShopInstance game = Bot.getPendingData().getShops().get(0);
-        Bot.getPendingData().getShops().remove(0);
+        ShopUtils.getLatestPendingShop(shop -> {
 
-        EmbedBuilder builder = new EmbedBuilder()
-                .setColor(Color.decode("#D1A841"))
-                .setTitle("Potvrzení registrace obchodu")
-                .setImage(game.getThumbnail())
-                .addField("ID", game.getId() + "")
-                .addInlineField("Název", game.getName())
-                .addInlineField("Slevový kód", game.getVoucher().equals("") ? "nenastaven" : game.getVoucher())
-                .addInlineField("Web", game.getWebsite())
-                .addInlineField("Adresa", game.getLocation().equals("") ? "nenastavena" : game.getLocation())
-                .addInlineField("ZIP", String.valueOf(game.getZip()))
-                .addInlineField("IP adresa", game.getIp_address())
-                .setDescription(game.getDescription())
-                .setFooter("Verze: " + Bot.getVersion());
+            if(shop == null){
+                interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Žádná data", "Již byla zpracována všechna data, která být zpracována měla. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", "PendingCommand.shop", ReplyEmbedEnum.WARNING)).respond().join();
+                return;
+            }
+            for(Object o : Bot.getCheckingData().values()){
+                if(o instanceof ShopInstance){
+                    if(((ShopInstance)o).getId() == shop.getId()){
+                        interaction.createImmediateResponder().addEmbed(DiscordUtils.createReplyEmbed("Obchod již v kontrole", "Již se zpracovává poslední obchod. Zkus zpracovat jiná data nebo počkej, než bude obchod zpracován. Děkujeme za čas, který jsi chtěl věnovat SoftBotovi.", "PendingCommand.team", ReplyEmbedEnum.WARNING)).respond().join();
+                        return;
+                    }
+                }
+            }
+            EmbedBuilder builder = new EmbedBuilder()
+                    .setColor(Color.decode("#D1A841"))
+                    .setTitle("Potvrzení registrace obchodu")
+                    .setImage(shop.getThumbnail())
+                    .addField("ID", shop.getId() + "")
+                    .addInlineField("Název", shop.getName())
+                    .addInlineField("Slevový kód", shop.getVoucher().equals("") ? "nenastaven" : shop.getVoucher())
+                    .addInlineField("Web", shop.getWebsite())
+                    .addInlineField("Adresa", shop.getLocation().equals("") ? "nenastavena" : shop.getLocation())
+                    .addInlineField("ZIP", String.valueOf(shop.getZip()))
+                    .addInlineField("IP adresa", shop.getIp_address())
+                    .setDescription(shop.getDescription())
+                    .setFooter("Verze: " + Bot.getVersion());
 
-        MessageBuilder msg_builder = new MessageBuilder()
-                .setEmbed(builder)
-                .addComponents(
-                        ActionRow.of(Button.success("ncodes-softbot-pending-shop-approve-" + interaction.getUser().getId(), "Povolit"),
-                                Button.danger("ncodes-softbot-pending-shop-deny-" + interaction.getUser().getId(), "Zakákat"),
-                                Button.danger("ncodes-softbot-pending-shop-remove-" + interaction.getUser().getId(), "Smazat"))
-                );
+            MessageBuilder msg_builder = new MessageBuilder()
+                    .setEmbed(builder)
+                    .addComponents(
+                            ActionRow.of(Button.success("ncodes-softbot-pending-shop-approve-" + interaction.getUser().getId(), "Povolit"),
+                                    Button.danger("ncodes-softbot-pending-shop-deny-" + interaction.getUser().getId(), "Zakákat"),
+                                    Button.danger("ncodes-softbot-pending-shop-remove-" + interaction.getUser().getId(), "Smazat"))
+                    );
 
-        msg_builder.send(interaction.getChannel().get()).thenAccept(success -> {
+            msg_builder.send(interaction.getChannel().get()).thenAccept(success -> {
 
-            Bot.getPendingData().getCheckingData().put(interaction.getUser().getId(), game);
+                Bot.getCheckingData().put(interaction.getUser().getId(), shop);
+
+            });
+            interaction.createImmediateResponder().setContent("hotovo").respond().join();
 
         });
-        interaction.createImmediateResponder().setContent("done").respond().join();
+
     }
 
     private static boolean checkPermission(SlashCommandInteraction interaction){

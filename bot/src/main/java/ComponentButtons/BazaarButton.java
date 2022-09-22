@@ -40,13 +40,13 @@ public class BazaarButton {
         if(!String.valueOf(user_id).equals(original_user_id))
             return;
 
-        if(Bot.getPendingData().getCheckingData().get(user_id) instanceof BazaarInstance){
+        if(Bot.getCheckingData().get(user_id) instanceof BazaarInstance){
 
-            BazaarInstance bazaar = ((BazaarInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            BazaarInstance bazaar = ((BazaarInstance) Bot.getCheckingData().get(user_id));
             User user = DiscordUtils.getUserById(bazaar.getCreator());
             bazaar.setStatus(BazaarStatusEnum.APPROVED);
 
-            Bot.getPendingData().getCheckingData().remove(user_id);
+            Bot.getCheckingData().remove(user_id);
             Bot.getBazaar().getBazaar().add(bazaar);
 
             BazaarUtils.updateBazaarStatus(bazaar.getId(), bazaar.getStatus(), success -> {
@@ -75,13 +75,13 @@ public class BazaarButton {
         if(!String.valueOf(user_id).equals(original_user_id))
             return;
 
-        if(Bot.getPendingData().getCheckingData().get(user_id) instanceof BazaarInstance){
+        if(Bot.getCheckingData().get(user_id) instanceof BazaarInstance){
 
-            BazaarInstance bazaar = ((BazaarInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            BazaarInstance bazaar = ((BazaarInstance) Bot.getCheckingData().get(user_id));
             User user = DiscordUtils.getUserById(bazaar.getCreator());
             bazaar.setStatus(BazaarStatusEnum.DENIED);
 
-            Bot.getPendingData().getCheckingData().remove(user_id);
+            Bot.getCheckingData().remove(user_id);
 
             BazaarUtils.updateBazaarStatus(bazaar.getId(), bazaar.getStatus(), success -> {
 
@@ -107,13 +107,13 @@ public class BazaarButton {
         if(!String.valueOf(user_id).equals(original_user_id))
             return;
 
-        if(Bot.getPendingData().getCheckingData().get(user_id) instanceof BazaarInstance){
+        if(Bot.getCheckingData().get(user_id) instanceof BazaarInstance){
 
-            BazaarInstance bazaar = ((BazaarInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            BazaarInstance bazaar = ((BazaarInstance) Bot.getCheckingData().get(user_id));
             User user = DiscordUtils.getUserById(bazaar.getCreator());
             bazaar.setStatus(BazaarStatusEnum.REMOVED);
 
-            Bot.getPendingData().getCheckingData().remove(user_id);
+            Bot.getCheckingData().remove(user_id);
 
             BazaarUtils.updateBazaarStatus(bazaar.getId(), bazaar.getStatus(), success -> {
 

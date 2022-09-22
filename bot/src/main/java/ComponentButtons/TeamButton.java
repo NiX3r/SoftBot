@@ -43,13 +43,13 @@ public class TeamButton {
         if(!String.valueOf(user_id).equals(original_user_id))
             return;
 
-        if(Bot.getPendingData().getCheckingData().get(user_id) instanceof TeamInstance){
+        if(Bot.getCheckingData().get(user_id) instanceof TeamInstance){
 
-            TeamInstance team = ((TeamInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            TeamInstance team = ((TeamInstance) Bot.getCheckingData().get(user_id));
             User user = DiscordUtils.getUserById(team.getCreator());
             team.setStatus(TeamStatusEnum.APPROVED);
 
-            Bot.getPendingData().getCheckingData().remove(user_id);
+            Bot.getCheckingData().remove(user_id);
             Bot.getTeamUtil().getTeams().add(team);
 
             TeamUtils.updateTeamStatus(team.getId(), team.getStatus(), success -> {
@@ -76,13 +76,13 @@ public class TeamButton {
         if(!String.valueOf(user_id).equals(original_user_id))
             return;
 
-        if(Bot.getPendingData().getCheckingData().get(user_id) instanceof TeamInstance){
+        if(Bot.getCheckingData().get(user_id) instanceof TeamInstance){
 
-            TeamInstance team = ((TeamInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            TeamInstance team = ((TeamInstance) Bot.getCheckingData().get(user_id));
             User user = DiscordUtils.getUserById(team.getCreator());
             team.setStatus(TeamStatusEnum.DENIED);
 
-            Bot.getPendingData().getCheckingData().remove(user_id);
+            Bot.getCheckingData().remove(user_id);
 
             TeamUtils.updateTeamStatus(team.getId(), team.getStatus(), success -> {
 
@@ -108,13 +108,13 @@ public class TeamButton {
         if(!String.valueOf(user_id).equals(original_user_id))
             return;
 
-        if(Bot.getPendingData().getCheckingData().get(user_id) instanceof TeamInstance){
+        if(Bot.getCheckingData().get(user_id) instanceof TeamInstance){
 
-            TeamInstance team = ((TeamInstance) Bot.getPendingData().getCheckingData().get(user_id));
+            TeamInstance team = ((TeamInstance) Bot.getCheckingData().get(user_id));
             User user = DiscordUtils.getUserById(team.getCreator());
             team.setStatus(TeamStatusEnum.REMOVED);
 
-            Bot.getPendingData().getCheckingData().remove(user_id);
+            Bot.getCheckingData().remove(user_id);
 
             TeamUtils.updateTeamStatus(team.getId(), team.getStatus(), success -> {
 
